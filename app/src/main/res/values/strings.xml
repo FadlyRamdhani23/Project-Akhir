@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">UD MR Putra</string>
+    <string name="slide_persediaan">Persediaan yang dikelola dengan tepat adalah \nlangkah awal menuju keberlanjutan bisnis</string>
+    <string name="next_btn">Lanjut ></string>
+    <string name="kelola_persediaan_barang">Kelola Persediaan Barang</string>
+    <string name="skip"><![CDATA[Lewati >]]></string>
+    <string name="menu">Menu</string>
+    <string name="slide_tracking">Lacak pengiriman dengan mudah tanpa batas. Dapatkan kemudahan  dan pastikan setiap pengiriman sukses sampai ke tujuan</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="fab_add_activity">fab activity\n</string>
+    <string name="title_profile">profile</string>
+    <string name="title_activity">Activity</string>
+    <string name="title_gas_station">Pencatatan</string>
+    <string name="title_settings">Pengaturan</string>
+    <string name="title_tracking">Pengiriman</string>
 </resources>
