@@ -16,4 +16,6 @@
     <string name="title_gas_station">Pencatatan</string>
     <string name="title_settings">Pengaturan</string>
     <string name="title_tracking">Pengiriman</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

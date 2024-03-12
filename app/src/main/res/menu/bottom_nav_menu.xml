@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="none">
         <item
             android:id="@+id/navigation_home"
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/title_home" />
 
         <item
-            android:id="@+id/navigation_gas_station"
-            android:icon="@drawable/ic_baseline_timeline_24"
-            android:title="@string/title_gas_station" />
+            android:id="@+id/navigation_pencatatan"
+            android:icon="@drawable/ic_truck"
+            android:title="@string/title_tracking" />
 
         <item
             android:id="@+id/navigation_add_activity"
             android:title="" />
 
         <item
-            android:id="@+id/navigation_activity"
-            android:icon="@drawable/ic_truck"
-            android:title="@string/title_tracking" />
+            android:id="@+id/navigation_pengiriman"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/title_profile" />
         <item
-            android:id="@+id/navigation_profile"
+            android:id="@+id/navigation_pengaturan"
             android:icon="@drawable/baseline_settings_24"
             android:title="@string/title_settings" />
-    </group>
 </menu>

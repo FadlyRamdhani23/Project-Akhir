@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.ui.notifications
+package com.tugasakhir.udmrputra.ui.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater

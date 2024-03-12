@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.ui.dashboard
+package com.tugasakhir.udmrputra.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

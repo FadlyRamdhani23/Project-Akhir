@@ -7,26 +7,34 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.tugasakhir.udmrputra.ui.ui.home.HomeFragment"
+        android:name="com.tugasakhir.udmrputra.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
+            app:destination="@id/navigation_pencatatan" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_notifications"
-            app:destination="@id/navigation_notifications" />
+            app:destination="@id/navigation_pengiriman" />
+        <action
+            android:id="@+id/action_navigation_home_to_pengaturanFragment"
+            app:destination="@id/navigation_pengaturan" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.tugasakhir.udmrputra.ui.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_pencatatan"
+        android:name="com.tugasakhir.udmrputra.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.tugasakhir.udmrputra.ui.ui.notifications.NotificationsFragment"
+        android:id="@+id/navigation_pengiriman"
+        android:name="com.tugasakhir.udmrputra.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_pengaturan"
+        android:name="com.tugasakhir.udmrputra.ui.pengaturan.PengaturanFragment"
+        android:label="fragment_pengaturan"
+        tools:layout="@layout/fragment_pengaturan" />
 </navigation>
