@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityHomeBinding
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
+import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import com.tugasakhir.udmrputra.ui.onboarding.OnboardingActivity
 
 class Home : AppCompatActivity() {
@@ -40,6 +41,11 @@ class Home : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.fabAddActivity.setOnClickListener {
+        intent = Intent(this, BarangActivity::class.java)
+        startActivity(intent)
+        }
 
     }
 }
