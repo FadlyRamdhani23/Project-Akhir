@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "832294277709",
+    "project_id": "ud-mr-putra",
+    "storage_bucket": "ud-mr-putra.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832294277709:android:83fa0f8d4557d53b53c204",
+        "android_client_info": {
+          "package_name": "com.tugasakhir.udmrputra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3whj-C2pg7PfE7AEdnnSUg8T40JZKeFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
