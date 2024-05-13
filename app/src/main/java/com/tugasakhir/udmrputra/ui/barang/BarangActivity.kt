@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.barang
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,7 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
+import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
 
 class BarangActivity : AppCompatActivity() {
 
@@ -46,7 +48,11 @@ class BarangActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.rvBarang)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        adapter = BarangAdapter(barangList)
+        adapter = BarangAdapter(this, barangList)
         recyclerView.adapter = adapter
+        binding.fabAddBarang.setOnClickListener {
+            val intent = Intent(this, InputBarangActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -21,4 +21,10 @@
     <string name="title_activity_barang">BarangActivity</string>
     <string name="tab_text_1">Masuk</string>
     <string name="tab_text_2">Keluar</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="action_bar_maps">Detail Pengiriman</string>
+    <string name="enable_location_message">Fitur lokasi dinonaktifkan. Apakah Anda ingin mengaktifkannya?</string>
+    <string name="yes">Ya</string>
+    <string name="slider">slider\n</string>
+    <string name="detail_pengiriman">Detail Pengiriman</string>
 </resources>

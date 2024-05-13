@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tugasakhir.udmrputra.databinding.FragmentHomeBinding
 import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
+import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
 
 class HomeFragment : Fragment() {
 
@@ -32,6 +33,10 @@ class HomeFragment : Fragment() {
 
         binding.toDaftarMitra.setOnClickListener {
             val intent = Intent(activity, DaftarMitra::class.java)
+            startActivity(intent)
+        }
+        binding.pengajuan.setOnClickListener {
+            val intent = Intent(activity, ActivityPengajuan::class.java)
             startActivity(intent)
         }
         return root
