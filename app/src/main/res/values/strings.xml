@@ -27,4 +27,9 @@
     <string name="yes">Ya</string>
     <string name="slider">slider\n</string>
     <string name="detail_pengiriman">Detail Pengiriman</string>
+    <string name="namaField">Masukan nama</string>
+    <string name="emailField">Masukan alamat email</string>
+    <string name="sandiField">Masukan kata sandi</string>
+    <string name="konfirmasiField">Masukan kembali kata sandi</string>
+    <string name="nomorField">Masukan nomor HP</string>
 </resources>

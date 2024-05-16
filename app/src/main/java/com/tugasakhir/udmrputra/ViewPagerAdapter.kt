@@ -11,9 +11,9 @@ import com.tugasakhir.udmrputra.databinding.SlideLayoutBinding
 
 class ViewPagerAdapter(private val context: Context) : PagerAdapter() {
     private val images = intArrayOf(
-        R.drawable.onboarding_persediaan,
-        R.drawable.onboarding_tracking_pengiriman,
-        R.drawable.ic_launcher_background
+        R.drawable.onboarding_1,
+        R.drawable.onboarding_2,
+        R.drawable.onboarding_3
     )
 
     private val descriptions = intArrayOf(
