@@ -50,7 +50,7 @@
         android:src="@drawable/icon_barang"
         android:visibility="visible"
         app:borderWidth="0dp"
-        app:layout_anchor="@+id/bottomAppBar"
-        app:layout_anchorGravity="top|center"
+        app:layout_anchor="@+id/nav_host_fragment_activity_main"
+        app:layout_anchorGravity="bottom|center"
         app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

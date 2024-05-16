@@ -32,4 +32,5 @@
     <string name="sandiField">Masukan kata sandi</string>
     <string name="konfirmasiField">Masukan kembali kata sandi</string>
     <string name="nomorField">Masukan nomor HP</string>
+    <string name="api_key">AIzaSyCJGXpV0zpsGLJxDF3IeSL77yy6Sl12zKs</string>
 </resources>
