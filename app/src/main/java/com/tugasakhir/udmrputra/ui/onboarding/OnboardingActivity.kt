@@ -12,6 +12,7 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.ViewPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityOnboardingBinding
 import com.tugasakhir.udmrputra.ui.Home
+import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -50,7 +51,7 @@ class OnboardingActivity : AppCompatActivity() {
             if (getitem(0) < 2) {
                 binding.viewPager.setCurrentItem(getitem(1), true)
             } else {
-                val i = Intent(this@OnboardingActivity, Home::class.java)
+                val i = Intent(this@OnboardingActivity, LoginActivity::class.java)
                 startActivity(i)
                 finish()
                 getSharedPreferences("PREFS", MODE_PRIVATE).edit()

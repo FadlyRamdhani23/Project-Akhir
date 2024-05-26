@@ -22,6 +22,11 @@
         android:theme="@style/Theme.UDMRPutra"
         tools:targetApi="31">
         <activity
+            android:name=".ui.dashboard.sopir.DaftarSopir"
+            android:exported="false"
+            android:label="@string/title_activity_daftar_sopir"
+            android:theme="@style/Theme.UDMRPutra" />
+        <activity
             android:name=".ui.logreg.RegisterActivity"
             android:exported="false" />
         <activity
@@ -66,11 +71,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data

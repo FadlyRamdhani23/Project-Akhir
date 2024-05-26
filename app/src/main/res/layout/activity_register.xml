@@ -61,7 +61,7 @@
             android:text="Nama" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nama_textField"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/namaField"
@@ -69,8 +69,10 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nama_textField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +83,7 @@
             android:text="Email" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_textField"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/emailField"
@@ -89,8 +91,10 @@
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_textField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,7 +105,6 @@
             android:text="Kata Sandi" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sandi_textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
@@ -109,8 +112,10 @@
             app:startIconDrawable="@drawable/icon_key">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sandi_textField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +126,6 @@
             android:text="Konfirmasi Kata Sandi" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/konfirmasi_textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
@@ -129,8 +133,10 @@
             app:startIconDrawable="@drawable/icon_key">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/konfirmasi_textField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,7 +147,6 @@
             android:text="Nomor HP" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nomor_textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nomorField"
@@ -150,7 +155,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:id="@+id/nomor_textField"
+                android:inputType="number"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,6 +172,7 @@
                 android:text="Sudah punya akun? "/>
 
             <TextView
+                android:id="@+id/tvMasuk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
