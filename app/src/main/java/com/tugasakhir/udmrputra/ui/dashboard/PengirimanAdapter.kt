@@ -14,7 +14,7 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
 
     class MitraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.pengiriman_name)
-        val location: TextView = itemView.findViewById(R.id.pengiriman_location)
+        val status: TextView = itemView.findViewById(R.id.pengiriman_status)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MitraViewHolder {
@@ -25,10 +25,11 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
     override fun onBindViewHolder(holder: MitraViewHolder, position: Int) {
         val currentItem = pengirimanList[position]
         holder.name.text = currentItem.name
-        holder.location.text = currentItem.location
+        holder.status.text = currentItem.status
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, MapsActivity::class.java)
+            intent.putExtra("PENGIRIMAN_DATA", currentItem) // Menambahkan objek Pengiriman ke Intent
             context.startActivity(intent)
         }
     }

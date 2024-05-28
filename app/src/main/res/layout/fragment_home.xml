@@ -110,41 +110,13 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- CardView 1 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/imageView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="20dp"
-                        android:layout_marginTop="40dp"
-                        android:src="@drawable/icon_daftarmitra" /> <!-- Ganti dengan gambar yang sesuai -->
-
-                    <TextView
-                        android:id="@+id/textView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/baseline_arrow_right_alt_24"
-                        android:fontFamily="@font/nunito_bold"
-                        android:text="Daftar Mitra"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+            <com.tugasakhir.udmrputra.ui.customview.PieChartView
+                android:id="@+id/pieChartView"
+                android:layout_width="147dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="147dp"
+                android:layout_centerInParent="true" />
 
             <!-- CardView 2 -->
             <androidx.cardview.widget.CardView

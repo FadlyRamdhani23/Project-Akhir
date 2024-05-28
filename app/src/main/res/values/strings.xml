@@ -33,6 +33,10 @@
     <string name="konfirmasiField">Masukan kembali kata sandi</string>
     <string name="nomorField">Masukan nomor HP</string>
     <string name="api_key">AIzaSyCJGXpV0zpsGLJxDF3IeSL77yy6Sl12zKs</string>
+    <string name="logout">Keluar</string>
+    <string name="title_dark_mode">Mode Hitam</string>
+    <string name="desc_dark_mode">Ganti ke tema hitam</string>
+    <string name="title_pengiriman">Pengiriman</string>
     <string name="title_activity_daftar_sopir">DaftarSopir</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -76,4 +80,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="action_bar_mitra">Daftar Mitra</string>
+    <string name="action_bar_supir">Daftar supir</string>
 </resources>

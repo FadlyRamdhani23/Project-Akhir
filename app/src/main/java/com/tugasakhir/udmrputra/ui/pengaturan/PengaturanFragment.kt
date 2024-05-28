@@ -68,14 +68,12 @@ class PengaturanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val btnLogout = view.findViewById<Button>(R.id.btnLogout)
-            btnLogout.setOnClickListener {
-                Firebase.auth.signOut()
-                Toast.makeText(context, "Berhasil Keluar", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, LoginActivity::class.java)
-                startActivity(intent)
-            }
-
+        binding.btnLogout.setOnClickListener {
+            Firebase.auth.signOut()
+            Toast.makeText(context, "Berhasil Keluar", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     companion object {

@@ -17,7 +17,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
+    // This property is only valid between onCreat eView and
     // onDestroyView.
     private val binding get() = _binding!!
 
@@ -31,6 +31,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        // Set data for PieChartView
+        val pieChartView = binding.pieChartView
+        pieChartView.setData(180f, 180f) // Set data for Buah and Sayur
 
         binding.toDaftarMitra.setOnClickListener {
             val intent = Intent(activity, DaftarMitra::class.java)

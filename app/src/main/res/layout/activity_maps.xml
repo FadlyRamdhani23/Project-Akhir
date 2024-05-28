@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back"
             app:title="@string/action_bar_maps" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -61,6 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+
     <ProgressBar
         android:id="@+id/mapProgressBar"
         android:layout_width="wrap_content"
@@ -94,7 +96,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
             android:layout_marginTop="30dp">
 
             <TextView
@@ -144,7 +145,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/title_maps_content"
+                        android:id="@+id/nama_sopir"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -155,19 +156,25 @@
                         tools:text="Mitra" />
 
                     <TextView
-                        android:id="@+id/name_maps_content"
+                        android:id="@+id/noHp_sopir"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                         tools:text="Pak Budi" />
 
                     <TextView
-                        android:id="@+id/desc_maps_content"
+                        android:id="@+id/status_pengiriman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         tools:text="Descripsi" />
+
+                    <TextView
+                        android:id="@+id/alamat_pengiriman"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                        tools:text="Alamat" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -203,9 +210,8 @@
                 app:layout_constraintTop_toBottomOf="@id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
             <LinearLayout
-                android:id="@+id/linearLayout7"
+                android:id="@+id/linearLayouttempat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -221,20 +227,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
-                    android:gravity="center"
                     android:maxLines="2"
-                    android:text="minimun" />
+                    android:text="Prediksi Waktu" />
 
                 <TextView
-                    android:id="@+id/min_price_maps_content"
+                    android:id="@+id/tv_location_right_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="Deskripsi" />
+
+                    tools:text="Descripsi" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/linearLayoutArrivalTime"
@@ -244,7 +250,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout7"
+                app:layout_constraintTop_toBottomOf="@id/linearLayouttempat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
@@ -254,17 +260,18 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="Prediksi Waktu" />
+                    android:layout_marginBottom="8dp"
+                    android:text="Lokasi saat ini" />
 
                 <TextView
                     android:id="@+id/tv_arrival_times_maps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp"
                     android:textStyle="bold"
 
-                    tools:text="Descripsi" />
+                    tools:text="Descrip" />
             </LinearLayout>
 
 

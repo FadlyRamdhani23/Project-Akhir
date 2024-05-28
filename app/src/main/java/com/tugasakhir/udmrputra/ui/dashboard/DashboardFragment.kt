@@ -18,11 +18,13 @@ class DashboardFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PengirimanAdapter
     private var pengirimanList = arrayListOf<Pengiriman>(
-        Pengiriman(1, "Mitra 1", "Lokasi 1"),
-        Pengiriman(2, "Mitra 2", "Lokasi 2"),
-        Pengiriman(3, "Mitra 3", "Lokasi 3"),
-        // Tambahkan lebih banyak data Mitra jika diperlukan
+        Pengiriman(1, "Pengiriman 1",  -6.971744, 107.630628, -6.1754,  106.8272, "Alamat 1", "08123456789", "Dalam Proses"),
+        Pengiriman(2, "Pengiriman 2", -6.9175, 107.6191, -7.2026, 107.9075, "Alamat 2", "08123456789", "Dalam Proses"),
+        Pengiriman(3, "Pengiriman 3", -6.5950, 106.8166, -7.2026, 107.9075, "Alamat 3", "08123456789", "Dalam Proses"),
+        // Tambahkan lebih banyak data Pengiriman jika diperlukan
     )
+
+
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

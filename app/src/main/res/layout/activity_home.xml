@@ -51,6 +51,7 @@
         android:visibility="visible"
         app:borderWidth="0dp"
         app:layout_anchor="@+id/nav_host_fragment_activity_main"
+        android:layout_marginBottom="40dp"
         app:layout_anchorGravity="bottom|center"
         app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
