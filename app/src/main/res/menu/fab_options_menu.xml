@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/option_1"
-        android:title="Option 1" />
-    <item
-        android:id="@+id/option_2"
-        android:title="Option 2" />
+        android:id="@+id/action_open_other_activity"
+        android:icon="@drawable/box"
+        android:title="Open Other Activity"
+        app:showAsAction="always"/>
 </menu>

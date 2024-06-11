@@ -14,5 +14,5 @@ data class Pengiriman(
     val supirLongitude: Double,
     val address: String,
     val phone: String,
-    val status: String
+    val status: Int
 ): Parcelable

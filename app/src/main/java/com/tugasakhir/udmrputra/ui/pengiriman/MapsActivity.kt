@@ -12,9 +12,11 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentContainerView
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -59,7 +61,7 @@ class MapsActivity: AppCompatActivity(), OnMapReadyCallback, RouteListener {
             binding.namaSopir.text = pengirimanData.name
             binding.alamatPengiriman.text = pengirimanData.address
             binding.noHpSopir.text = pengirimanData.phone
-            binding.statusPengiriman.text = pengirimanData.status
+            binding.statusPengiriman.text = pengirimanData.status.toString()
         }
         else {
             Toast.makeText(this, "Data pengiriman tidak ditemukan", Toast.LENGTH_SHORT).show()
@@ -69,52 +71,62 @@ class MapsActivity: AppCompatActivity(), OnMapReadyCallback, RouteListener {
     }
 
 
-@SuppressLint("SuspiciousIndentation")
-override fun onMapReady(googleMap: GoogleMap) {
-    mMap = googleMap
-    mMap.uiSettings.isZoomControlsEnabled = true
-    mMap.uiSettings.isIndoorLevelPickerEnabled = true
-    mMap.uiSettings.isCompassEnabled = true
-    mMap.uiSettings.isMapToolbarEnabled = true
-    val pengirimanData: Pengiriman? = intent.getParcelableExtra("PENGIRIMAN_DATA")
-    if(pengirimanData != null) {
-        userLocation = LatLng(pengirimanData.supirLatitude, pengirimanData.supirLongitude)
-        vendorLocation = LatLng(pengirimanData.mitraLatitude, pengirimanData.mitraLongitude)
-        val geocoder = Geocoder(this, Locale.getDefault())
-       val addresses = geocoder.getFromLocation(userLocation.latitude, userLocation.longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
-                val address = addresses[0].getAddressLine(0)
-                binding.tvLocationRightNow.text = address.toString()
+    @SuppressLint("SuspiciousIndentation")
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isIndoorLevelPickerEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
+        val pengirimanData: Pengiriman? = intent.getParcelableExtra("PENGIRIMAN_DATA")
+        if(pengirimanData != null) {
+            userLocation = LatLng(pengirimanData.supirLatitude, pengirimanData.supirLongitude)
+            vendorLocation = LatLng(pengirimanData.mitraLatitude, pengirimanData.mitraLongitude)
+            val geocoder = Geocoder(this, Locale.getDefault())
+           val addresses = geocoder.getFromLocation(userLocation.latitude, userLocation.longitude, 1)
+                if (addresses != null && addresses.isNotEmpty()) {
+                    val address = addresses[0].getAddressLine(0)
+                    binding.tvLocationRightNow.text = address.toString()
+                } else {
+                    binding.tvLocationRightNow.text = "Alamat tidak ditemukan"
+                }
+
+            if (pengirimanData.status == 1) {
+                // Jika status pengiriman adalah "Sedang di kemas", tampilkan ImageView dan sembunyikan google_map
+                findViewById<ImageView>(R.id.image_status).visibility = View.VISIBLE
+                findViewById<FragmentContainerView>(R.id.google_map).visibility = View.GONE
             } else {
-                binding.tvLocationRightNow.text = "Alamat tidak ditemukan"
+                // Jika status pengiriman bukan "Sedang di kemas", tampilkan google_map dan sembunyikan ImageView
+                findViewById<ImageView>(R.id.image_status).visibility = View.GONE
+                findViewById<FragmentContainerView>(R.id.google_map).visibility = View.VISIBLE
             }
-    }
-    else {
-       Toast.makeText(this, "Data pengiriman tidak ditemukan", Toast.LENGTH_SHORT).show()
-    }
+        }
+        else {
+           Toast.makeText(this, "Data pengiriman tidak ditemukan", Toast.LENGTH_SHORT).show()
+        }
 
-    val truckIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_truck)
+        val truckIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_truck)
 
-  val distance = calculateDistance(
-    userLocation.latitude,
-    userLocation.longitude,
-    vendorLocation.latitude,
-    vendorLocation.longitude
-)
-val distanceFormatted = String.format("%.2f", distance)
-binding.distanceMapsContent.text = "${distanceFormatted} km"
-
-    mMap.addMarker(
-        MarkerOptions()
-            .position(vendorLocation)
-            .title("Dicoding Space")
-            .snippet("Batik Kumeli No.50")
-            .icon(truckIcon) // Set the custom icon here
+      val distance = calculateDistance(
+        userLocation.latitude,
+        userLocation.longitude,
+        vendorLocation.latitude,
+        vendorLocation.longitude
     )
-    zoomToLocations()
+    val distanceFormatted = String.format("%.2f", distance)
+    binding.distanceMapsContent.text = "${distanceFormatted} km"
 
-    findRoute(userLocation, vendorLocation)
-}
+        mMap.addMarker(
+            MarkerOptions()
+                .position(vendorLocation)
+                .title("Dicoding Space")
+                .snippet("Batik Kumeli No.50")
+                .icon(truckIcon) // Set the custom icon here
+        )
+        zoomToLocations()
+
+        findRoute(userLocation, vendorLocation)
+    }
 
 
 

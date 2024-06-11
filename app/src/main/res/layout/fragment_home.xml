@@ -82,7 +82,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:padding="30dp"
-                    android:src="@drawable/icon_putra" />
+                    android:src="@drawable/logo4" />
 
             </RelativeLayout>
 

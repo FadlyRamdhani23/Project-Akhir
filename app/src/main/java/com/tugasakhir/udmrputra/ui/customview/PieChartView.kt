@@ -50,7 +50,7 @@ class PieChartView @JvmOverloads constructor(
 
         // Draw text on Fruit Segment
         paint.color = Color.WHITE
-        paint.textSize = 35f
+        paint.textSize = 20f
         val fruitText = "$fruitWeight kg\nBuah"
         drawCenteredText(canvas, fruitText, width / 3, height / 3)
 

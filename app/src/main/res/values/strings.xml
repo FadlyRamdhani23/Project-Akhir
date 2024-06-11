@@ -82,4 +82,9 @@
     </string>
     <string name="action_bar_mitra">Daftar Mitra</string>
     <string name="action_bar_supir">Daftar supir</string>
+    <string name="supir_maps">Maps Supir</string>
+    <string name="start_point">start</string>
+    <string name="start_running">start</string>
+    <string name="stop_running">stop</string>
+    <string name="title_activity_stock_barang">Stok Barang</string>
 </resources>

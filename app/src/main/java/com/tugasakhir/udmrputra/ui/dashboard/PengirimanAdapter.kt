@@ -25,7 +25,11 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
     override fun onBindViewHolder(holder: MitraViewHolder, position: Int) {
         val currentItem = pengirimanList[position]
         holder.name.text = currentItem.name
-        holder.status.text = currentItem.status
+        when (currentItem.status) {
+            1 -> holder.status.text = "Sedang di kemas"
+            2 -> holder.status.text = "Sedang diperjalanan"
+            else -> holder.status.text = "Status tidak diketahui"
+        }
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, MapsActivity::class.java)

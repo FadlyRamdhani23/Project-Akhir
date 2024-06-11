@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
@@ -16,6 +17,7 @@ import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
+import com.tugasakhir.udmrputra.ui.pengiriman.SupirActivity
 
 class BarangActivity : AppCompatActivity() {
 
@@ -39,7 +41,8 @@ class BarangActivity : AppCompatActivity() {
 
         binding = ActivityBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val toolbar: Toolbar = findViewById(R.id.topAppBarr)
+        setSupportActionBar(toolbar)
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
@@ -53,6 +56,23 @@ class BarangActivity : AppCompatActivity() {
         binding.fabAddBarang.setOnClickListener {
             val intent = Intent(this, InputBarangActivity::class.java)
             startActivity(intent)
+        }
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.fab_options_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_open_other_activity -> {
+                // Ganti OtherActivity dengan nama Activity yang ingin Anda buka
+                val intent = Intent(this, SupirActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.notifications
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tugasakhir.udmrputra.databinding.FragmentNotificationsBinding
+import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
+import com.tugasakhir.udmrputra.ui.pengiriman.SupirActivity
 
 class NotificationsFragment : Fragment() {
 
@@ -29,6 +32,11 @@ class NotificationsFragment : Fragment() {
         // Set data for PieChartView
         val pieChartView = binding.pieChartView
         pieChartView.setData(180f, 180f) // Set data for Buah and Sayur
+
+        binding.btnRefresh.setOnClickListener {
+            val intent = Intent(activity, SupirActivity::class.java)
+            startActivity(intent)
+        }
 
         return root
     }
