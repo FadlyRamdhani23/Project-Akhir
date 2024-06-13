@@ -73,6 +73,7 @@ dependencies {
 
     // Google Direction API
     implementation("com.github.dangiashish:Google-Direction-Api:1.4")
+    implementation ("com.jaredrummler:material-spinner:1.3.1")
 
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")

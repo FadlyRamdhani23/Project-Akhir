@@ -29,7 +29,6 @@ class BarangAdapter(private val context: Context, private val barangList: List<B
     override fun onBindViewHolder(holder: BarangViewHolder, position: Int) {
         val currentItem = barangList[position]
         holder.name.text = currentItem.name
-        holder.gambar.setImageResource(currentItem.gambar)
 
         Glide.with(context)
             .load(currentItem.gambar) // replace with your image URL or resource
