@@ -12,8 +12,10 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
+import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
@@ -25,15 +27,15 @@ class BarangActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BarangAdapter
     private var barangList = arrayListOf<Barang>(
-        Barang(1, "Barang 1"),
-        Barang(2, "Barang 2"),
-        Barang(3, "Barang 3"),
-        Barang(4, "Barang 4"),
-        Barang(5, "Barang 5"),
-        Barang(6, "Barang 6"),
-        Barang(7, "Barang 7"),
-        Barang(8, "Barang 8"),
-        Barang(9, "Barang 9"),
+        Barang(1, "Tomat", R.drawable.tomato),
+        Barang(2, "Timun", R.drawable.timun),
+        Barang(3, "Cabai", R.drawable.cabai),
+        Barang(4, "Barang 4", R.drawable.tomato),
+        Barang(5, "Barang 5", R.drawable.tomato),
+        Barang(6, "Barang 6", R.drawable.tomato),
+        Barang(7, "Barang 7", R.drawable.tomato),
+        Barang(8, "Barang 8", R.drawable.tomato),
+        Barang(9, "Barang 9", R.drawable.tomato),
         // Tambahkan lebih banyak data Barang jika diperlukan
     )
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,4 +77,5 @@ class BarangActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

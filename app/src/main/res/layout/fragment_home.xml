@@ -50,7 +50,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UD MR PUTRA"
+                        android:text="SELAMAT DATANG"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -113,10 +113,10 @@
             <com.tugasakhir.udmrputra.ui.customview.PieChartView
                 android:id="@+id/pieChartView"
                 android:layout_width="147dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_height="147dp"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp" />
 
             <!-- CardView 2 -->
             <androidx.cardview.widget.CardView

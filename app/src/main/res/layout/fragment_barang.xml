@@ -20,4 +20,14 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPencatatan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/section_label"
+        tools:listitem="@layout/item_list_barang"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
