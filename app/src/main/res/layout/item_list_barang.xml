@@ -1,109 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="4dp"
     app:layout_constraintStart_toStartOf="parent">
 
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="150dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/barang_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Barang"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/mitra_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Haji Ojak"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/imageListBarang"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="10dp"
+            android:src="@color/green"
+            android:layout_gravity="center_vertical"/>
 
         <LinearLayout
-            android:id="@+id/linearLayout9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="230dp"
+            android:layout_height="150dp"
             android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="12dp">
 
             <TextView
-                android:id="@+id/jumlah_barang"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="+40 Kg"
-                android:textColor="@color/green"/>
+                android:id="@+id/jenisListBarang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jenis"
+                android:layout_marginBottom="5dp"/>
 
             <TextView
-                android:id="@+id/harga_barang"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Rp.100.000/kg"
-                android:textSize="10sp" />
+                android:id="@+id/namaListBarang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Timun"
+                 android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/jumlahListBarang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="50 kg"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/catatanListBarang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Catatan"
+                android:layout_marginBottom="5dp"/>
+
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/warna_jenis"
-            android:layout_width="30dp"
-            android:layout_height="75dp"
-            android:src="@color/blue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/shape_3"
+            />
 
-        <TextView
-            android:id="@+id/jenis_barang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buah"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:rotation="270"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.997"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout5"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
 
-    </androidx.cardview.widget.CardView>
 
-
+</androidx.cardview.widget.CardView>

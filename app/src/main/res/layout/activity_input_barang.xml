@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@color/blue_2"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -18,22 +19,15 @@
             android:layout_height="?actionBarSize"
             app:navigationIcon="@drawable/ic_back">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:text="Jenis Barang"
+                    android:text="Tambah Barang"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-            </RelativeLayout>
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -89,6 +83,8 @@
                     </LinearLayout>
 
 
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -98,18 +94,17 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/inputJenis"
+                            android:id="@+id/tvJenisBarang"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Jenis Barang"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
-                        <com.jaredrummler.materialspinner.MaterialSpinner
-                            android:id="@+id/inputJenisSipnner"
+                        <Spinner
+                            android:id="@+id/jenisBarangSpinner"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="Pilih Jenis Barang"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
@@ -131,10 +126,10 @@
                             android:textSize="14sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputbarang"
+                            android:id="@+id/input_namaBarang"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="Masukan nama barang"
+                            android:hint="masukan jumlah barang"
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"
@@ -159,7 +154,7 @@
                             android:textSize="14sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputjumlah"
+                            android:id="@+id/input_jumlahBarang"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:hint="masukan jumlah barang"
@@ -168,8 +163,57 @@
                             android:maxLines="1"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Catatan Barang"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_catatanBarang"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="masukan jumlah barang"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
+                    <ImageView
+                        android:id="@+id/previewImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:contentDescription="@string/preview_image_view" />
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:id="@+id/rvImageList"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="210dp"-->
+<!--                        android:layout_marginStart="20dp"-->
+<!--                        android:layout_marginEnd="20dp"-->
+<!--                        tools:listitem="@layout/item_image_list"/>-->
+
+                    <ImageView
+                        android:id="@+id/imagePreview"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/baseline_image_24"
+                        android:layout_marginStart="20dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -219,8 +263,6 @@
                 app:backgroundTint="@color/grey_50"
                 app:cornerRadius="50dp"
                 app:elevation="5dp" />
-
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

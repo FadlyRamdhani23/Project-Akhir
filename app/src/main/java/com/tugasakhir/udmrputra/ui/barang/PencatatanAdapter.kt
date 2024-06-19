@@ -24,7 +24,7 @@ class PencatatanAdapter (private val context: Context, private val pencatatanLis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PencatatanViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_barang, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_pencatatan, parent, false)
         return PencatatanViewHolder(view)
     }
 

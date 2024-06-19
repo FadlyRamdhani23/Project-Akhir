@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tugasakhir.udmrputra.databinding.FragmentNotificationsBinding
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 import com.tugasakhir.udmrputra.ui.pengiriman.SupirActivity
+import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 
 class NotificationsFragment : Fragment() {
 
@@ -29,14 +31,20 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Set data for PieChartView
-        val pieChartView = binding.pieChartView
-        pieChartView.setData(180f, 180f) // Set data for Buah and Sayur
+       val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
+        val viewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs = binding.tabs
+        tabs.setupWithViewPager(viewPager)
 
-        binding.btnRefresh.setOnClickListener {
-            val intent = Intent(activity, SupirActivity::class.java)
-            startActivity(intent)
-        }
+        // Set data for PieChartView
+//        val pieChartView = binding.pieChartView
+//        pieChartView.setData(180f, 180f) // Set data for Buah and Sayur
+//
+//        binding.btnRefresh.setOnClickListener {
+//            val intent = Intent(activity, SupirActivity::class.java)
+//            startActivity(intent)
+//        }
 
         return root
     }

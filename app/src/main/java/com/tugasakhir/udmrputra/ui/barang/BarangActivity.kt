@@ -48,11 +48,11 @@ class BarangActivity : AppCompatActivity() {
         setContentView(binding.root)
         val toolbar: Toolbar = findViewById(R.id.topAppBarr)
         setSupportActionBar(toolbar)
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
+//        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+//        val viewPager: ViewPager = binding.viewPager
+//        viewPager.adapter = sectionsPagerAdapter
+//        val tabs: TabLayout = binding.tabs
+//        tabs.setupWithViewPager(viewPager)
 
         catRecyclerView()
 
@@ -67,12 +67,21 @@ class BarangActivity : AppCompatActivity() {
 
     }
 
+//    private fun barangRecyclerView() {
+//        val barangList = arrayListOf<Barang>()
+//        val db = FirebaseFirestore.getInstance()
+//
+//        recyclerView = findViewById(R.id.)
+//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        adapter = BarangAdapter(this, barangList)
+//    }
+
     private fun catRecyclerView() {
         val barangList = arrayListOf<Barang>()
         val db = FirebaseFirestore.getInstance()
 
         recyclerView = findViewById(R.id.rvBarang)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = BarangAdapter(this, barangList)
 
 
@@ -87,6 +96,9 @@ class BarangActivity : AppCompatActivity() {
                     val data = Barang(
                         document.id,
                         document.data["nama"].toString(),
+                        document.data["jenis"].toString(),
+                        document.data["jumlah"].toString(),
+                        document.data["catatan"].toString(),
                          imageUrls.toString()
                     )
                     barangList.add(data)
