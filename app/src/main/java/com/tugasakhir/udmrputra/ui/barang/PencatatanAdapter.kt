@@ -34,12 +34,11 @@ class PencatatanAdapter (private val context: Context, private val pencatatanLis
 
     override fun onBindViewHolder(holder: PencatatanViewHolder, position: Int) {
         val data = pencatatanList[position]
-        holder.jenis.text = data.jenis
-        holder.namaBrg.text = data.namaBrg
-        holder.namaMitra.text = data.namaMitra
-        holder.harga.text = data.harga.toString()
+        holder.jenis.text = data.catId
+        holder.namaBrg.text = data.barangId
+        holder.namaMitra.text = data.namaPetani
+        holder.harga.text = data.hargaBeli
         holder.jumlah.text = data.jumlah.toString() + " Kg"
-        holder.warna.setImageResource(data.warna)
 
         holder.itemView.setOnClickListener {
              val intent = Intent(context, ActivityPengajuan::class.java)

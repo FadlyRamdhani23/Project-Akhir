@@ -26,16 +26,17 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangBinding
+import com.tugasakhir.udmrputra.databinding.ActivityInputBarangMasukBinding
 import java.util.UUID
 
-class InputBarangActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityInputBarangBinding
+class InputMasukActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityInputBarangMasukBinding
     private var currentImageUri: Uri? = null
     private val imageList = mutableListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityInputBarangBinding.inflate(layoutInflater)
+        binding = ActivityInputBarangMasukBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val db = FirebaseFirestore.getInstance()
