@@ -22,14 +22,16 @@ import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
-import com.tugasakhir.udmrputra.ui.pengiriman.SupirActivity
+import com.tugasakhir.udmrputra.ui.sopir.HomeSupirActivity
+import com.tugasakhir.udmrputra.ui.sopir.SupirActivity
 
 class BarangActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBarangBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BarangAdapter
-//    private var barangList = arrayListOf<Barang>(
+
+    //    private var barangList = arrayListOf<Barang>(
 //        Barang(1, "Tomat", R.drawable.tomato),
 //        Barang(2, "Timun", R.drawable.timun),
 //        Barang(3, "Cabai", R.drawable.cabai),
@@ -48,11 +50,11 @@ class BarangActivity : AppCompatActivity() {
         setContentView(binding.root)
         val toolbar: Toolbar = findViewById(R.id.topAppBarr)
         setSupportActionBar(toolbar)
-//        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-//        val viewPager: ViewPager = binding.viewPager
-//        viewPager.adapter = sectionsPagerAdapter
-//        val tabs: TabLayout = binding.tabs
-//        tabs.setupWithViewPager(viewPager)
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        val viewPager: ViewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs: TabLayout = binding.tabs
+        tabs.setupWithViewPager(viewPager)
 
         catRecyclerView()
 
@@ -67,55 +69,53 @@ class BarangActivity : AppCompatActivity() {
 
     }
 
-//    private fun barangRecyclerView() {
-//        val barangList = arrayListOf<Barang>()
-//        val db = FirebaseFirestore.getInstance()
-//
-//        recyclerView = findViewById(R.id.)
-//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        adapter = BarangAdapter(this, barangList)
-//    }
-
     private fun catRecyclerView() {
         val barangList = arrayListOf<Barang>()
         val db = FirebaseFirestore.getInstance()
 
         recyclerView = findViewById(R.id.rvBarang)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         adapter = BarangAdapter(this, barangList)
-
+        recyclerView.adapter = adapter
 
         db.collection("barang")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
+                    val barangId = document.id
+                    val catId = document.data["catId"].toString()
+                    val imageUrls = document.get("images") as? List<String>
+                    val namaBarang = document.data["nama"].toString()
+                    val jumlahBarang = document.data["jumlah"].toString()
 
-                    val imageUrls = document.get("gambar") as String?
-                    Log.d("gambar", "imageUrls: $imageUrls")
+                    db.collection("kategori").document(catId)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val catName = documentSnapshot.getString("nama").toString()
 
-                    val data = Barang(
-                        document.id,
-                        document.data["nama"].toString(),
-                        document.data["jenis"].toString(),
-                        document.data["jumlah"].toString(),
-                        document.data["catatan"].toString(),
-                         imageUrls.toString()
-                    )
-                    barangList.add(data)
-
+                            val data = Barang(
+                                barangId,
+                                namaBarang,
+                                catName,
+                                jumlahBarang,
+                                imageUrls?.get(0).toString(),
+                            )
+                            barangList.add(data)
+                            adapter.notifyDataSetChanged()
+                            Log.d("BarangActivity", "Data berhasil ditambahkan: $data")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("BarangActivity", "Error mendapatkan nama kategori", e)
+                        }
                 }
-                recyclerView.adapter = adapter
-                Log.d("BarangActivity", "Data berhasil ditampilkan")
-                Log.d("BarangActivity", "Data: $barangList")
-
             }
             .addOnFailureListener { exception ->
-                Log.w("BarangActivity", "Data gagal ditampilkan")
+                Log.w("BarangActivity", "Data gagal ditampilkan", exception)
             }
-
-
-
     }
+
+
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.fab_options_menu, menu)
@@ -126,10 +126,11 @@ class BarangActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_open_other_activity -> {
                 // Ganti OtherActivity dengan nama Activity yang ingin Anda buka
-                val intent = Intent(this, SupirActivity::class.java)
+                val intent = Intent(this, HomeSupirActivity::class.java)
                 startActivity(intent)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

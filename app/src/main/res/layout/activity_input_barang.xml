@@ -165,33 +165,6 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Catatan Barang"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_catatanBarang"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:hint="masukan jumlah barang"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
-                    </LinearLayout>
                     <ImageView
                         android:id="@+id/previewImageView"
                         android:layout_width="wrap_content"
@@ -208,12 +181,7 @@
 <!--                        android:layout_marginEnd="20dp"-->
 <!--                        tools:listitem="@layout/item_image_list"/>-->
 
-                    <ImageView
-                        android:id="@+id/imagePreview"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:src="@drawable/baseline_image_24"
-                        android:layout_marginStart="20dp"/>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -233,13 +201,20 @@
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
-                        <Button
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text=":"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <ImageView
                             android:id="@+id/buttonChooseImage"
-                            android:layout_width="168dp"
-                            android:layout_height="40dp"
-                            android:textSize="11sp"
-                            android:backgroundTint="#CABCBC"
-                            android:text="Choose File" />
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:src="@drawable/baseline_image_24"
+                            android:layout_marginStart="20dp"/>
 
                     </LinearLayout>
 
@@ -249,7 +224,7 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCheckout"
+                android:id="@+id/btnCheckoutt"
                 android:layout_width="141dp"
                 android:layout_height="61dp"
                 android:layout_gravity="right"

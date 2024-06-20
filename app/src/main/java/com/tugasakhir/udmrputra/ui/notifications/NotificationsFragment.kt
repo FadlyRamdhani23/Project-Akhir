@@ -1,16 +1,12 @@
 package com.tugasakhir.udmrputra.ui.notifications
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tugasakhir.udmrputra.databinding.FragmentNotificationsBinding
-import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
-import com.tugasakhir.udmrputra.ui.pengiriman.SupirActivity
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 
 class NotificationsFragment : Fragment() {

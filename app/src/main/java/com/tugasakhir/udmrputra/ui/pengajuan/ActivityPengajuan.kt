@@ -2,9 +2,12 @@ package com.tugasakhir.udmrputra.ui.pengajuan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityPengajuanBinding
 
@@ -23,6 +26,10 @@ class ActivityPengajuan : AppCompatActivity() {
 
             // Tambahkan CardView ke LinearLayout
             binding.cardViewPengajuan2.addView(newCardView)
+
+
+
+
         }
 
 
@@ -33,11 +40,13 @@ class ActivityPengajuan : AppCompatActivity() {
                 val params = binding.cardViewPengajuan.layoutParams
                 params.height = 200 // Anda dapat mengatur ini sesuai kebutuhan Anda
                 binding.cardViewPengajuan.layoutParams = params
+
             } else {
                 // Melebarkan CardView
                 val params = binding.cardViewPengajuan.layoutParams
                 params.height = LinearLayout.LayoutParams.MATCH_PARENT
                 binding.cardViewPengajuan.layoutParams = params
+
             }
             isCardViewExpanded = !isCardViewExpanded
         }

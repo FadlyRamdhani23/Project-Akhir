@@ -10,12 +10,13 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
     <application
@@ -29,10 +30,16 @@
         android:theme="@style/Theme.UDMRPutra"
         tools:targetApi="31">
         <activity
+            android:name=".ui.sopir.ProfilSupirActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.sopir.HomeSupirActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.barang.StockBarangActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.pengiriman.SupirActivity"
+            android:name=".ui.sopir.SupirActivity"
             android:exported="false" />
         <activity
             android:name=".ui.dashboard.sopir.DaftarSopir"

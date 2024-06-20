@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.FragmentPengaturanBinding
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
-import com.tugasakhir.udmrputra.ui.logreg.RegisterActivity
+import com.tugasakhir.udmrputra.ui.sopir.HomeSupirActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +74,12 @@ class PengaturanFragment : Fragment() {
             Toast.makeText(context, "Berhasil Keluar", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, LoginActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.btnToSupir.setOnClickListener {
+            val intent = Intent(context, HomeSupirActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(context, "Berhasil ke halaman supir", Toast.LENGTH_SHORT).show()
         }
         binding.btnLogout.setOnClickListener {
             Firebase.auth.signOut()

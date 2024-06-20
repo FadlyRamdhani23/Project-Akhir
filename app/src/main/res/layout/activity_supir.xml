@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".ui.pengiriman.SupirActivity">
+tools:context=".ui.sopir.SupirActivity">
 
 <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/appBarLayout"
@@ -20,6 +20,7 @@ tools:context=".ui.pengiriman.SupirActivity">
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:title="@string/action_bar_maps" />
+
 
 </com.google.android.material.appbar.AppBarLayout>
 
@@ -59,7 +60,7 @@ tools:context=".ui.pengiriman.SupirActivity">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-<ProgressBar
+    <ProgressBar
     android:id="@+id/mapProgressBar"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

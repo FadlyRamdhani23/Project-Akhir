@@ -1,7 +1,7 @@
-package com.tugasakhir.udmrputra.ui.pengiriman
+package com.tugasakhir.udmrputra.ui.sopir
 
-import android.Manifest
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -9,7 +9,6 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,13 +31,16 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.RoundCap
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivitySupirBinding
+import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import java.util.concurrent.TimeUnit
 
 
@@ -50,7 +52,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private var isTracking = false
-
+    private lateinit var database: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupirBinding.inflate(layoutInflater)
@@ -62,7 +64,6 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
         mMap.uiSettings.isCompassEnabled = true
@@ -123,8 +124,8 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         }
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create().apply {
-            interval = TimeUnit.SECONDS.toMillis(30)
-            maxWaitTime = TimeUnit.SECONDS.toMillis(30)
+            interval = TimeUnit.MINUTES.toMillis(2) // Set interval to 2 minutes
+            maxWaitTime = TimeUnit.MINUTES.toMillis(2) // Set max wait time to 2 minutes
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder()
@@ -205,10 +206,30 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 for (location in locationResult.locations) {
                     Log.d(TAG, "onLocationResult: " + location.latitude + ", " + location.longitude)
                     val latLng = LatLng(location.latitude, location.longitude)
+                    saveLocationToFirebase(location.latitude, location.longitude)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
             }
         }
+    }
+
+
+    private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
+        val db = FirebaseFirestore.getInstance()
+        val barang = hashMapOf(
+            "latitude" to latitude,
+            "longitude" to longitude,
+        )
+
+        db.collection("location")
+            .add(barang)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+
+                Toast.makeText(this, "Data gagal disimpan", Toast.LENGTH_SHORT).show()
+            }
     }
     private fun startLocationUpdates() {
         try {
