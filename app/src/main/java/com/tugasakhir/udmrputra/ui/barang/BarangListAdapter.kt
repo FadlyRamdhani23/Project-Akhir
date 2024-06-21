@@ -32,7 +32,7 @@ class BarangListAdapter(private val context: Context, private val barangList: Li
         holder.jumlah.text = currentItem.jumlah
 
         //tambahkan kg di belakang jumlah
-        holder.jumlah.text = currentItem.jumlah + " kg"
+        holder.jumlah.text = currentItem.jumlah + " Kg"
 
 
         Glide.with(context)

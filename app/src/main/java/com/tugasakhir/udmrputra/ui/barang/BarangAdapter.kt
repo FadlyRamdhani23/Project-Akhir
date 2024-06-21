@@ -19,7 +19,7 @@ class BarangAdapter(private val context: Context, private val barangList: List<B
     class BarangViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.nama_jenis)
         val gambar: ImageView = itemView.findViewById(R.id.gambar_jenis)
-        val jenis: TextView = itemView.findViewById(R.id.jumlah_jenis)
+        val jumlah: TextView = itemView.findViewById(R.id.jumlah_jenis)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarangViewHolder {
@@ -30,7 +30,7 @@ class BarangAdapter(private val context: Context, private val barangList: List<B
     override fun onBindViewHolder(holder: BarangViewHolder, position: Int) {
         val currentItem = barangList[position]
         holder.name.text = currentItem.name
-        holder.jenis.text = currentItem.jumlah
+        holder.jumlah.text = currentItem.jumlah + " Kg"
 
         Glide.with(context)
             .load(currentItem.gambar) // replace with your image URL or resource
