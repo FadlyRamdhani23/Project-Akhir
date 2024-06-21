@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
 
-class PencatatanAdapter(private val context: Context, private val pencatatanList: List<Pencatatan>) : RecyclerView.Adapter<PencatatanAdapter.PencatatanViewHolder>() {
+class PencatatanMasukAdapter(private val context: Context, private val pencatatanList: List<Pencatatan>) : RecyclerView.Adapter<PencatatanMasukAdapter.PencatatanViewHolder>() {
     class PencatatanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val jenis: TextView = itemView.findViewById(R.id.jenis_barang)
         val namaBrg: TextView = itemView.findViewById(R.id.barang_name)
@@ -44,7 +43,7 @@ class PencatatanAdapter(private val context: Context, private val pencatatanList
         holder.namaBrg.text = data.barangId
         holder.namaMitra.text = data.namaPetani
         holder.harga.text = data.hargaBeli + " Rp"
-        holder.jumlah.text = "${data.jumlah} Kg"
+        holder.jumlah.text = "+${data.jumlah} Kg"
 
 
         holder.itemView.setOnClickListener {

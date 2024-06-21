@@ -19,15 +19,15 @@ import com.tugasakhir.udmrputra.data.PencatatanKeluar
 import com.tugasakhir.udmrputra.databinding.FragmentBarangBinding
 import com.tugasakhir.udmrputra.ui.barang.InputMasukActivity
 import com.tugasakhir.udmrputra.ui.barang.InputKeluarActivity
-import com.tugasakhir.udmrputra.ui.barang.PencatatanAdapter
 import com.tugasakhir.udmrputra.ui.barang.PencatatanKeluarAdapter
+import com.tugasakhir.udmrputra.ui.barang.PencatatanMasukAdapter
 
 class PlaceholderFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentBarangBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private lateinit var p_adapter: PencatatanAdapter
+    private lateinit var p_adapter: PencatatanMasukAdapter
     private lateinit var p_adapter2: PencatatanKeluarAdapter
     private lateinit var progressBar: ProgressBar
 
@@ -114,7 +114,7 @@ class PlaceholderFragment : Fragment() {
 
                 tasks.forEach { it.addOnCompleteListener {
                     if (tasks.all { it.isComplete } && isAdded) {  // Pastikan fragmen masih ditambahkan sebelum mengakses konteks
-                        p_adapter = PencatatanAdapter(requireContext(), pencatatanList = dataList)
+                        p_adapter = PencatatanMasukAdapter(requireContext(), pencatatanList = dataList)
                         recyclerView.adapter = p_adapter
                         progressBar.visibility = View.GONE
                     }

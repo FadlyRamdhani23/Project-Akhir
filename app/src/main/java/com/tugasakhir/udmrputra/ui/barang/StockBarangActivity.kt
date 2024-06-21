@@ -14,7 +14,7 @@ class StockBarangActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStockBarangBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: BarangListAdapter
+    private lateinit var adapter: StockBarangAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class StockBarangActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.rvBarangList)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        adapter = BarangListAdapter(this, barangList)
+        adapter = StockBarangAdapter(this, barangList)
         recyclerView.adapter = adapter
 
         db.collection("barang")

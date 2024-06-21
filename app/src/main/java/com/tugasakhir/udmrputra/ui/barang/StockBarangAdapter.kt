@@ -1,6 +1,7 @@
 package com.tugasakhir.udmrputra.ui.barang
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,9 @@ import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
 
-class BarangListAdapter(private val context: Context, private val barangList: List<Barang>) : RecyclerView.Adapter<BarangListAdapter.BarangViewHolder>() {
+class StockBarangAdapter(private val context: Context, private val barangList: List<Barang>) : RecyclerView.Adapter<StockBarangAdapter.BarangViewHolder>() {
 
-    class BarangViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class BarangViewHolder(itemView: View,) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.stock_nama)
         val gambar: ImageView = itemView.findViewById(R.id.stock_image)
         val jenis: TextView = itemView.findViewById(R.id.stock_jenis)
@@ -22,6 +23,7 @@ class BarangListAdapter(private val context: Context, private val barangList: Li
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarangViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.stock_item_list, parent, false)
+        val detailView = LayoutInflater.from(parent.context).inflate(R.layout.activity_detail_list, parent, false)
         return BarangViewHolder(view)
     }
 
@@ -40,7 +42,16 @@ class BarangListAdapter(private val context: Context, private val barangList: Li
             .circleCrop()
             .fitCenter()
             .into(holder.gambar)
+
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, DetailStockListActivity::class.java)
+                intent.putExtra("barangId", currentItem.id)
+                context.startActivity(intent)
+            }
+
     }
+
+
 
     override fun getItemCount() = barangList.size
 }

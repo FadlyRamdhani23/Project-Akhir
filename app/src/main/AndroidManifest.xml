@@ -50,6 +50,8 @@
         <activity
             android:name=".ui.sopir.SupirActivity"
             android:exported="false" />
+        <activity android:name=".ui.barang.DetailStockListActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.dashboard.sopir.DaftarSopir"
             android:exported="false"
