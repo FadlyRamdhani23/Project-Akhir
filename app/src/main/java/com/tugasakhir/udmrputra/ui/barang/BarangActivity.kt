@@ -23,7 +23,6 @@ import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
 import com.tugasakhir.udmrputra.ui.sopir.HomeSupirActivity
-import com.tugasakhir.udmrputra.ui.sopir.SupirActivity
 
 class BarangActivity : AppCompatActivity() {
 
@@ -31,18 +30,6 @@ class BarangActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BarangAdapter
 
-    //    private var barangList = arrayListOf<Barang>(
-//        Barang(1, "Tomat", R.drawable.tomato),
-//        Barang(2, "Timun", R.drawable.timun),
-//        Barang(3, "Cabai", R.drawable.cabai),
-//        Barang(4, "Barang 4", R.drawable.tomato),
-//        Barang(5, "Barang 5", R.drawable.tomato),
-//        Barang(6, "Barang 6", R.drawable.tomato),
-//        Barang(7, "Barang 7", R.drawable.tomato),
-//        Barang(8, "Barang 8", R.drawable.tomato),
-//        Barang(9, "Barang 9", R.drawable.tomato),
-//        // Tambahkan lebih banyak data Barang jika diperlukan
-//    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,10 +45,6 @@ class BarangActivity : AppCompatActivity() {
 
         catRecyclerView()
 
-//        recyclerView = findViewById(R.id.rvBarang)
-//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        adapter = BarangAdapter(this, barangList)
-//        recyclerView.adapter = adapter
         binding.fabAddBarang.setOnClickListener {
             val intent = Intent(this, InputBarangActivity::class.java)
             startActivity(intent)
@@ -74,6 +57,7 @@ class BarangActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         recyclerView = findViewById(R.id.rvBarang)
+
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         adapter = BarangAdapter(this, barangList)
         recyclerView.adapter = adapter
@@ -84,9 +68,16 @@ class BarangActivity : AppCompatActivity() {
                 for (document in result) {
                     val barangId = document.id
                     val catId = document.data["catId"].toString()
-                    val imageUrls = document.get("images") as? List<String>
                     val namaBarang = document.data["nama"].toString()
                     val jumlahBarang = document.data["jumlah"].toString()
+
+                    // Pengecekan tipe sebelum casting
+                    val imageUrls = if (document.get("gambar") is List<*>) {
+                        (document.get("gambar") as? List<String>) ?: emptyList()
+                    } else {
+                        emptyList()
+                    }
+                    Log.d("gambar", "imageUrls: $imageUrls")
 
                     db.collection("kategori").document(catId)
                         .get()
@@ -98,7 +89,7 @@ class BarangActivity : AppCompatActivity() {
                                 namaBarang,
                                 catName,
                                 jumlahBarang,
-                                imageUrls?.get(0).toString(),
+                                imageUrls.getOrNull(0).toString(),
                             )
                             barangList.add(data)
                             adapter.notifyDataSetChanged()
@@ -108,12 +99,15 @@ class BarangActivity : AppCompatActivity() {
                             Log.w("BarangActivity", "Error mendapatkan nama kategori", e)
                         }
                 }
+                recyclerView.adapter = adapter
+                Log.d("BarangActivity", "Data berhasil ditampilkan")
+                Log.d("BarangActivity", "Data: $barangList")
+
             }
             .addOnFailureListener { exception ->
                 Log.w("BarangActivity", "Data gagal ditampilkan", exception)
             }
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -126,7 +120,7 @@ class BarangActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_open_other_activity -> {
                 // Ganti OtherActivity dengan nama Activity yang ingin Anda buka
-                val intent = Intent(this, HomeSupirActivity::class.java)
+                val intent = Intent(this, StockBarangActivity::class.java)
                 startActivity(intent)
                 true
             }

@@ -20,7 +20,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBarang"
+            android:id="@+id/rvBarangList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/fabAddBarang"
@@ -28,7 +28,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topAppBarr"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/stock_item_list"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddBarang"

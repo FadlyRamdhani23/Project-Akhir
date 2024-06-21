@@ -40,11 +40,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBarang"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="110dp"
             android:layout_marginHorizontal="10dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            tools:listitem="@layout/barang_item"/>
 
     </LinearLayout>
 
