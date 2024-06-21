@@ -48,10 +48,7 @@ class PlaceholderFragment : Fragment() {
         _binding = FragmentBarangBinding.inflate(inflater, container, false)
         val root = binding.root
 
-        val textView: TextView = binding.sectionLabel
-        pageViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
 
         recyclerView = binding.recyclerViewPencatatan
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -115,9 +112,8 @@ class PlaceholderFragment : Fragment() {
                     }
                 }
 
-                // When all tasks are complete, update the adapter
                 tasks.forEach { it.addOnCompleteListener {
-                    if (tasks.all { it.isComplete }) {
+                    if (tasks.all { it.isComplete } && isAdded) {  // Pastikan fragmen masih ditambahkan sebelum mengakses konteks
                         p_adapter = PencatatanAdapter(requireContext(), pencatatanList = dataList)
                         recyclerView.adapter = p_adapter
                         progressBar.visibility = View.GONE
@@ -128,6 +124,7 @@ class PlaceholderFragment : Fragment() {
                 progressBar.visibility = View.GONE
             }
     }
+
 
     private fun fetchDataFromFirestore2() {
         progressBar.visibility = View.VISIBLE

@@ -44,7 +44,7 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         }
         holder.namaBrg.text = data.barangId
         holder.namaMitra.text = data.namaPetani
-        holder.harga.text = data.hargaJual
+        holder.harga.text = data.hargaJual + " Rp"
         holder.jumlah.text = "${data.jumlah} Kg"
 
 

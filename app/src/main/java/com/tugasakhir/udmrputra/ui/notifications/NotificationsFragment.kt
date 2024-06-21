@@ -27,11 +27,6 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-       val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
-        val viewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs = binding.tabs
-        tabs.setupWithViewPager(viewPager)
 
         // Set data for PieChartView
 //        val pieChartView = binding.pieChartView

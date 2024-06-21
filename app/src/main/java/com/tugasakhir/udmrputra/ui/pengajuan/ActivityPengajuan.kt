@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityPengajuanBinding
@@ -15,6 +16,7 @@ class ActivityPengajuan : AppCompatActivity() {
 
     private lateinit var binding: ActivityPengajuanBinding
     private var isCardViewExpanded = true
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPengajuanBinding.inflate(layoutInflater)
@@ -26,7 +28,6 @@ class ActivityPengajuan : AppCompatActivity() {
 
             // Tambahkan CardView ke LinearLayout
             binding.cardViewPengajuan2.addView(newCardView)
-
 
 
 

@@ -1,17 +1,22 @@
 package com.tugasakhir.udmrputra.ui.dashboard.sopir
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Sopir
+import com.tugasakhir.udmrputra.databinding.ActivityDaftarSopirBinding
+import com.tugasakhir.udmrputra.ui.logreg.RegisterSupirActivity
 import com.tugasakhir.udmrputra.ui.sopir.SopirAdapter
 
 class DaftarSopir : AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SopirAdapter
+
+    private lateinit var binding : ActivityDaftarSopirBinding
     private var sopirList = arrayListOf<Sopir>(
             Sopir(1, "Apendi", "Z 2433 EG"),
             Sopir(2, "Agus", "Z 1767 DG"),
@@ -20,12 +25,18 @@ class DaftarSopir : AppCompatActivity(){
         )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_daftar_sopir)
+        binding = ActivityDaftarSopirBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         recyclerView = findViewById(R.id.recyclerViewSopir)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SopirAdapter(sopirList)
         recyclerView.adapter = adapter
+
+        binding.fabAddSopir.setOnClickListener {
+            val intent = Intent(this, RegisterSupirActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 

@@ -2,12 +2,14 @@ package com.tugasakhir.udmrputra.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.tugasakhir.udmrputra.databinding.FragmentHomeBinding
 import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import com.tugasakhir.udmrputra.ui.dashboard.sopir.DaftarSopir
@@ -17,6 +19,7 @@ import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
+    private lateinit var auth: FirebaseAuth
 
     // This property is only valid between onCreat eView and
     // onDestroyView.
@@ -54,6 +57,18 @@ class HomeFragment : Fragment() {
             val intent = Intent(activity, DaftarSopir::class.java)
             startActivity(intent)
         }
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
+        user?.let {
+            val email = user.email
+            val uid = user.uid
+            Log.d("HomeFragment", "Email: $email")
+            Log.d("HomeFragment", "UID: $uid")
+        }
+        Log.d("HomeFragment", "User: $user")
+
         return root
     }
 

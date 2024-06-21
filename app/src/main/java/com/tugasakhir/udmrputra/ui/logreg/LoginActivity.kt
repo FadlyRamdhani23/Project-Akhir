@@ -16,12 +16,14 @@ import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.data.Users
 import com.tugasakhir.udmrputra.databinding.ActivityLoginBinding
 import com.tugasakhir.udmrputra.ui.Home
+import com.tugasakhir.udmrputra.ui.sopir.HomeSupirActivity
+
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityLoginBinding
     lateinit var auth: FirebaseAuth
-//    lateinit var database : FirebaseDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -30,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
         binding.tvRegistrasi.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-
 
         auth = FirebaseAuth.getInstance()
         binding.btnMasuk.setOnClickListener(){
@@ -59,67 +60,43 @@ class LoginActivity : AppCompatActivity() {
             }
 
             LoginFirebase(email, password)
-
         }
-//        mAuth = FirebaseAuth.getInstance()
-//
-//        mAuth.signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener(this) { task ->
-//                if (task.isSuccessful) {
-//                    // Sign in success, update UI with the signed-in user's information
-//                    Toast.makeText(baseContext, "Authentication success.",
-//                        Toast.LENGTH_SHORT).show()
-//                } else {
-//                    // If sign in fails, display a message to the user.
-//                    Toast.makeText(baseContext, "Authentication failed.",
-//                        Toast.LENGTH_SHORT).show()
-//                }
-//            }
     }
-
 
     private fun LoginFirebase(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
                     val db = Firebase.firestore
-                    db.collection("users").get().addOnSuccessListener { result ->
-                        for (document in result) {
-                            if (document.data["email"] == email) {
-                                Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this, Home::class.java)
-                                startActivity(intent)
-                                finish()
+                    db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener { result ->
+                        if (!result.isEmpty) {
+                            for (document in result) {
+                                val status = document.getString("status")
+                                if (status != null) {
+                                    if (status == "supir") {
+                                        Toast.makeText(this, "Berhasil Masuk sebagai Supir", Toast.LENGTH_SHORT).show()
+                                        val intent = Intent(this,HomeSupirActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
+                                        val intent = Intent(this, Home::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                } else {
+                                    Toast.makeText(this, "Status pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
+                                }
                             }
+                        } else {
+                            Toast.makeText(this, "Pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
                         }
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
-
-//    private fun addToDatabase(nama: String?, email: String, noHp: String?, uid: String) {
-//        val db = Firebase.firestore
-//        val user = hashMapOf(
-//            "nama" to  nama,
-//            "email" to email,
-//            "noHp" to noHp,
-//            "uid" to uid,
-//        )
-//
-//        db.collection("users").document(uid).set(user).addOnSuccessListener {
-//            Log.d("TAG", "DocumentSnapshot successfully written!")
-//        }.addOnFailureListener {
-//            Log.w("TAG", "Error writing document", it)
-//        }
-//
-//        database = FirebaseDatabase.getInstance()
-//        val myRef: DatabaseReference = database.getReference("users")
-//        myRef.child(uid).setValue(Users(uid, nama, email, noHp))
-//
-//    }
-
-
-
 }

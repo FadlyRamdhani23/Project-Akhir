@@ -1,16 +1,20 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Mitra
+import com.tugasakhir.udmrputra.databinding.ActivityDaftarMitraBinding
+import com.tugasakhir.udmrputra.ui.logreg.RegisterSupirActivity
 
 class DaftarMitra : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MitraAdapter
+    private lateinit var binding : ActivityDaftarMitraBinding
     private var mitraList = arrayListOf<Mitra>(
         Mitra(1, "Mitra 1", "Lokasi 1"),
         Mitra(2, "Mitra 2", "Lokasi 2"),
@@ -20,11 +24,16 @@ class DaftarMitra : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_daftar_mitra)
-
+        binding = ActivityDaftarMitraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MitraAdapter(mitraList)
         recyclerView.adapter = adapter
+
+    binding.fab.setOnClickListener {
+            val intent = Intent(this, RegisterSupirActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
