@@ -36,6 +36,9 @@
             android:name=".ui.barang.InputMasukActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.barang.InputKeluarActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.sopir.HomeSupirActivity"
             android:exported="false" />
         <activity
