@@ -3,31 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_2"
+        android:background="@android:color/transparent"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
+            android:background="@color/blue_2"
             app:navigationIcon="@drawable/ic_back">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:text="Tambah Barang"
+                    android:text="Pengajuan"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+            </RelativeLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -45,7 +52,35 @@
             android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/shape"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/ic_info" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Mohon isi data dibawah ini dengan benar"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewPengajuan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
@@ -53,60 +88,61 @@
                 app:cardElevation="5dp">
 
                 <LinearLayout
+                    android:id="@+id/linearLayoutPesanan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:background="@color/grey_50"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="20dp"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="20dp"
-                            android:src="@drawable/ic_info" />
-
                         <TextView
+                            android:id="@+id/inputJeniszq"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/nunito_extrabold"
+                            android:text="Barang Masuk"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnshow"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:text="Mohon isi data dibawah ini dengan benar"
-                            android:textColor="@color/white"
-                            android:textSize="15sp" />
-
+                            android:text="&#x25BC;"
+                            android:textColor="@color/md_theme_light_primary"
+                            android:textSize="10sp" />
                     </LinearLayout>
-
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvJenisBarang"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Jenis Barang"
+                            android:text="Tanggal"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
-                        <Spinner
-                            android:id="@+id/jenisBarangSpinner"
+                        <Button
+                            android:id="@+id/button_date_picker"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:backgroundTint="@color/white"
+                            android:gravity="center_vertical|start"
+                            android:paddingStart="16dp"
+                            android:text="Pilih Tanggal"
+                            android:textColor="@color/black" />
 
                     </LinearLayout>
 
@@ -115,6 +151,36 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nama Petani"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputNamaPetani"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="10dp"
+                            android:hint="Masukan harga Beli"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+
                         android:layout_marginEnd="20dp"
                         android:orientation="vertical">
 
@@ -125,18 +191,107 @@
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_namaBarang"
+                        <Spinner
+                            android:id="@+id/spinnerInputBarang"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="masukan jumlah barang"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
+                            android:backgroundTint="@color/grey_50"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jumlah barang"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <ImageButton
+                            android:id="@+id/button_decrement"
+                            android:layout_width="39dp"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            android:background="@drawable/button_decrement_bg"
+                            android:src="@drawable/baseline_remove_24" />
+
+                        <EditText
+                            android:id="@+id/editTextQuantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="1"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/button_increment"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:background="@drawable/button_decrement_pressed"
+                            android:contentDescription="@string/increment"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/ic_baseline_add_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:text="/KG"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Harga Beli (Rp)"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputHargaBeli"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="10dp"
+                            android:hint="Masukan harga Beli"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -149,39 +304,23 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Jumlah Barang"
+                            android:text="Catatan"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_jumlahBarang"
+                            android:id="@+id/inputCatatan"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="masukan jumlah barang"
+                            android:layout_marginBottom="10dp"
+                            android:hint="Masukan catatan"
                             android:imeOptions="actionDone"
-                            android:inputType="number"
+                            android:inputType="text"
                             android:maxLines="1"
                             android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:textSize="12sp" />
+
                     </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/previewImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="gone"
-                        android:contentDescription="@string/preview_image_view" />
-
-<!--                    <androidx.recyclerview.widget.RecyclerView-->
-<!--                        android:id="@+id/rvImageList"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="210dp"-->
-<!--                        android:layout_marginStart="20dp"-->
-<!--                        android:layout_marginEnd="20dp"-->
-<!--                        tools:listitem="@layout/item_image_list"/>-->
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -213,8 +352,8 @@
                             android:id="@+id/buttonChooseImage"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
-                            android:src="@drawable/baseline_image_24"
-                            android:layout_marginStart="20dp"/>
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/baseline_image_24" />
 
                     </LinearLayout>
 
@@ -223,13 +362,14 @@
 
             </androidx.cardview.widget.CardView>
 
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCheckoutt"
+                android:id="@+id/btnCheckout"
                 android:layout_width="141dp"
                 android:layout_height="61dp"
                 android:layout_gravity="right"
                 android:layout_marginEnd="10dp"
-                android:text="Simpan"
+                android:text="Masuk"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -238,6 +378,8 @@
                 app:backgroundTint="@color/grey_50"
                 app:cornerRadius="50dp"
                 app:elevation="5dp" />
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

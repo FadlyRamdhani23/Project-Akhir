@@ -92,6 +92,7 @@
     <string name="title_profil">Profil</string>
     <string name="title_pencatatan">Pencatatan</string>
     <string name="preview_image_view">Preview Image View</string>
+    <string name="increment">btn tambah</string>
 
 
     <string-array name="jenis_barang">

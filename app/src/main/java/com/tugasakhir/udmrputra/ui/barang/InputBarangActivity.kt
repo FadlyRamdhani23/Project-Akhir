@@ -6,48 +6,57 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.tugasakhir.udmrputra.R
-import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangBinding
 import java.util.UUID
 
 class InputBarangActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityInputBarangBinding
     private var currentImageUri: Uri? = null
     private val imageList = mutableListOf<Uri>()
+    private lateinit var progressBar: ProgressBar
+    private val categoryMap = hashMapOf<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInputBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val db = FirebaseFirestore.getInstance()
+        progressBar = findViewById(R.id.progressBar)
+        setupToolbar()
+        setupSpinner()
+        setupImagePicker()
+        setupSaveButton()
+    }
 
-        // List untuk spinner, tambahkan "Pilih Jenis Barang" sebagai placeholder
-        val list = ArrayList<String>()
-        list.add("Pilih Jenis Barang")
-
+    private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
-        val categoryMap = hashMapOf<String, String>()
+    private fun setupSpinner() {
+        val db = FirebaseFirestore.getInstance()
+        val list = arrayListOf("Pilih Jenis Barang")
 
         db.collection("kategori")
             .get()
@@ -60,57 +69,53 @@ class InputBarangActivity : AppCompatActivity() {
                         list.add(name)
                     }
                 }
+                setupSpinnerAdapter(list)
+            }
+    }
 
-                // Buat ArrayAdapter tanpa menyertakan placeholder dalam pilihan yang dapat dipilih
-                val adapter = object : ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_spinner_item,
-                    list
-                ) {
-                    override fun isEnabled(position: Int): Boolean {
-                        // Tetapkan posisi 0 (placeholder) tidak dapat dipilih
-                        return position != 0
-                    }
-
-                    override fun getDropDownView(
-                        position: Int,
-                        convertView: View?,
-                        parent: ViewGroup
-                    ): View {
-                        val view = super.getDropDownView(position, convertView, parent)
-                        val textView = view.findViewById<TextView>(android.R.id.text1)
-                        textView.setTextColor(
-                            if (position == 0) {
-                                // Warna teks untuk placeholder
-                                ContextCompat.getColor(context, R.color.green)
-                            } else {
-                                // Warna teks untuk item yang dapat dipilih
-                                ContextCompat.getColor(context, android.R.color.black)
-                            }
-                        )
-                        return view
-                    }
-                }
-
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.jenisBarangSpinner.adapter = adapter
+    private fun setupSpinnerAdapter(list: ArrayList<String>) {
+        val adapter = object : ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item,
+            list
+        ) {
+            override fun isEnabled(position: Int): Boolean {
+                return position != 0
             }
 
-        // ...
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+                textView.setTextColor(
+                    if (position == 0) {
+                        ContextCompat.getColor(context, R.color.green)
+                    } else {
+                        ContextCompat.getColor(context, android.R.color.black)
+                    }
+                )
+                return view
+            }
+        }
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.jenisBarangSpinner.adapter = adapter
+    }
 
-        binding.btnCheckoutt.setOnClickListener {
-            val catName = binding.jenisBarangSpinner.selectedItem?.toString()
-
-            // Pastikan catName tidak sama dengan placeholder sebelum memproses
-            if (catName != "Pilih Jenis Barang") {
-                // Proses data
+    private fun setupImagePicker() {
+        binding.buttonChooseImage.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
             } else {
-                // Tampilkan pesan bahwa jenis barang harus dipilih
-                Toast.makeText(this, "Harap pilih jenis barang", Toast.LENGTH_SHORT).show()
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    123
+                )
             }
         }
     }
-
 
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -123,11 +128,98 @@ class InputBarangActivity : AppCompatActivity() {
                 val data: Intent? = result.data
                 data?.data?.let {
                     currentImageUri = it
-                    imageList.add(it) // Tambahkan URI gambar ke imageList
+                    imageList.add(it)
                     binding.buttonChooseImage.setImageURI(currentImageUri)
                 }
             }
         }
+
+    private fun setupSaveButton() {
+        binding.btnCheckoutt.setOnClickListener {
+            saveBarang()
+        }
+    }
+
+    private fun saveBarang() {
+        val catName = binding.jenisBarangSpinner.selectedItem?.toString()
+        if (catName != "Pilih Jenis Barang") {
+            val catId = categoryMap.entries.find { it.value == catName }?.key
+            val nama = binding.inputNamaBarang.text?.toString()
+            val jumlahString = binding.inputJumlahBarang.text?.toString()
+            val jumlah = jumlahString?.toIntOrNull()
+
+            Log.d("InputBarangActivity", "catId: $catId, nama: $nama, jumlah: $jumlah, imageList: $imageList")
+
+            if (catId != null && nama != null && nama.isNotBlank() && jumlah != null && imageList.isNotEmpty()) {
+                uploadData(catId, nama, jumlah)
+            } else {
+                Toast.makeText(this, "Data tidak lengkap atau tidak ada gambar yang dipilih", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "Harap pilih jenis barang", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun uploadData(catId: String, nama: String, jumlah: Int) {
+        progressBar.visibility = View.VISIBLE
+        val db = FirebaseFirestore.getInstance()
+        val storageRefs = imageList.map {
+            Firebase.storage.reference.child("images/${UUID.randomUUID()}")
+        }
+
+        val uploadTasks = mutableListOf<Task<Uri>>()
+        val imageUrls = mutableListOf<String>()
+        storageRefs.forEachIndexed { index, storageRef ->
+            val uploadTask = storageRef.putFile(imageList[index])
+            uploadTasks.add(uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                storageRef.downloadUrl
+            }.addOnSuccessListener { uri ->
+                imageUrls.add(uri.toString())
+                if (imageUrls.size == storageRefs.size) {
+                    val barang = hashMapOf(
+                        "catId" to catId,
+                        "nama" to nama,
+                        "jumlah" to jumlah,
+                        "gambar" to imageUrls
+                    )
+
+                    Log.d("InputBarangActivity", "Data: $barang")
+
+                    Tasks.whenAllComplete(uploadTasks)
+                        .addOnSuccessListener {
+                            db.collection("barang")
+                                .add(barang)
+                                .addOnSuccessListener { documentReference ->
+                                    progressBar.visibility = View.GONE
+                                    val intent = Intent(this, BarangActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                    Log.d(
+                                        "InputBarangActivity",
+                                        "DocumentSnapshot added with ID: ${documentReference.id}"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    progressBar.visibility = View.GONE
+                                    Log.d("InputBarangActivity", "Error adding document", e)
+                                }
+                        }
+                        .addOnFailureListener { e ->
+                            progressBar.visibility = View.GONE
+                            Log.d("InputBarangActivity", "Error: ${e.message}")
+                            Log.w(ContentValues.TAG, "Error uploading images!", e)
+                        }
+                }
+            }.addOnFailureListener { e ->
+                progressBar.visibility = View.GONE
+                Log.d("InputBarangActivity", "Error: ${e.message}")
+            })
+        }
+        Log.d("InputBarangActivity", "Upload tasks: $imageUrls")
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -135,7 +227,6 @@ class InputBarangActivity : AppCompatActivity() {
                 finish()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
