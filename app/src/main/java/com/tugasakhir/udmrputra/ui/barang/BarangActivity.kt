@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
+import com.tugasakhir.udmrputra.ui.home.HomeFragment
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 
 class BarangActivity : AppCompatActivity() {
@@ -46,6 +48,14 @@ class BarangActivity : AppCompatActivity() {
             val intent = Intent(this, InputBarangActivity::class.java)
             startActivity(intent)
         }
+
+        val  topBar = findViewById<MaterialToolbar>(R.id.topAppBarr);
+        topBar.setNavigationOnClickListener {
+            val intent = Intent(this, HomeFragment::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     private fun catRecyclerView() {

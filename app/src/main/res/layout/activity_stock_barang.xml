@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.barang.StockBarangActivity">
 
+
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarr"
             android:layout_width="0dp"
@@ -23,7 +25,7 @@
             android:id="@+id/rvBarangList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/fabAddBarang"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,17 +33,17 @@
             app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/stock_item_list"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddBarang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        <ProgressBar
+            android:id="@+id/stockLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topAppBarr"
+            app:layout_constraintVertical_bias="0.447" />
 
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_baseline_add_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.904"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

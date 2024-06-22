@@ -53,6 +53,24 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // buatkan validasi email jika tidak terdapat dalam database
+            val db = Firebase.firestore
+            db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    binding.emailTextField.error = "Email Tidak Terdaftar"
+                    binding.emailTextField.requestFocus()
+                    return@addOnSuccessListener
+                }
+            }
+
+
+            // Validasi jumlah karakter dari password
+            if (password.length < 8) {
+                binding.sandiTextField.error = "Password Minimal 8 Karakter"
+                binding.sandiTextField.requestFocus()
+                return@setOnClickListener
+            }
+
             LoginFirebase(email, password)
         }
     }
@@ -95,10 +113,10 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this, "Pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener {
-                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }

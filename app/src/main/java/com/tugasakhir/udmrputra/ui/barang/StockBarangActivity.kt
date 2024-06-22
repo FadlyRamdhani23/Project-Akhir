@@ -1,8 +1,10 @@
 package com.tugasakhir.udmrputra.ui.barang
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,13 +17,21 @@ class StockBarangActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStockBarangBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: StockBarangAdapter
+    private lateinit var progressBar: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStockBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        progressBar = findViewById(R.id.stockLoading)
+
         catListRecyclerView()
+
+        val topBar = binding.topAppBarr
+        topBar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     private fun catListRecyclerView() {
@@ -32,6 +42,8 @@ class StockBarangActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = StockBarangAdapter(this, barangList)
         recyclerView.adapter = adapter
+
+        progressBar.visibility = View.VISIBLE
 
         db.collection("barang")
             .get()
@@ -71,6 +83,7 @@ class StockBarangActivity : AppCompatActivity() {
                             if (pendingTasks == 0) {
                                 adapter.notifyDataSetChanged()
                             }
+                            progressBar.visibility = View.GONE
                         }
                         .addOnFailureListener { e ->
                             Log.w("StockBarangActivity", "Error mendapatkan nama kategori", e)
@@ -80,13 +93,16 @@ class StockBarangActivity : AppCompatActivity() {
                             if (pendingTasks == 0) {
                                 adapter.notifyDataSetChanged()
                             }
+                            progressBar.visibility = View.GONE
                         }
                 }
                 Log.d("StockBarangActivity", "Data berhasil ditampilkan")
                 Log.d("StockBarangActivity", "Data: $barangList")
             }
+
             .addOnFailureListener { exception ->
                 Log.w("StockBarangActivity", "Data gagal ditampilkan", exception)
+                progressBar.visibility = View.GONE
             }
     }
 }

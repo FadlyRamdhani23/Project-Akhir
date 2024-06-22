@@ -41,6 +41,8 @@
                 android:textSize="14sp" />
 
 
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -49,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/linearLayout5"
             app:layout_constraintTop_toTopOf="parent">
@@ -67,12 +69,20 @@
                 android:layout_height="match_parent"
                 android:text="Rp.100.000/kg"
                 android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tanggal_masuk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="12/12/2021"
+                android:textSize="8sp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/warna_jenis"
             android:layout_width="30dp"
-            android:layout_height="75dp"
+            android:layout_height="77dp"
             android:src="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
