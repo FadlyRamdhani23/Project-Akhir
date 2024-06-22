@@ -11,17 +11,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.databinding.ActivityRegisterBinding
+import com.tugasakhir.udmrputra.databinding.ActivityRegisterMitraBinding
+import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterMitraActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRegisterBinding
+    private lateinit var binding: ActivityRegisterMitraBinding
     lateinit var auth: FirebaseAuth
 
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = ActivityRegisterMitraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
@@ -113,7 +115,7 @@ class RegisterActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             Log.d("RegisterActivity", "DocumentSnapshot added with ID: $uid")
                             Toast.makeText(this, "Register Berhasil", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, LoginActivity::class.java)
+                            val intent = Intent(this, DaftarMitra::class.java)
                             startActivity(intent)
                         }
                         .addOnFailureListener { e ->

@@ -39,33 +39,40 @@ class PieChartView @JvmOverloads constructor(
         val width = width.toFloat()
         val height = height.toFloat()
         val radius = Math.min(width, height) / 2f
+        val centerX = width / 2f
+        val centerY = height / 2f
 
         // Draw Fruit Segment
         paint.color = Color.rgb(92, 132, 161)
-        canvas.drawArc(0f, 0f, width, height, 0f, fruitAngle, true, paint)
+        canvas.drawArc(centerX - radius, centerY - radius, centerX + radius, centerY + radius, 0f, fruitAngle, true, paint)
 
         // Draw Vegetable Segment
         paint.color = Color.rgb(132, 179, 167)
-        canvas.drawArc(0f, 0f, width, height, fruitAngle, vegetableAngle, true, paint)
+        canvas.drawArc(centerX - radius, centerY - radius, centerX + radius, centerY + radius, fruitAngle, vegetableAngle, true, paint)
 
         // Draw text on Fruit Segment
         paint.color = Color.WHITE
-        paint.textSize = 20f
-        val fruitText = "$fruitWeight kg\nBuah"
-        drawCenteredText(canvas, fruitText, width / 3, height / 3)
+        paint.textSize = 30f
+        val fruitText = "${fruitWeight.toInt()} kg\nBuah"
+        drawSegmentText(canvas, fruitText, centerX, centerY, radius, fruitAngle / 2)
 
         // Draw text on Vegetable Segment
-        val vegetableText = "$vegetableWeight kg\nSayur"
-        drawCenteredText(canvas, vegetableText, 2 * width / 3, 2 * height / 3)
+        val vegetableText = "${vegetableWeight.toInt()} kg\nSayur"
+        drawSegmentText(canvas, vegetableText, centerX, centerY, radius, fruitAngle + vegetableAngle / 2)
     }
 
-    private fun drawCenteredText(canvas: Canvas, text: String, cx: Float, cy: Float) {
+    private fun drawSegmentText(canvas: Canvas, text: String, cx: Float, cy: Float, radius: Float, angle: Float) {
         val lines = text.split("\n")
         val textHeight = paint.descent() - paint.ascent()
         val textOffset = textHeight / 2 - paint.descent()
+
+        val angleRadians = Math.toRadians(angle.toDouble())
+        val x = cx + (radius / 2 * Math.cos(angleRadians)).toFloat()
+        val y = cy + (radius / 2 * Math.sin(angleRadians)).toFloat()
+
         lines.forEachIndexed { index, line ->
-            val y = cy + index * textHeight + textOffset
-            canvas.drawText(line, cx - paint.measureText(line) / 2, y, paint)
+            val lineY = y + index * textHeight + textOffset
+            canvas.drawText(line, x - paint.measureText(line) / 2, lineY, paint)
         }
     }
 }

@@ -12,7 +12,7 @@ class SopirAdapter (private val sopirList: ArrayList<Sopir>) : RecyclerView.Adap
 
     class SopirViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.nama_sopir)
-        val plat: TextView = itemView.findViewById(R.id.plat_sopir)
+        val plat: TextView = itemView.findViewById(R.id.noHp)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SopirViewHolder {
@@ -22,8 +22,8 @@ class SopirAdapter (private val sopirList: ArrayList<Sopir>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: SopirViewHolder, position: Int) {
         val currentItem = sopirList[position]
-        holder.name.text = currentItem.name
-        holder.plat.text = currentItem.plat
+        holder.name.text = currentItem.nama
+        holder.plat.text = currentItem.noHp
     }
 
     override fun getItemCount() = sopirList.size

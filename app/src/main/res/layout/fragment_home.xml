@@ -66,11 +66,10 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/textViewStock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:fontFamily="@font/nunito_extrabold"
-                        android:text="450 kg"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
@@ -117,9 +116,18 @@
                 android:layout_height="147dp"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:visibility="gone"/> <!-- Hide PieChart initially -->
 
-            <!-- CardView 2 -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="147dp"
+                android:layout_height="147dp"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"/> <!-- Show ProgressBar initially -->
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
