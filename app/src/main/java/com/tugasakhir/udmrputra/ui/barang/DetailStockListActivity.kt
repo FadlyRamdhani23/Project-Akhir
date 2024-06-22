@@ -22,26 +22,25 @@ class DetailStockListActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityDetailListBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter2(this, supportFragmentManager)
+        val barangId = intent.getStringExtra("barangId")
+
+        val sectionsPagerAdapter = SectionsPagerAdapter2(this, supportFragmentManager, barangId)
         val viewPager: ViewPager = binding.viewPager2
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs2
         tabs.setupWithViewPager(viewPager)
 
-        val  topBar = binding.topAppBar
+        val topBar = binding.topAppBar
         topBar.setNavigationOnClickListener {
             val intent = Intent(this, HomeFragment::class.java)
             startActivity(intent)
             finish()
         }
-
-        val barangId = intent.getStringExtra("barangId")
 
         val db = FirebaseFirestore.getInstance()
 
@@ -80,9 +79,5 @@ class DetailStockListActivity : AppCompatActivity(){
                     }
                 }
             }
-
-
     }
-
 }
-

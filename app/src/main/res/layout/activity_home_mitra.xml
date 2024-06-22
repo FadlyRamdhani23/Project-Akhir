@@ -119,26 +119,17 @@
 
                 <ImageView
                     android:layout_width="180dp"
-                    android:layout_height="123dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
+                    android:layout_height="100dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_profile_supir" />
+                    android:src="@drawable/group" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorPrimary" />
 
             </LinearLayout>
 
             <TextView
-                android:layout_width="151dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_width="210dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:fontFamily="@font/nunito_extrabold"
                 android:text="Profil"
                 android:textColor="@color/black"
@@ -178,27 +169,19 @@
                 <ImageView
                     android:layout_width="180dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:padding="10dp"
-                    android:src="@drawable/icon_pengiriman_supir" />
+                    android:padding="20dp"
+                    android:src="@drawable/bills" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorPrimary" />
 
             </LinearLayout>
 
             <TextView
-                android:layout_width="127dp"
-                android:layout_height="wrap_content"
+                android:layout_width="210dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:gravity="center"
                 android:fontFamily="@font/nunito_extrabold"
-                android:text="Profil"
+                android:text="Pengajuan"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -238,17 +221,13 @@
 
                 <ImageView
                     android:layout_width="180dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="6dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:padding="10dp"
                     android:src="@drawable/icon_pengaturan_supir" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorPrimary" />
 
             </LinearLayout>
 

@@ -1,6 +1,5 @@
 package com.tugasakhir.udmrputra.ui.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ class PlaceholderFragment2 : Fragment() {
     private lateinit var p_adapter: PencatatanMasukAdapter
     private lateinit var p_adapter2: PencatatanKeluarAdapter
     private lateinit var progressBar: ProgressBar
+    private var barangId: String? = null
 
     private val binding get() = _binding!!
 
@@ -33,6 +33,7 @@ class PlaceholderFragment2 : Fragment() {
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
+        barangId = arguments?.getString(ARG_BARANG_ID)
     }
 
     override fun onCreateView(
@@ -42,7 +43,6 @@ class PlaceholderFragment2 : Fragment() {
 
         _binding = FragmentBarang2Binding.inflate(inflater, container, false)
         val root = binding.root
-
 
         recyclerView = binding.recyclerViewPencatatan
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -59,119 +59,107 @@ class PlaceholderFragment2 : Fragment() {
         progressBar.visibility = View.VISIBLE
 
         val db = FirebaseFirestore.getInstance()
-        db.collection("barang")
-            .whereEqualTo("nama", "tomat")
-            .get()
-            .addOnSuccessListener { barangResult ->
-                val dataList = mutableListOf<Pencatatan>()
-                val tasks = barangResult.map { barangDocument ->
-                    val catId = barangDocument.getString("catId") ?: ""
-                    val barangName = barangDocument.getString("nama") ?: ""
+        val barangDocRef = db.collection("barang").document(barangId ?: "")
 
-                    barangDocument.reference.collection("masuk").get().continueWith { task ->
-                        if (task.isSuccessful) {
-                            task.result?.forEach { masukDocument ->
-                                val namaPetani = masukDocument.getString("namaPetani") ?: ""
-                                val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
-                                val gambarList = masukDocument.get("gambar") as? List<String>
-                                val gambar = gambarList?.joinToString(",") ?: ""
-                                val catatan = masukDocument.getString("catatan") ?: ""
-                                val tanggal = masukDocument.getString("tanggal") ?: ""
-                                val hargaBeli = masukDocument.getString("hargaBeli") ?: ""
+        barangDocRef.get().addOnSuccessListener { barangDocument ->
+            val catId = barangDocument.getString("catId") ?: ""
+            val namaBarang = barangDocument.getString("nama") ?: ""
 
-                                dataList.add(
-                                    Pencatatan(
-                                        id = 0,
-                                        catId = catId,
-                                        barangId = barangName,
-                                        namaPetani = namaPetani,
-                                        jumlah = jumlah,
-                                        gambar = gambar,
-                                        catatan = catatan,
-                                        tanggal = tanggal,
-                                        hargaBeli = hargaBeli
-                                    )
-                                )
-                            }
-                        }
+            barangDocRef.collection("masuk")
+                .get()
+                .addOnSuccessListener { masukResult ->
+                    val dataList = mutableListOf<Pencatatan>()
+                    masukResult.forEach { masukDocument ->
+                        val namaPetani = masukDocument.getString("namaPetani") ?: ""
+                        val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
+                        val gambarList = masukDocument.get("gambar") as? List<String>
+                        val gambar = gambarList?.joinToString(",") ?: ""
+                        val catatan = masukDocument.getString("catatan") ?: ""
+                        val tanggal = masukDocument.getString("tanggal") ?: ""
+                        val hargaBeli = masukDocument.getString("hargaBeli") ?: ""
+
+                        dataList.add(
+                            Pencatatan(
+                                id = 0,
+                                catId = catId,
+                                barangId = namaBarang,
+                                namaPetani = namaPetani,
+                                jumlah = jumlah,
+                                gambar = gambar,
+                                catatan = catatan,
+                                tanggal = tanggal,
+                                hargaBeli = hargaBeli
+                            )
+                        )
                     }
-                }
-
-                tasks.forEach { it.addOnCompleteListener {
-                    if (tasks.all { it.isComplete } && isAdded) {  // Pastikan fragmen masih ditambahkan sebelum mengakses konteks
+                    if (isAdded) {
                         p_adapter = PencatatanMasukAdapter(requireContext(), pencatatanList = dataList)
                         recyclerView.adapter = p_adapter
                         progressBar.visibility = View.GONE
                     }
-                }}
-            }
-            .addOnFailureListener { exception ->
-                progressBar.visibility = View.GONE
-            }
+                }
+                .addOnFailureListener { exception ->
+                    progressBar.visibility = View.GONE
+                }
+        }
     }
-
 
     private fun fetchDataFromFirestore2() {
         progressBar.visibility = View.VISIBLE
 
         val db = FirebaseFirestore.getInstance()
-        db.collection("barang")
-            .get()
-            .addOnSuccessListener { barangResult ->
-                val dataList = mutableListOf<PencatatanKeluar>()
-                val tasks = barangResult.map { barangDocument ->
-                    val catId = barangDocument.getString("catId") ?: ""
-                    val barangName = barangDocument.getString("nama") ?: ""
+        val barangDocRef = db.collection("barang").document(barangId ?: "")
 
-                    barangDocument.reference.collection("keluar").get().continueWith { task ->
-                        if (task.isSuccessful) {
-                            task.result?.forEach { masukDocument ->
-                                val namaPetani = masukDocument.getString("namaPetani") ?: ""
-                                val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
-                                val catatan = masukDocument.getString("catatan") ?: ""
-                                val tanggal = masukDocument.getString("tanggal") ?: ""
-                                val hargaJual = masukDocument.getString("hargaJual") ?: ""
+        barangDocRef.get().addOnSuccessListener { barangDocument ->
+            val catId = barangDocument.getString("catId") ?: ""
+            val namaBarang = barangDocument.getString("nama") ?: ""
 
+            barangDocRef.collection("keluar")
+                .get()
+                .addOnSuccessListener { keluarResult ->
+                    val dataList = mutableListOf<PencatatanKeluar>()
+                    keluarResult.forEach { keluarDocument ->
+                        val namaPetani = keluarDocument.getString("namaPetani") ?: ""
+                        val jumlah = keluarDocument.getLong("jumlah")?.toString() ?: ""
+                        val catatan = keluarDocument.getString("catatan") ?: ""
+                        val tanggal = keluarDocument.getString("tanggal") ?: ""
+                        val hargaJual = keluarDocument.getString("hargaJual") ?: ""
 
-                                dataList.add(
-                                    PencatatanKeluar(
-                                        id = 0,
-                                        catId = catId,
-                                        barangId = barangName,
-                                        namaPetani = namaPetani,
-                                        jumlah = jumlah,
-                                        catatan = catatan,
-                                        tanggal = tanggal,
-                                        hargaJual = hargaJual
-                                    )
-                                )
-                            }
-                        }
+                        dataList.add(
+                            PencatatanKeluar(
+                                id = 0,
+                                catId = catId,
+                                barangId = namaBarang,
+                                namaPetani = namaPetani,
+                                jumlah = jumlah,
+                                catatan = catatan,
+                                tanggal = tanggal,
+                                hargaJual = hargaJual
+                            )
+                        )
                     }
-                }
-
-                // When all tasks are complete, update the adapter
-                tasks.forEach { it.addOnCompleteListener {
-                    if (tasks.all { it.isComplete }) {
+                    if (isAdded) {
                         p_adapter2 = PencatatanKeluarAdapter(requireContext(), pencatatanList = dataList)
                         recyclerView.adapter = p_adapter2
                         progressBar.visibility = View.GONE
                     }
-                }}
-            }
-            .addOnFailureListener { exception ->
-                progressBar.visibility = View.GONE
-            }
+                }
+                .addOnFailureListener { exception ->
+                    progressBar.visibility = View.GONE
+                }
+        }
     }
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
+        private const val ARG_BARANG_ID = "barang_id"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int): PlaceholderFragment {
-            return PlaceholderFragment().apply {
+        fun newInstance(sectionNumber: Int, barangId: String?): PlaceholderFragment2 {
+            return PlaceholderFragment2().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
+                    putString(ARG_BARANG_ID, barangId)
                 }
             }
         }
