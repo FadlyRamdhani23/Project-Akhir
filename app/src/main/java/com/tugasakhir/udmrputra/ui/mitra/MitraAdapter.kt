@@ -7,24 +7,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Mitra
+import com.tugasakhir.udmrputra.data.Users
 
-class MitraAdapter(private val mitraList: List<Mitra>) : RecyclerView.Adapter<MitraAdapter.MitraViewHolder>() {
+class MitraAdapter(private val mitraList: ArrayList<Mitra>) : RecyclerView.Adapter<MitraAdapter.ViewHolder>() {
 
-    class MitraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.findViewById(R.id.mitra_name)
-        val location: TextView = itemView.findViewById(R.id.mitra_location)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val namaTextView: TextView = itemView.findViewById(R.id.mitra_name)
+        val lokasiTextView: TextView = itemView.findViewById(R.id.noHp)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MitraViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.mitra_item, parent, false)
-        return MitraViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MitraViewHolder, position: Int) {
-        val currentItem = mitraList[position]
-        holder.name.text = currentItem.name
-        holder.location.text = currentItem.location
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val mitra = mitraList[position]
+        holder.namaTextView.text = mitra.nama
+        holder.lokasiTextView.text = mitra.noHp
     }
 
-    override fun getItemCount() = mitraList.size
+    override fun getItemCount(): Int {
+        return mitraList.size
+    }
 }

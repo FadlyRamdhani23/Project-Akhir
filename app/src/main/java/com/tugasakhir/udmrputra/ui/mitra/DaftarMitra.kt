@@ -1,26 +1,24 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Mitra
+import com.tugasakhir.udmrputra.data.Users
 import com.tugasakhir.udmrputra.databinding.ActivityDaftarMitraBinding
-import com.tugasakhir.udmrputra.ui.logreg.RegisterSupirActivity
+import com.tugasakhir.udmrputra.ui.logreg.RegisterMitraActivity
 
 class DaftarMitra : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MitraAdapter
-    private lateinit var binding : ActivityDaftarMitraBinding
-    private var mitraList = arrayListOf<Mitra>(
-        Mitra(1, "Mitra 1", "Lokasi 1"),
-        Mitra(2, "Mitra 2", "Lokasi 2"),
-        Mitra(3, "Mitra 3", "Lokasi 3"),
-        // Tambahkan lebih banyak data Mitra jika diperlukan
-    )
+    private lateinit var binding: ActivityDaftarMitraBinding
+    private var mitraList = arrayListOf<Mitra>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +29,29 @@ class DaftarMitra : AppCompatActivity() {
         adapter = MitraAdapter(mitraList)
         recyclerView.adapter = adapter
 
-    binding.fab.setOnClickListener {
-            val intent = Intent(this, RegisterSupirActivity::class.java)
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users")
+            .whereEqualTo("status", "mitra")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val userId = document.id
+                    val nama = document.getString("nama") ?: ""
+                    val noHp = document.getString("noHp") ?: ""
+                    val status = document.getString("status") ?: ""
+
+                    val user = Mitra(userId, nama, noHp, status)
+                    mitraList.add(user)
+                    Log.d("DaftarMitra", "Data berhasil ditambahkan: $user")
+                }
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.w("DaftarMitra", "Error getting documents: ", exception)
+            }
+
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, RegisterMitraActivity::class.java)
             startActivity(intent)
         }
     }

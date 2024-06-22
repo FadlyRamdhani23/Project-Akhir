@@ -18,15 +18,17 @@
             android:id="@+id/mitra_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="nama"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/mitra_location"
+            android:id="@+id/noHp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
-
+            android:text="NoHp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
