@@ -30,7 +30,13 @@
         android:theme="@style/Theme.UDMRPutra"
         tools:targetApi="31">
         <activity
+            android:name=".ui.pengajuan.DetailPengajuanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.sopir.ProfilSupirActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mitra.ProfilMitraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.logreg.RegisterMitraActivity"
@@ -42,10 +48,16 @@
             android:name=".ui.barang.InputMasukActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.dashboard.InputPengirimanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.barang.InputKeluarActivity"
             android:exported="false" />
         <activity
             android:name=".ui.sopir.HomeSupirActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mitra.HomeMitraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.barang.StockBarangActivity"
@@ -53,7 +65,8 @@
         <activity
             android:name=".ui.sopir.SupirActivity"
             android:exported="false" />
-        <activity android:name=".ui.barang.DetailStockListActivity"
+        <activity
+            android:name=".ui.barang.DetailStockListActivity"
             android:exported="false" />
         <activity
             android:name=".ui.dashboard.sopir.DaftarSopir"

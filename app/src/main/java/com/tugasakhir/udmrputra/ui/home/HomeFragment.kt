@@ -47,8 +47,6 @@ class HomeFragment : Fragment() {
         imageView = binding.imageVaccine
         pieChartView = binding.pieChartView
 
-
-
         progressBar.visibility = View.VISIBLE // Show progress bar while loading data
 
         user?.let {
@@ -117,6 +115,7 @@ class HomeFragment : Fragment() {
                                     "buah" -> jumlahBarang.jumlahBuah += jumlah.toFloat()
                                 }
                                 setupPieChart() // Update PieChart every time data changes
+                                updateStockText() // Update the stock text
                             }
                             .addOnFailureListener { e ->
                                 Log.w("HomeFragment", "Error getting category name", e)
@@ -128,6 +127,11 @@ class HomeFragment : Fragment() {
                     pieChartView.visibility = View.VISIBLE
                 }
             }
+    }
+
+    private fun updateStockText() {
+        val totalStock = (jumlahBarang.jumlahSayur + jumlahBarang.jumlahBuah).toInt()
+        binding.textViewStock.text = "Total Stock: $totalStock Kg"
     }
 
     override fun onDestroyView() {

@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.databinding.ActivityLoginBinding
 import com.tugasakhir.udmrputra.ui.Home
+import com.tugasakhir.udmrputra.ui.mitra.HomeMitraActivity
 import com.tugasakhir.udmrputra.ui.sopir.HomeSupirActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -88,36 +89,53 @@ class LoginActivity : AppCompatActivity() {
                     val db = Firebase.firestore
                     db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener { result ->
                         if (!result.isEmpty) {
+                            var statusFound = false
                             for (document in result) {
                                 val status = document.getString("status")
                                 if (status != null) {
-                                    if (status == "supir") {
-                                        Toast.makeText(this, "Berhasil Masuk sebagai Supir", Toast.LENGTH_SHORT).show()
-                                        val intent = Intent(this, HomeSupirActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
-                                    } else {
-                                        Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
-                                        val intent = Intent(this, Home::class.java)
-                                        startActivity(intent)
-                                        finish()
+                                    statusFound = true
+                                    when (status) {
+                                        "supir" -> {
+                                            Toast.makeText(this, "Berhasil Masuk sebagai Supir", Toast.LENGTH_SHORT).show()
+                                            val intent = Intent(this, HomeSupirActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        "admin" -> {
+                                            Toast.makeText(this, "Berhasil Masuk sebagai Admin", Toast.LENGTH_SHORT).show()
+                                            val intent = Intent(this, Home::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        "mitra" -> {
+                                            Toast.makeText(this, "Berhasil Masuk sebagai Mitra", Toast.LENGTH_SHORT).show()
+                                            val intent = Intent(this, HomeMitraActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        else -> {
+                                            Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
+                                            val intent = Intent(this, Home::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
                                     }
-                                } else {
-                                    Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(this, Home::class.java)
-                                    startActivity(intent)
-                                    finish()
                                 }
+                            }
+                            if (!statusFound) {
+                                Toast.makeText(this, "Akun tidak terdaftar", Toast.LENGTH_SHORT).show()
+                                auth.signOut()
                             }
                         } else {
                             Toast.makeText(this, "Pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener {
-//                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-//                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
 }

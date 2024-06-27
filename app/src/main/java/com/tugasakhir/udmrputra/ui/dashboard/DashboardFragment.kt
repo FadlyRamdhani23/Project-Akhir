@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
+import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
 
 
 class DashboardFragment : Fragment() {
@@ -35,6 +37,12 @@ class DashboardFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = PengirimanAdapter(pengirimanList)
         recyclerView.adapter = adapter
+
+        binding.inputPengiriman.setOnClickListener {
+            Intent(requireContext(), InputPengirimanActivity::class.java).also {
+                startActivity(it)
+            }
+        }
         return root
     }
 

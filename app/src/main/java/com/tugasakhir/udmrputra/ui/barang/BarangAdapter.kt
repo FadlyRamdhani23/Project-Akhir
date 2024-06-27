@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
-import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
+
 
 class BarangAdapter(private val context: Context, private val barangList: List<Barang>) : RecyclerView.Adapter<BarangAdapter.BarangViewHolder>() {
 

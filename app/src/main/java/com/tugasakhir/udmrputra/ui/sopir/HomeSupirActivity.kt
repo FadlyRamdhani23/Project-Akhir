@@ -17,6 +17,10 @@ class HomeSupirActivity : AppCompatActivity() {
             val intent = Intent(this, SupirActivity::class.java)
             startActivity(intent)
         }
+        binding.btnToProfil.setOnClickListener {
+            val intent = Intent(this, ProfilSupirActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }

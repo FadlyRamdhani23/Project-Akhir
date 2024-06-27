@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:text="Pengajuan"
+                    android:text="Pengiriman"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -121,30 +121,26 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nama Petani"
+                            android:text="Nama Supir"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputNamaPetani"
+                        <Spinner
+                            android:id="@+id/inputNamaSupir"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
-                            android:hint="Masukan harga Beli"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
+                            android:backgroundTint="@color/grey_50"
                             android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -161,7 +157,7 @@
                             android:id="@+id/textbarang"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nama Barang"
+                            android:text="Nama Mitra"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -169,73 +165,17 @@
                             android:id="@+id/textViewInputBarang"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Pilih Jenis Barang"
-                            android:padding="16dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
-                            android:focusable="true"/>
+                            android:focusable="true"
+                            android:padding="16dp"
+                            android:text="Pilih Mitra" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jumlah barang"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <ImageButton
-                            android:id="@+id/button_decrement"
-                            android:layout_width="39dp"
-                            android:layout_height="35dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginStart="20dp"
-                            android:background="@drawable/button_decrement_bg"
-                            android:src="@drawable/baseline_remove_24" />
-
-                        <EditText
-                            android:id="@+id/editTextQuantity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:gravity="center"
-                            android:inputType="number"
-                            android:text="1"
-                            android:textSize="20sp" />
-
-                        <ImageButton
-                            android:id="@+id/button_increment"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:background="@drawable/button_decrement_pressed"
-                            android:contentDescription="@string/increment"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/ic_baseline_add_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="10dp"
-                            android:text="/KG"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="20dp"
 
                         android:layout_marginEnd="20dp"
@@ -244,60 +184,21 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Harga Pasar (Rp)"
+                            android:text="Alamat"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputHargaPasar"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
-                            android:hint="Masukan harga pasar"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-
-                        android:layout_marginEnd="20dp"
-                        android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Harga Beli (Rp)"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputHargaBeli"
+                            android:id="@+id/input_alamat"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
-                            android:hint="Masukan harga Beli"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:layout_height="wrap_content"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="16dp"
+                            android:text="Pilih Alamat" />
 
                     </LinearLayout>
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="gone" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -327,33 +228,16 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jenis Pembayaran"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
 
-                        <Spinner
-                            android:id="@+id/inputJenisPembayaran"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@color/grey_50"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="visible" />
 
-                    </LinearLayout>
                 </LinearLayout>
-
-
 
 
             </androidx.cardview.widget.CardView>
@@ -364,16 +248,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-            </LinearLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/inputTambahan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_add_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCheckout"
@@ -391,9 +265,9 @@
                 app:cornerRadius="50dp"
                 app:elevation="5dp" />
 
+            </LinearLayout>
 
         </LinearLayout>
-
 
 
     </androidx.core.widget.NestedScrollView>

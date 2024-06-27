@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Array for Spinner -->
+    <string-array name="payment_methods">
+        <item>Titip Supir</item>
+        <item>Transfer</item>
+    </string-array>
+</resources>

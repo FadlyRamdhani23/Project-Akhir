@@ -44,7 +44,7 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         }
         holder.namaBrg.text = data.barangId
         holder.namaMitra.text = data.namaPetani
-        holder.harga.text = data.hargaJual + " Rp"
+        holder.harga.text = " Rp" +  data.hargaJual
         holder.jumlah.text = "-${data.jumlah} Kg"
         holder.jumlah.setTextColor(context.resources.getColor(R.color.red))
 
