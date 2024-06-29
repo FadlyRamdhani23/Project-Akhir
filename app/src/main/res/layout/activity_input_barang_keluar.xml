@@ -250,7 +250,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="10dp"
-                            android:text="/KG"
+                            android:text="/Kg"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -268,7 +268,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Harga Beli (Rp)"
+                            android:text="Harga Beli (Rp) /Kg"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 

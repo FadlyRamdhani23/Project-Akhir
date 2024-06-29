@@ -70,6 +70,7 @@ class PlaceholderFragment2 : Fragment() {
                 .addOnSuccessListener { masukResult ->
                     val dataList = mutableListOf<Pencatatan>()
                     masukResult.forEach { masukDocument ->
+                        val id = masukDocument.id
                         val namaPetani = masukDocument.getString("namaPetani") ?: ""
                         val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
                         val gambarList = masukDocument.get("gambar") as? List<String>
@@ -80,7 +81,7 @@ class PlaceholderFragment2 : Fragment() {
 
                         dataList.add(
                             Pencatatan(
-                                id = 0,
+                                id = id,
                                 catId = catId,
                                 barangId = namaBarang,
                                 namaPetani = namaPetani,

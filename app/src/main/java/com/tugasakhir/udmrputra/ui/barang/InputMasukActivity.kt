@@ -21,12 +21,15 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.adapter.ImageAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangMasukBinding
 import java.util.Calendar
 import java.util.UUID
@@ -35,6 +38,7 @@ class InputMasukActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInputBarangMasukBinding
     private var currentImageUri: Uri? = null
     private val imageList = mutableListOf<Uri>()
+    private lateinit var imageAdapter: ImageAdapter
     private val categoryMap = hashMapOf<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +50,9 @@ class InputMasukActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initializeSpinner()
+        setupRecyclerView()
         setupButtonListeners()
+        updateRecyclerViewVisibility()
     }
 
     private fun initializeSpinner() {
@@ -98,23 +104,17 @@ class InputMasukActivity : AppCompatActivity() {
             }
     }
 
+    private fun setupRecyclerView() {
+        imageAdapter = ImageAdapter(imageList)
+        binding.recyclerViewImages.apply {
+            layoutManager = LinearLayoutManager(this@InputMasukActivity, RecyclerView.HORIZONTAL, false)
+            adapter = imageAdapter
+        }
+    }
+
     private fun setupButtonListeners() {
         binding.btnCheckout.setOnClickListener {
             handleCheckout()
-        }
-        binding.buttonChooseImage.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                openGallery()
-            } else {
-                requestPermissions(
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    123
-                )
-            }
         }
 
         binding.buttonIncrement.setOnClickListener {
@@ -128,12 +128,15 @@ class InputMasukActivity : AppCompatActivity() {
         binding.buttonDatePicker.setOnClickListener {
             showDatePickerDialog()
         }
+
+        setupTakePhotoButton()
     }
 
     private fun handleCheckout() {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnCheckout.isEnabled = false
         val db = FirebaseFirestore.getInstance()
+        val id = db.collection("barang").document().id
         val barangName = binding.spinnerInputBarang.selectedItem?.toString()
         val nama = binding.inputNamaPetani.text?.toString()
         val jumlahString = binding.editTextQuantity.text?.toString()
@@ -188,6 +191,7 @@ class InputMasukActivity : AppCompatActivity() {
                     imageUrls.add(uri.toString())
                     if (imageUrls.size == storageRefs.size) {
                         val barangMasuk = hashMapOf(
+                            "id" to id,
                             "namaPetani" to nama,
                             "jumlah" to jumlah,
                             "gambar" to imageUrls,
@@ -201,59 +205,131 @@ class InputMasukActivity : AppCompatActivity() {
                             .collection("masuk")
                             .add(barangMasuk)
                             .addOnSuccessListener {
-                                Log.d("InputMasukActivity", "Data barang masuk berhasil ditambahkan")
                                 updateItemQuantity(barangId, jumlah)
                             }
                             .addOnFailureListener { e ->
+                                Log.w("InputMasukActivity", "Error adding document", e)
                                 binding.progressBar.visibility = View.GONE
                                 binding.btnCheckout.isEnabled = true
-                                Log.d("InputMasukActivity", "Error menambahkan data barang masuk", e)
+                                Toast.makeText(this, "Gagal menambahkan data", Toast.LENGTH_SHORT).show()
                             }
                     }
-                }.addOnFailureListener { e ->
-                    binding.progressBar.visibility = View.GONE
-                    binding.btnCheckout.isEnabled = true
-                    Log.d("InputMasukActivity", "Error: ${e.message}")
                 })
             }
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.btnCheckout.isEnabled = true
-            Log.d("InputMasukActivity", "Barang ID tidak ditemukan")
+            Tasks.whenAllComplete(uploadTasks).addOnCompleteListener {
+                // Handle when all uploads complete
+                Log.d("InputMasukActivity", "All image uploads complete")
+            }
         }
     }
 
     private fun incrementCount() {
-        val current = binding.editTextQuantity.text.toString().toInt()
-        binding.editTextQuantity.setText((current + 1).toString())
+        val quantityString = binding.editTextQuantity.text.toString()
+        var quantity = if (quantityString.isEmpty()) 0 else quantityString.toInt()
+        quantity++
+        binding.editTextQuantity.setText(quantity.toString())
     }
 
     private fun decrementCount() {
-        val current = binding.editTextQuantity.text.toString().toInt()
-        if (current > 0) {
-            binding.editTextQuantity.setText((current - 1).toString())
+        val quantityString = binding.editTextQuantity.text.toString()
+        var quantity = if (quantityString.isEmpty()) 0 else quantityString.toInt()
+        if (quantity > 0) {
+            quantity--
         }
+        binding.editTextQuantity.setText(quantity.toString())
     }
 
     private fun showDatePickerDialog() {
-        val calendar: Calendar = Calendar.getInstance()
-        val year: Int = calendar.get(Calendar.YEAR)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            this@InputMasukActivity,
-            { view: DatePicker?, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-                binding.buttonDatePicker.text = date
+            this,
+            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
+                val dateString = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                binding.buttonDatePicker.text = dateString
             },
             year, month, day
         )
         datePickerDialog.show()
     }
 
+    private fun setupTakePhotoButton() {
+        // Gabungkan logika untuk mengambil foto atau memilih dari galeri
+        binding.buttonAmbilPhoto.setOnClickListener {
+            showImagePickerDialog()
+        }
+    }
+
+    private fun showImagePickerDialog() {
+        val options = arrayOf("Ambil Foto", "Pilih dari Galeri")
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Pilih Gambar")
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.CAMERA
+                        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        openCamera()
+                    } else {
+                        requestPermissions(
+                            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            124
+                        )
+                    }
+                }
+                1 -> {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        openGallery()
+                    } else {
+                        requestPermissions(
+                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            123
+                        )
+                    }
+                }
+            }
+        }
+        builder.show()
+    }
+
+    private fun openCamera() {
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.TITLE, "New Picture")
+            put(MediaStore.Images.Media.DESCRIPTION, "From your Camera")
+        }
+        currentImageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, currentImageUri)
+        }
+        takePhotoLauncher.launch(cameraIntent)
+    }
+
+    private val takePhotoLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                currentImageUri?.let {
+                    imageAdapter.addImage(it)
+                    updateRecyclerViewVisibility()
+                }
+            }
+        }
+
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pickImageLauncher.launch(gallery)
     }
 
@@ -261,11 +337,18 @@ class InputMasukActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-                data?.data?.let {
-                    currentImageUri = it
-                    imageList.add(it) // Tambahkan URI gambar ke imageList
-                    binding.buttonChooseImage.setImageURI(currentImageUri)
+                if (data?.clipData != null) {
+                    val count = data.clipData!!.itemCount
+                    for (i in 0 until count) {
+                        val imageUri = data.clipData!!.getItemAt(i).uri
+                        imageAdapter.addImage(imageUri)
+                    }
+                } else {
+                    data?.data?.let {
+                        imageAdapter.addImage(it)
+                    }
                 }
+                updateRecyclerViewVisibility()
             }
         }
 
@@ -292,6 +375,16 @@ class InputMasukActivity : AppCompatActivity() {
             }
         }.addOnFailureListener { e ->
             Log.d("InputMasukActivity", "Error mendapatkan dokumen barang", e)
+        }
+    }
+
+    private fun updateRecyclerViewVisibility() {
+        if (imageAdapter.itemCount == 0) {
+            binding.recyclerViewImages.visibility = View.GONE
+//            binding.textNoImages.visibility = View.VISIBLE
+        } else {
+            binding.recyclerViewImages.visibility = View.VISIBLE
+//            binding.textNoImages.visibility = View.GONE
         }
     }
 

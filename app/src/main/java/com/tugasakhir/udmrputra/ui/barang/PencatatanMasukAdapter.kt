@@ -20,6 +20,7 @@ class PencatatanMasukAdapter(private val context: Context, private val pencatata
         val harga: TextView = itemView.findViewById(R.id.harga_barang)
         val jumlah: TextView = itemView.findViewById(R.id.jumlah_barang)
         val warna = itemView.findViewById<ImageView>(R.id.warna_jenis)
+        val tanggal: TextView = itemView.findViewById(R.id.tanggal_masuk)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PencatatanViewHolder {
@@ -44,10 +45,20 @@ class PencatatanMasukAdapter(private val context: Context, private val pencatata
         holder.namaMitra.text = data.namaPetani
         holder.harga.text = " Rp" + data.hargaBeli
         holder.jumlah.text = "+${data.jumlah} Kg"
+        holder.tanggal.text = data.tanggal
 
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, ActivityPengajuan::class.java)
+            val intent = Intent(context, DetailPencatatanActivity::class.java)
+            intent.putExtra("masukId", data.id)
+            intent.putExtra("barangId", data.barangId)
+            intent.putExtra("catId", data.catId)
+            intent.putExtra("namaPetani", data.namaPetani)
+            intent.putExtra("hargaBeli", data.hargaBeli)
+            intent.putExtra("jumlah", data.jumlah)
+            intent.putExtra("tanggal", data.tanggal)
+            intent.putExtra("catatan", data.catatan)
+            intent.putExtra("gambar", data.gambar)
             context.startActivity(intent)
         }
     }

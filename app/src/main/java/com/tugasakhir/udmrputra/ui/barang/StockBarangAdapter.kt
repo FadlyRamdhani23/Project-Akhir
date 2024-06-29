@@ -23,7 +23,6 @@ class StockBarangAdapter(private val context: Context, private val barangList: L
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarangViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.stock_item_list, parent, false)
-        val detailView = LayoutInflater.from(parent.context).inflate(R.layout.activity_detail_list, parent, false)
         return BarangViewHolder(view)
     }
 

@@ -94,6 +94,7 @@
     <string name="preview_image_view">Preview Image View</string>
     <string name="increment">btn tambah</string>
     <string name="action_bar_detail">Detail Barang</string>
+    <string name="action_bar_detail_pencatatan">Detail Pencatatan</string>
 
 
     <string-array name="jenis_barang">

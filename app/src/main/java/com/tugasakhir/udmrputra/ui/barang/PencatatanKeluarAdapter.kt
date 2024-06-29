@@ -22,6 +22,7 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         val harga: TextView = itemView.findViewById(R.id.harga_barang)
         val jumlah: TextView = itemView.findViewById(R.id.jumlah_barang)
         val warna = itemView.findViewById<ImageView>(R.id.warna_jenis)
+        val tanggal: TextView = itemView.findViewById(R.id.tanggal_masuk)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PencatatanViewHolder {
@@ -47,10 +48,12 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         holder.harga.text = " Rp" +  data.hargaJual
         holder.jumlah.text = "-${data.jumlah} Kg"
         holder.jumlah.setTextColor(context.resources.getColor(R.color.red))
+        holder.tanggal.text = data.tanggal
 
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, ActivityPengajuan::class.java)
+            val intent = Intent(context, DetailPencatatanActivity::class.java)
+            intent.putExtra("pencatatanId", data.id)
             context.startActivity(intent)
         }
     }

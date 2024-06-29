@@ -47,6 +47,7 @@ class InputBarangActivity : AppCompatActivity() {
         setupSpinner()
         setupImagePicker()
         setupSaveButton()
+//        setupTakePhotoButton()
     }
 
     private fun setupToolbar() {
@@ -133,6 +134,49 @@ class InputBarangActivity : AppCompatActivity() {
                 }
             }
         }
+
+//    private fun setupTakePhotoButton() {
+//        binding.buttonAmbilPhoto.setOnClickListener {
+//            if (ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.CAMERA
+//                ) == PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                ) == PackageManager.PERMISSION_GRANTED
+//            ) {
+//                openCamera()
+//            } else {
+//                requestPermissions(
+//                    arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                    124
+//                )
+//            }
+//        }
+//    }
+//
+//    private fun openCamera() {
+//        val values = ContentValues().apply {
+//            put(MediaStore.Images.Media.TITLE, "New Picture")
+//            put(MediaStore.Images.Media.DESCRIPTION, "From your Camera")
+//        }
+//        currentImageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+//        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+//            putExtra(MediaStore.EXTRA_OUTPUT, currentImageUri)
+//        }
+//        takePhotoLauncher.launch(cameraIntent)
+//    }
+//
+//    private val takePhotoLauncher: ActivityResultLauncher<Intent> =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                currentImageUri?.let {
+//                    imageList.add(it)
+//                    binding.buttonChooseImage.setImageURI(it)
+//                }
+//            }
+//        }
 
     private fun setupSaveButton() {
         binding.btnCheckoutt.setOnClickListener {

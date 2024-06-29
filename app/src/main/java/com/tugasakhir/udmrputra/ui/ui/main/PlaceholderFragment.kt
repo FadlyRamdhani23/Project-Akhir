@@ -2,6 +2,7 @@ package com.tugasakhir.udmrputra.ui.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,6 @@ class PlaceholderFragment : Fragment() {
         val root = binding.root
 
 
-
         recyclerView = binding.recyclerViewPencatatan
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -81,11 +81,13 @@ class PlaceholderFragment : Fragment() {
                 val dataList = mutableListOf<Pencatatan>()
                 val tasks = barangResult.map { barangDocument ->
                     val catId = barangDocument.getString("catId") ?: ""
+                    val barangId = barangDocument.id
                     val barangName = barangDocument.getString("nama") ?: ""
 
                     barangDocument.reference.collection("masuk").get().continueWith { task ->
                         if (task.isSuccessful) {
                             task.result?.forEach { masukDocument ->
+                                val id = masukDocument.id
                                 val namaPetani = masukDocument.getString("namaPetani") ?: ""
                                 val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
                                 val gambarList = masukDocument.get("gambar") as? List<String>
@@ -96,7 +98,7 @@ class PlaceholderFragment : Fragment() {
 
                                 dataList.add(
                                     Pencatatan(
-                                        id = 0,
+                                        id = id,
                                         catId = catId,
                                         barangId = barangName,
                                         namaPetani = namaPetani,
@@ -107,6 +109,7 @@ class PlaceholderFragment : Fragment() {
                                         hargaBeli = hargaBeli
                                     )
                                 )
+                                Log.d("DetailPencatatanActivity", "Data berhasil ditambahkan: $dataList")
                             }
                         }
                     }
@@ -178,6 +181,8 @@ class PlaceholderFragment : Fragment() {
                 progressBar.visibility = View.GONE
             }
     }
+
+
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
