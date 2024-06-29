@@ -7,5 +7,9 @@ data class Pengajuan(
     val barangAjuan: String,
     val listBarang: List<String>,
     val jenisPembayaran: String,
-    val statusPengajuan: String
+    val statusPengajuan: String,
+    val address: String,
+    val latitude: Double,
+    val longitude: Double,
+    val idPengiriman: String? = null
 )

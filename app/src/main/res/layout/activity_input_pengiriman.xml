@@ -93,31 +93,85 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/inputJeniszq"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunito_extrabold"
+                        android:text="Pengajuan"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnshow"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#x25BC;"
+                        android:textColor="@color/md_theme_light_primary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Supir"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/inputNamaSupir"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="20dp"
-                        android:orientation="horizontal">
+                        android:layout_height="50dp"
+                        android:backgroundTint="@color/grey_50"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                        <TextView
-                            android:id="@+id/inputJeniszq"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_extrabold"
-                            android:text="Pengajuan"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                </LinearLayout>
 
-                        <Button
-                            android:id="@+id/btnshow"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="&#x25BC;"
-                            android:textColor="@color/md_theme_light_primary"
-                            android:textSize="10sp" />
-                    </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textbarang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Pengjuan"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewInputBarang"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="16dp"
+                        android:text="Pilih Pengajuan" />
+
+                </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -130,12 +184,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nama Supir"
+                            android:text="Alamat"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
                         <Spinner
-                            android:id="@+id/inputNamaSupir"
+                            android:id="@+id/inpu_alamat_pengiriman"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:backgroundTint="@color/grey_50"
@@ -144,98 +198,118 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="20dp"
-
-                        android:layout_marginEnd="20dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textbarang"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nama Mitra"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/textViewInputBarang"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="16dp"
-                            android:text="Pilih Mitra" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="20dp"
-
-                        android:layout_marginEnd="20dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Alamat"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/input_alamat"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="16dp"
-                            android:text="Pilih Alamat" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                        android:id="@+id/lokasi_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
+                        android:visibility="gone"
+                        android:layout_marginHorizontal="20dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Catatan"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputCatatan"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
-                            android:hint="Masukan catatan"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView_lokasi2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Lokasi"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textStyle="bold" />
+
+                            <Button
+                                android:id="@+id/btn_search"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cari" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Search"
+                                app:endIconMode="clear_text"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/editTextSearchAlamat"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_semibold"/>
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_lokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/google_map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginTop="16dp" />
+
+                            <Button
+                                android:id="@+id/btn_set_lokasi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="50dp"
+                                android:layout_gravity="end"
+                                android:text="Set Lokasi" />
 
                     </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Catatan"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputCatatan"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Masukan catatan"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
 
                     <ProgressBar
                         android:id="@+id/progressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -249,21 +323,21 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCheckout"
-                android:layout_width="141dp"
-                android:layout_height="61dp"
-                android:layout_gravity="right"
-                android:layout_marginEnd="10dp"
-                android:text="Masuk"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:theme="@style/Theme.MaterialComponents"
-                app:backgroundTint="@color/grey_50"
-                app:cornerRadius="50dp"
-                app:elevation="5dp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCheckout"
+                    android:layout_width="141dp"
+                    android:layout_height="61dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="10dp"
+                    android:text="Masuk"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:backgroundTint="@color/grey_50"
+                    app:cornerRadius="50dp"
+                    app:elevation="5dp" />
 
             </LinearLayout>
 

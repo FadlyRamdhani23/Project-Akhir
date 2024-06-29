@@ -13,8 +13,8 @@ import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : RecyclerView.Adapter<PengirimanAdapter.MitraViewHolder>() {
 
     class MitraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.findViewById(R.id.pengiriman_name)
-        val status: TextView = itemView.findViewById(R.id.pengiriman_status)
+        val name: TextView = itemView.findViewById(R.id.supirId)
+        val status: TextView = itemView.findViewById(R.id.status_pengiriman)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MitraViewHolder {
@@ -24,16 +24,12 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
 
     override fun onBindViewHolder(holder: MitraViewHolder, position: Int) {
         val currentItem = pengirimanList[position]
-        holder.name.text = currentItem.name
-        when (currentItem.status) {
-            1 -> holder.status.text = "Sedang di kemas"
-            2 -> holder.status.text = "Sedang diperjalanan"
-            else -> holder.status.text = "Status tidak diketahui"
-        }
+        holder.name.text = currentItem.supir
+        holder.status.text = currentItem.status
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, MapsActivity::class.java)
-            intent.putExtra("PENGIRIMAN_DATA", currentItem) // Menambahkan objek Pengiriman ke Intent
+            intent.putExtra("PENGIRIMAN_ID", currentItem.id) // Menambahkan ID Pengiriman ke Intent
             context.startActivity(intent)
         }
     }

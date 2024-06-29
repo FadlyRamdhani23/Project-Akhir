@@ -6,13 +6,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Pengiriman(
-    val id: Int,
-    val name: String,
-    val mitraLatitude: Double,
-    val mitraLongitude: Double,
+    val id: String,
+    val latitudeTujuan: Double,
+    val LongitudeTujuan: Double,
     val supirLatitude: Double,
     val supirLongitude: Double,
+    val supir : String,
+    val supirId : String,
     val address: String,
-    val phone: String,
-    val status: Int
+    val status: String,
 ): Parcelable

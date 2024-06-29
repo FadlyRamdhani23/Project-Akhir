@@ -1,7 +1,6 @@
 package com.tugasakhir.udmrputra.ui.sopir
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -35,12 +34,12 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.RoundCap
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivitySupirBinding
-import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import java.util.concurrent.TimeUnit
 
 
@@ -53,13 +52,16 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
     private lateinit var locationCallback: LocationCallback
     private var isTracking = false
     private lateinit var database: DatabaseReference
+    private lateinit var firestore: FirebaseFirestore
+    private val auth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupirBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.google_map_supir) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -80,6 +82,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 stopLocationUpdates()
             }
         }
+
     }
 
     private val requestPermissionLauncher =
@@ -100,6 +103,8 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
                 location?.let {
                     val latLng = LatLng(it.latitude, it.longitude)
+                    val end = LatLng(-6.1753871,  106.8271805)
+                    findRoute(latLng, end)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
             }
@@ -166,11 +171,6 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             routing.execute()
         }
     }
-    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
-        val results = FloatArray(1)
-        Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-        return results[0] / 1000 // Mengubah meter menjadi kilometer
-    }
 
     override fun onRouteFailure(e: ErrorHandling?) {
         Log.d("Route", "onRoutingFailure: $e")
@@ -193,9 +193,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 polylineOptions.endCap(RoundCap())
                 val polyline: Polyline = mMap.addPolyline(polylineOptions)
                 polylines.add(polyline)
-                val durationText = list[indexing].durationText
-                binding.tvArrivalTimesMaps.text = durationText
-                Log.e("DActivity", "onRoutingSuccess: routeIndexing $durationText")
+
             }
         }
     }
@@ -215,14 +213,24 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
 
     private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
+        firestore = FirebaseFirestore.getInstance()
+        val userId = auth.currentUser?.uid ?: ""
         val db = FirebaseFirestore.getInstance()
-        val barang = hashMapOf(
-            "latitude" to latitude,
-            "longitude" to longitude,
+        val pengirimanUpdate: Map<String, Any> = hashMapOf(
+            "latitudeSupir" to latitude,
+            "longitudeSupir" to longitude,
         )
 
+        firestore.collection("pengiriman").document("YGMjYEdUdhf5WaUDaQVb").update(pengirimanUpdate)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error updating location: $exception", Toast.LENGTH_SHORT).show()
+            }
+
         db.collection("location")
-            .add(barang)
+            .add(pengirimanUpdate)
             .addOnSuccessListener { documentReference ->
                 Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
             }

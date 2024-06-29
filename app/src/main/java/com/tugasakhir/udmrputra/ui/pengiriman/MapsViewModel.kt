@@ -1,12 +1,13 @@
 package com.tugasakhir.udmrputra.ui.pengiriman
 
 import android.app.Application
+import android.location.Geocoder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.location.Geocoder
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.google.android.gms.maps.model.LatLng
+import com.tugasakhir.udmrputra.R
 import java.util.Locale
 
 class MapsViewModel(application: Application) : AndroidViewModel(application) {
@@ -33,7 +34,7 @@ class MapsViewModel(application: Application) : AndroidViewModel(application) {
         _pengirimanData.value = data
         data?.let {
             _userLocation.value = LatLng(it.supirLatitude, it.supirLongitude)
-            _vendorLocation.value = LatLng(it.mitraLatitude, it.mitraLongitude)
+            _vendorLocation.value = LatLng(it.latitudeTujuan, it.LongitudeTujuan)
             updateAddress()
             updateDistance()
         }
@@ -43,11 +44,12 @@ class MapsViewModel(application: Application) : AndroidViewModel(application) {
         val geocoder = Geocoder(getApplication(), Locale.getDefault())
         val userLoc = _userLocation.value
         if (userLoc != null) {
-            val addresses = geocoder.getFromLocation(userLoc.latitude, userLoc.longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
-                _address.value = addresses[0].getAddressLine(0)
-            } else {
-                _address.value = "Alamat tidak ditemukan"
+            try {
+                val addresses = geocoder.getFromLocation(userLoc.latitude, userLoc.longitude, 1)
+                _address.value = addresses?.firstOrNull()?.getAddressLine(0) ?: getApplication<Application>().getString(
+                    R.string.address_not_found)
+            } catch (e: Exception) {
+                _address.value = getApplication<Application>().getString(R.string.address_not_found)
             }
         }
     }
@@ -57,7 +59,7 @@ class MapsViewModel(application: Application) : AndroidViewModel(application) {
         val vendorLoc = _vendorLocation.value
         if (userLoc != null && vendorLoc != null) {
             val distance = calculateDistance(userLoc.latitude, userLoc.longitude, vendorLoc.latitude, vendorLoc.longitude)
-        _distance.value = String.format("%.2f km", distance)
+            _distance.value = String.format(Locale.getDefault(), "%.2f km", distance)
         }
     }
 

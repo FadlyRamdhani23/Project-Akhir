@@ -17,10 +17,11 @@ class HomeMitraActivity : AppCompatActivity() {
         binding = ActivityHomeMitraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        binding.btnToPengaturan.setOnClickListener {
-//            val intent = Intent(this, PengaturanFragment::class.java)
-//            startActivity(intent)
-//        }
+        binding.btnToPengaturan.setOnClickListener {
+            val intent = Intent(this, PesananMitraActivity::class.java)
+            startActivity(intent)
+            binding.progressBarPesanan.visibility = View.VISIBLE
+        }
         binding.btnToPengiriman.setOnClickListener {
             val intent = Intent(this, ProfilMitraActivity::class.java)
             startActivity(intent)
@@ -29,11 +30,14 @@ class HomeMitraActivity : AppCompatActivity() {
         binding.btnToProfil.setOnClickListener {
             val intent = Intent(this, ActivityPengajuan::class.java)
             startActivity(intent)
+            binding.progressBarPengajuan.visibility = View.VISIBLE
         }
     }
     override fun onResume() {
         super.onResume()
         // Hide the ProgressBar when the activity resumes
         binding.progressBar.visibility = View.GONE
+        binding.progressBarPesanan.visibility = View.GONE
+        binding.progressBarPengajuan.visibility = View.GONE
     }
 }

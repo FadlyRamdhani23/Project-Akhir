@@ -18,6 +18,7 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         val listBarang: TextView = view.findViewById(R.id.listBarang)
         val jenisPembayaran: TextView = view.findViewById(R.id.jenisPembayaran)
         val statusPengajuan: TextView = view.findViewById(R.id.statusPengajuan)
+        val warna = view.findViewById<View>(R.id.warna_jenis)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PengajuanViewHolder {
@@ -33,6 +34,8 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         holder.listBarang.text = pengajuan.listBarang.joinToString(", ")
         holder.jenisPembayaran.text = pengajuan.jenisPembayaran
         holder.statusPengajuan.text = pengajuan.statusPengajuan
+
+
     }
 
     override fun getItemCount(): Int {

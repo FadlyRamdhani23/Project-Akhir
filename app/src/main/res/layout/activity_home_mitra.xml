@@ -164,7 +164,13 @@
             android:background="@color/colorPrimary"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
-
+            <ProgressBar
+                android:id="@+id/progressBarPengajuan"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="121dp"
@@ -218,6 +224,14 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
+            <ProgressBar
+                android:id="@+id/progressBarPesanan"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="121dp"
@@ -234,7 +248,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:padding="10dp"
-                    android:src="@drawable/icon_pengaturan_supir" />
+                    android:src="@drawable/icon_pengiriman_supir" />
 
 
             </LinearLayout>
@@ -246,7 +260,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/nunito_extrabold"
-                android:text="Pengaturan"
+                android:text="Pesanan"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />

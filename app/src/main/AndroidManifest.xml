@@ -30,6 +30,9 @@
         android:theme="@style/Theme.UDMRPutra"
         tools:targetApi="31">
         <activity
+            android:name=".ui.mitra.PesananMitraActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.pengajuan.DetailPengajuanActivity"
             android:exported="false" />
         <activity

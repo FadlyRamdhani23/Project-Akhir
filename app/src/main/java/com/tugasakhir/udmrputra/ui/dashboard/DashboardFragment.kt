@@ -2,16 +2,20 @@ package com.tugasakhir.udmrputra.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
 import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
+import com.tugasakhir.udmrputra.ui.notifications.PengajuanAdapter
 
 
 class DashboardFragment : Fragment() {
@@ -19,12 +23,9 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PengirimanAdapter
-    private var pengirimanList = arrayListOf<Pengiriman>(
-        Pengiriman(1, "Pengiriman 1",  -6.971744, 107.630628, -6.1754,  106.8272, "Alamat 1", "08123456789", 2),
-        Pengiriman(2, "Pengiriman 2", -6.9175, 107.6191, -7.2026, 107.9075, "Alamat 2", "08123456789", 2),
-        Pengiriman(3, "Pengiriman 3", -6.5950, 106.8166, -7.2026, 107.9075, "Alamat 3", "08123456789", 1),
-        // Tambahkan lebih banyak data Pengiriman jika diperlukan
-    )
+
+    private lateinit var pengirimanAdapter: PengirimanAdapter
+    private val pengirimanList = mutableListOf<Pengiriman>()
 
 
     private val binding get() = _binding!!
@@ -43,8 +44,61 @@ class DashboardFragment : Fragment() {
                 startActivity(it)
             }
         }
+        setupRecyclerView()
+        fetchPengirimanData()
         return root
     }
+
+    private fun setupRecyclerView() {
+        pengirimanAdapter = PengirimanAdapter(pengirimanList)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = pengirimanAdapter
+        }
+    }
+
+    private fun fetchPengirimanData() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("pengiriman")
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.w("wow", "Listen failed", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshots != null && !snapshots.isEmpty) {
+                    pengirimanList.clear()
+                    for (document in snapshots) {
+                        val pengirimanId = document.id
+                        val address = document.getString("address") ?: ""
+                        val latitudeTujuan = document.getDouble("latitudeTujuan") ?: 0.0
+                        val longitudeTujuan = document.getDouble("longitudeTujuan") ?: 0.0
+                        val latitudeSupir = document.getDouble("latitudeSupir") ?: 0.0
+                        val longitudeSupir = document.getDouble("longitudeSupir") ?: 0.0
+                        val supir = document.getString("supir") ?: ""
+                        val supirId = document.getString("supirId") ?: ""
+                        val status = document.getString("status") ?: ""
+
+                        val pengiriman = Pengiriman(
+                            pengirimanId,
+                            latitudeTujuan,
+                            longitudeTujuan,
+                            latitudeSupir,
+                            longitudeSupir,
+                            supir,
+                            supirId,
+                            address,
+                            status,
+                        )
+                        pengirimanList.add(pengiriman)
+                    }
+                    pengirimanAdapter.notifyDataSetChanged()
+                } else {
+                    Log.d("wow", "Current data: null")
+                }
+            }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
