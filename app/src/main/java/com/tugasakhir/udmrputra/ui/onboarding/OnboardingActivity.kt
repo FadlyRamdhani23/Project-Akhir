@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import com.tugasakhir.udmrputra.ui.main.MainActivity
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.ViewPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityOnboardingBinding
@@ -29,17 +28,10 @@ class OnboardingActivity : AppCompatActivity() {
         if (isFirstInstall) {
             setupFirstInstall()
         } else {
-            setupFirstInstall()
+            proceedToNextActivity()
         }
     }
     private fun setupFirstInstall() {
-//        binding.btnBack.setOnClickListener {
-//            if (getitem(0) > 0) {
-//                binding.viewPager.setCurrentItem(getitem(-1), true)
-//                binding.btnNext.text = getString(R.string.next_btn)
-//            }
-//        }
-
         binding.btnNext.setOnClickListener {
 
             if (getitem(0) == 1) {
@@ -62,7 +54,7 @@ class OnboardingActivity : AppCompatActivity() {
 
 
         binding.btnSkip.setOnClickListener {
-            val i = Intent(this@OnboardingActivity, Home::class.java)
+            val i = Intent(this@OnboardingActivity, LoginActivity::class.java)
             startActivity(i)
             finish()
             getSharedPreferences("PREFS", MODE_PRIVATE).edit().putBoolean("isFirstInstall", false)
@@ -77,7 +69,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun proceedToNextActivity() {
-        val i = Intent(this@OnboardingActivity, Home::class.java)
+        val i = Intent(this@OnboardingActivity, LoginActivity::class.java)
         startActivity(i)
         finish()
     }

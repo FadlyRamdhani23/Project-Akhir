@@ -173,7 +173,8 @@ class InputPengirimanActivity : AppCompatActivity() {
         if (results!!.isNotEmpty()) {
             val latitude = results[0].latitude
             val longitude = results[0].longitude
-
+           val latitudeSupir = -6.904033999999999
+            val longitudeSupir = 107.6207242
             // Persiapkan data untuk dikirim
             val data = hashMapOf(
                 "address" to selectedAlamat,
@@ -181,6 +182,8 @@ class InputPengirimanActivity : AppCompatActivity() {
                 "latitudeTujuan" to latitude,
                 "longitudeTujuan" to longitude,
                 "supir" to selectedSupir,
+                "latitudeSupir" to latitudeSupir,
+                "longitudeSupir" to longitudeSupir,
                 "supirId" to selectedSupirId  // Use selected driver ID
             )
 

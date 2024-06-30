@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.notifications
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
+import com.tugasakhir.udmrputra.ui.pengajuan.DetailPengajuanActivity
+import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 
 class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
     RecyclerView.Adapter<PengajuanAdapter.PengajuanViewHolder>() {
@@ -34,6 +37,12 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         holder.listBarang.text = pengajuan.listBarang.joinToString(", ")
         holder.jenisPembayaran.text = pengajuan.jenisPembayaran
         holder.statusPengajuan.text = pengajuan.statusPengajuan
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailPengajuanActivity::class.java)
+            intent.putExtra("pengajuanId", pengajuan.id) // Menambahkan ID Pengiriman ke Intent
+            context.startActivity(intent)
+        }
 
 
     }

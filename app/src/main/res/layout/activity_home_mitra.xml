@@ -60,19 +60,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/nunito_extrabold"
-                        android:text="Berkendaralah dengan hati hati!!"
+                        android:text="Jadilah mitra yang amanah dalam poses pengajuan"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:fontFamily="@font/nunito_extrabold"
-                        android:text="Ketika lelah beristirahatlah!!"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
-
                 </LinearLayout>
 
                 <ImageView

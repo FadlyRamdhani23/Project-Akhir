@@ -130,7 +130,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nama Petani"
+                            android:text="Nama Pengaju"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -139,7 +139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_marginBottom="10dp"
-                            android:hint="Masukan harga Beli"
+                            android:hint="Masukan nama pengaju"
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"

@@ -109,6 +109,15 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
+
+            <ProgressBar
+                android:id="@+id/progressBarPengiriman"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="124dp"
@@ -165,6 +174,14 @@
             android:background="@color/colorPrimary"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
+
+            <ProgressBar
+                android:id="@+id/progressBarProfile"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,6 +244,13 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
+            <ProgressBar
+                android:id="@+id/progressBarRiwayat"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="121dp"

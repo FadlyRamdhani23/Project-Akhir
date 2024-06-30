@@ -11,15 +11,15 @@ import com.tugasakhir.udmrputra.databinding.SlideLayoutBinding
 
 class ViewPagerAdapter(private val context: Context) : PagerAdapter() {
     private val images = intArrayOf(
-        R.drawable.onboarding_1,
+        R.drawable.bills,
         R.drawable.onboarding_2,
-        R.drawable.onboarding_3
+        R.drawable.logo4
     )
 
     private val descriptions = intArrayOf(
         R.string.slide_persediaan,
         R.string.slide_tracking,
-        R.string.slide_persediaan
+        R.string.slide_udmr_putra
     )
 
     override fun getCount(): Int {

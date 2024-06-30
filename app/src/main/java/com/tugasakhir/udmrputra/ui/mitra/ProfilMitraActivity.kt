@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -26,6 +27,9 @@ import com.tugasakhir.udmrputra.databinding.ProfileMitraActivityBinding
 import java.util.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 
 class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -101,8 +105,10 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.btnLogout.setOnClickListener {
-            auth.signOut()
-            finish()
+            Firebase.auth.signOut()
+            Toast.makeText(this, "Berhasil Keluar", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         val mapFragment = supportFragmentManager
@@ -132,6 +138,7 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.btnSetLokasi.setOnClickListener {
             saveLocation()
+            binding.materialCardView2.visibility = View.GONE
         }
 
         binding.btnEdit.setOnClickListener {

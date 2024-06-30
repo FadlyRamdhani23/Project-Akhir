@@ -1,4 +1,3 @@
-// PengajuanViewModel.kt
 package com.tugasakhir.udmrputra.ui.pengajuan
 
 import androidx.lifecycle.LiveData
@@ -10,6 +9,8 @@ import com.tugasakhir.udmrputra.data.Barang
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+
 
 class PengajuanViewModel : ViewModel() {
 
@@ -23,7 +24,7 @@ class PengajuanViewModel : ViewModel() {
     val toastMessage: LiveData<String> = _toastMessage
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val categoryMap = mutableMapOf<String, String>()
+    val categoryMap = mutableMapOf<String, String>()
 
     private val _isSubmitSuccessful = MutableLiveData<Boolean>()
     val isSubmitSuccessful: LiveData<Boolean> = _isSubmitSuccessful
@@ -97,6 +98,8 @@ class PengajuanViewModel : ViewModel() {
         _isLoading.value = true
 
         val mainBarangId = categoryMap.entries.firstOrNull { it.value == mainNamaBarang }?.key
+        val mainBarangImageUrl = _barangList.value?.firstOrNull { it.id == mainBarangId }?.gambar
+
         if (mainBarangId == null) {
             _toastMessage.value = "Invalid item selected"
             _isLoading.value = false
@@ -136,7 +139,8 @@ class PengajuanViewModel : ViewModel() {
                             "hargaBeli" to mainHargaBeli,
                             "catatan" to mainCatatan,
                             "barangId" to mainBarangId,
-                            "pengajuanId" to pengajuanId
+                            "pengajuanId" to pengajuanId,
+                            "imageUrl" to mainBarangImageUrl
                         )
                         db.collection("pengajuan").document(pengajuanId).collection("barang")
                             .add(mainBarangData)

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
+import com.tugasakhir.udmrputra.ui.pengajuan.DetailPengajuanActivity
 import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 
 class PesananMitraAdapter(private val pengajuanList: List<Pengajuan>) :
@@ -48,6 +49,12 @@ class PesananMitraAdapter(private val pengajuanList: List<Pengajuan>) :
             val intent = Intent(context, MapsActivity::class.java).apply {
                 putExtra("PENGIRIMAN_ID", pengajuan.idPengiriman)
             }
+            context.startActivity(intent)
+        }
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailPesananMitra::class.java)
+            intent.putExtra("pengajuanId", pengajuan.id) // Menambahkan ID Pengiriman ke Intent
             context.startActivity(intent)
         }
     }

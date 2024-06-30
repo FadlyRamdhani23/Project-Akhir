@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">UD MR Putra</string>
-    <string name="slide_persediaan">Persediaan yang dikelola dengan tepat adalah \nlangkah awal menuju keberlanjutan bisnis</string>
+    <string name="slide_persediaan">UD MR Putra telah memperkenalkan fitur pengajuan barang untuk meningkatkan kenyamanan mitra dalam memesan produk</string>
     <string name="next_btn">Lanjut ></string>
     <string name="kelola_persediaan_barang">Kelola Persediaan Barang</string>
     <string name="skip"><![CDATA[Lewati >]]></string>
@@ -16,6 +16,7 @@
     <string name="title_gas_station">Pencatatan</string>
     <string name="title_settings">Pengaturan</string>
     <string name="title_tracking">Pengiriman</string>
+    <string name="message">%1$s diklik!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_barang">Stok  Barang</string>
@@ -96,6 +97,7 @@
     <string name="action_bar_detail">Detail Barang</string>
     <string name="address_not_found">alamat tidak di temukan</string>
     <string name="action_bar_detail_pencatatan">Detail Pencatatan</string>
+    <string name="slide_udmr_putra">UD MR Putra adalah usaha dagang yang bergerak dalam distribusi sayur dan buah segar. Mengutamakan kualitas dan kesegaran, UD. MR Putra mendapatkan produk langsung dari petani lokal, memastikan bahwa setiap pengiriman memenuhi standar tinggi.</string>
 
 
     <string-array name="jenis_barang">

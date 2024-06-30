@@ -56,6 +56,7 @@ dependencies {
     // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
 
+
     // Firebase dependencies
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
@@ -63,6 +64,8 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-appcheck-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation ("com.firebaseui:firebase-ui-database:8.0.0")
+    implementation ("com.google.firebase:firebase-messaging-ktx:23.3.1")
 
     // Google Maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")

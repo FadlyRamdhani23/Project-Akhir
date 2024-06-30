@@ -30,6 +30,15 @@
         android:theme="@style/Theme.UDMRPutra"
         tools:targetApi="31">
         <activity
+            android:name=".ui.sopir.RiwayatPengirimanSupirActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mitra.DetailPesananMitra"
+            android:exported="false" />
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.mitra.PesananMitraActivity"
             android:exported="false" />
         <activity
@@ -113,7 +122,7 @@
             android:exported="false"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".ui.onboarding.OnboardingActivity"
+            android:name=".ui.splashscreen.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -122,7 +131,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.onboarding.OnboardingActivity"
             android:exported="true" />
 
         <meta-data

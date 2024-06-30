@@ -89,20 +89,22 @@ class ActivityPengajuan : AppCompatActivity() {
         val bottomSheetBinding = BottomSheetSelectItemBinding.inflate(LayoutInflater.from(this))
         bottomSheetDialog.setContentView(bottomSheetBinding.root)
 
-        bottomSheetBinding.recyclerViewItems.layoutManager = LinearLayoutManager(this)
         bottomSheetBinding.recyclerViewItems.adapter = adapter
+        bottomSheetBinding.recyclerViewItems.layoutManager = LinearLayoutManager(this)
 
         bottomSheetBinding.editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val filteredList = viewModel.filterBarangList(s.toString())
-                adapter.updateList(filteredList)
+                adapter.updateList(viewModel.filterBarangList(s.toString()))
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
         bottomSheetDialog.show()
     }
+
 
     private fun submitForm() {
         val mainNamaPetani = binding.inputNamaPetani.text.toString().trim()
@@ -112,7 +114,6 @@ class ActivityPengajuan : AppCompatActivity() {
         val mainHargaBeli = binding.inputHargaBeli.text.toString().trim()
         val mainCatatan = binding.inputCatatan.text.toString().trim()
         val mainJenisPembayaran = binding.inputJenisPembayaran.selectedItem.toString()
-
 
         if (mainNamaPetani.isEmpty() || mainNamaBarang == "Pilih Jenis Barang" || mainJumlahBarang.isEmpty() ||
             mainHargaPasar.isEmpty() || mainHargaBeli.isEmpty() || mainCatatan.isEmpty()) {
@@ -142,12 +143,22 @@ class ActivityPengajuan : AppCompatActivity() {
                     return
                 }
 
+                val barangId = viewModel.categoryMap.entries.firstOrNull { it.value == namaBarang }?.key
+                val imageUrl = viewModel.barangList.value?.firstOrNull { it.id == barangId }?.gambar
+
+                if (barangId == null || imageUrl == null) {
+                    Toast.makeText(this, "Invalid item selected in additional items", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
                 val additionalPengajuanData = hashMapOf(
                     "namaBarang" to namaBarang,
                     "jumlahBarang" to jumlahBarang,
                     "hargaPasar" to hargaPasar,
                     "hargaBeli" to hargaBeli,
-                    "catatan" to catatan
+                    "catatan" to catatan,
+                    "barangId" to barangId,
+                    "imageUrl" to imageUrl
                 )
                 additionalPengajuanDataList.add(additionalPengajuanData)
             }
@@ -164,6 +175,8 @@ class ActivityPengajuan : AppCompatActivity() {
             additionalPengajuanDataList
         )
     }
+
+
 
     private fun incrementCount() {
         val currentCount = binding.editTextQuantity.text.toString().toIntOrNull() ?: 0

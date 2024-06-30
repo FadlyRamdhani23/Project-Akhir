@@ -80,4 +80,8 @@
     <color name="blue_2">#61B5BA</color>
     <color name="red">#DD6F6F</color>
     <color name="gray_2">#DBDBDB</color>
+    <color name="chat_color_sender">#1E88E5</color>
+    <color name="chat_color_receiver">#7CB342</color>
+    <color name="chatkiri">#232526</color>
+    <color name="chatkanan">#244B38</color>
 </resources>
