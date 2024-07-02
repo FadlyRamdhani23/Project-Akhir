@@ -59,7 +59,8 @@
             android:name="ui.service.LocationService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="location" />
+            android:foregroundServiceType="location"
+            tools:ignore="MissingClass" />
 
         <activity
             android:name=".ui.logreg.RegisterSupirActivity"
