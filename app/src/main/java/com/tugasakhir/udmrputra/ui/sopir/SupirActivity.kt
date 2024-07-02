@@ -1,6 +1,7 @@
 package com.tugasakhir.udmrputra.ui.sopir
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -40,8 +41,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivitySupirBinding
+import com.tugasakhir.udmrputra.ui.service.LocationService
 import java.util.concurrent.TimeUnit
-
 
 class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
@@ -54,6 +55,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
     private val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupirBinding.inflate(layoutInflater)
@@ -61,7 +63,6 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -77,12 +78,13 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             if (!isTracking) {
                 updateTrackingStatus(true)
                 startLocationUpdates()
+                startService(Intent(this, LocationService::class.java))
             } else {
                 updateTrackingStatus(false)
                 stopLocationUpdates()
+                stopService(Intent(this, LocationService::class.java))
             }
         }
-
     }
 
     private val requestPermissionLauncher =
@@ -93,6 +95,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 getMyLocation()
             }
         }
+
     private fun getMyLocation() {
         if (ContextCompat.checkSelfPermission(
                 this.applicationContext,
@@ -100,10 +103,10 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             mMap.isMyLocationEnabled = true
-            fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     val latLng = LatLng(it.latitude, it.longitude)
-                    val end = LatLng(-6.1753871,  106.8271805)
+                    val end = LatLng(-6.1753871, 106.8271805)
                     findRoute(latLng, end)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
@@ -112,6 +115,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
     private val resolutionLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
@@ -127,6 +131,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                     ).show()
             }
         }
+
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.MINUTES.toMillis(2) // Set interval to 2 minutes
@@ -152,6 +157,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 }
             }
     }
+
     private fun findRoute(start: LatLng?, end: LatLng?) {
         if (start == null || end == null) {
             Snackbar.make(
@@ -193,7 +199,6 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 polylineOptions.endCap(RoundCap())
                 val polyline: Polyline = mMap.addPolyline(polylineOptions)
                 polylines.add(polyline)
-
             }
         }
     }
@@ -202,7 +207,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
-                    Log.d(TAG, "onLocationResult: " + location.latitude + ", " + location.longitude)
+                    Log.d(TAG, "onLocationResult: ${location.latitude}, ${location.longitude}")
                     val latLng = LatLng(location.latitude, location.longitude)
                     saveLocationToFirebase(location.latitude, location.longitude)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
@@ -211,17 +216,17 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         }
     }
 
-
     private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
         firestore = FirebaseFirestore.getInstance()
         val userId = auth.currentUser?.uid ?: ""
         val db = FirebaseFirestore.getInstance()
         val pengirimanUpdate: Map<String, Any> = hashMapOf(
+            "userId" to userId,
             "latitudeSupir" to latitude,
             "longitudeSupir" to longitude,
         )
 
-        firestore.collection("pengiriman").document("tOcOpzZIb9Olk6EnaZMp").update(pengirimanUpdate)
+        firestore.collection("pengiriman").document("D4snBD7t2rKM7BZu581E").update(pengirimanUpdate)
             .addOnSuccessListener {
                 Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
             }
@@ -235,10 +240,10 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
-
                 Toast.makeText(this, "Data gagal disimpan", Toast.LENGTH_SHORT).show()
             }
     }
+
     private fun startLocationUpdates() {
         try {
             fusedLocationClient.requestLocationUpdates(
@@ -250,6 +255,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             Log.e(TAG, "Error : " + exception.message)
         }
     }
+
     private fun updateTrackingStatus(newStatus: Boolean) {
         isTracking = newStatus
         if (isTracking) {
@@ -258,22 +264,24 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             binding.btnRouteMaps.text = getString(R.string.start_running)
         }
     }
+
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
+
     override fun onResume() {
         super.onResume()
         if (isTracking) {
             startLocationUpdates()
         }
     }
+
     override fun onPause() {
         super.onPause()
         stopLocationUpdates()
     }
+
     override fun onRouteCancelled() {
         Log.d("Route", "Cancel Route")
     }
-
-
 }

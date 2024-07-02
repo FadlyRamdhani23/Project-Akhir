@@ -125,9 +125,10 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="210dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="40dp"
                 android:fontFamily="@font/nunito_extrabold"
                 android:text="Profil"
                 android:textColor="@color/black"
@@ -180,10 +181,10 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="210dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="40dp"
                 android:fontFamily="@font/nunito_extrabold"
                 android:text="Pengajuan"
                 android:textColor="@color/black"
@@ -244,11 +245,10 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="127dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="40dp"
                 android:fontFamily="@font/nunito_extrabold"
                 android:text="Pesanan"
                 android:textColor="@color/black"

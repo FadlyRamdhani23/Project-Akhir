@@ -21,6 +21,8 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.databinding.ActivityPengajuanBinding
 import com.tugasakhir.udmrputra.databinding.BottomSheetSelectItemBinding
+import java.text.NumberFormat
+import java.util.Locale
 
 class ActivityPengajuan : AppCompatActivity() {
 
@@ -40,10 +42,11 @@ class ActivityPengajuan : AppCompatActivity() {
         adapter = PengajuanAdapterBarang(this, emptyList()) { selectedBarang ->
             binding.textViewInputBarang.text = selectedBarang.name
             viewModel.updateCategoryMap(selectedBarang.id, selectedBarang.name)
-            bottomSheetDialog.dismiss() // Ensure BottomSheetDialog is dismissed
+            bottomSheetDialog.dismiss()
         }
 
         setupObservers()
+        setupTextWatchers()
 
         binding.btnCheckout.setOnClickListener {
             submitForm()
@@ -78,7 +81,6 @@ class ActivityPengajuan : AppCompatActivity() {
         })
         viewModel.isSubmitSuccessful.observe(this, Observer { isSuccessful ->
             if (isSuccessful) {
-                // Tutup halaman jika submit berhasil
                 finish()
             }
         })
@@ -105,19 +107,57 @@ class ActivityPengajuan : AppCompatActivity() {
         bottomSheetDialog.show()
     }
 
+    private fun setupTextWatchers() {
+        setupCurrencyTextWatcher(binding.inputHargaPasar)
+        setupCurrencyTextWatcher(binding.inputHargaBeli)
+    }
+
+    private fun setupCurrencyTextWatcher(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                editText.removeTextChangedListener(this)
+                try {
+                    val originalString = s.toString()
+
+                    // Remove formatting characters
+                    val cleanString = originalString.replace("[Rp,.]".toRegex(), "")
+
+                    if (cleanString.isNotEmpty()) {
+                        val longVal: Long = cleanString.toLong()
+
+                        val formatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+                        formatter.maximumFractionDigits = 0
+                        val formattedString = formatter.format(longVal)
+
+                        // Update input field with formatted currency
+                        editText.setText(formattedString)
+                        editText.setSelection(formattedString.length)
+                    }
+                } catch (nfe: NumberFormatException) {
+                    nfe.printStackTrace()
+                }
+
+                editText.addTextChangedListener(this)
+            }
+        })
+    }
 
     private fun submitForm() {
         val mainNamaPetani = binding.inputNamaPetani.text.toString().trim()
         val mainNamaBarang = binding.textViewInputBarang.text.toString().trim()
-        val mainJumlahBarang = binding.editTextQuantity.text.toString().trim()
-        val mainHargaPasar = binding.inputHargaPasar.text.toString().trim()
-        val mainHargaBeli = binding.inputHargaBeli.text.toString().trim()
+        val mainJumlahBarang = binding.editTextQuantity.text.toString().toIntOrNull()
+        val mainHargaPasar = binding.inputHargaPasar.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
+        val mainHargaBeli = binding.inputHargaBeli.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
         val mainCatatan = binding.inputCatatan.text.toString().trim()
         val mainJenisPembayaran = binding.inputJenisPembayaran.selectedItem.toString()
 
-        if (mainNamaPetani.isEmpty() || mainNamaBarang == "Pilih Jenis Barang" || mainJumlahBarang.isEmpty() ||
-            mainHargaPasar.isEmpty() || mainHargaBeli.isEmpty() || mainCatatan.isEmpty()) {
-            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+        if (mainNamaPetani.isEmpty() || mainNamaBarang == "Pilih Jenis Barang" || mainJumlahBarang == null ||
+            mainHargaPasar == null || mainHargaBeli == null || mainCatatan.isEmpty()) {
+            Toast.makeText(this, "Please fill out all fields correctly", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -131,14 +171,15 @@ class ActivityPengajuan : AppCompatActivity() {
                 val etHargaPasar = cardView.findViewById<EditText>(R.id.inputHargaPasarTambahan)
                 val etHargaBeli = cardView.findViewById<EditText>(R.id.inputHargaBeliTambahan)
                 val etCatatan = cardView.findViewById<EditText>(R.id.inputCatatanTambahan)
-
+                setupCurrencyTextWatcher(etHargaPasar)
+                setupCurrencyTextWatcher(etHargaBeli)
                 val namaBarang = etNamaBarang.text.toString().trim()
-                val jumlahBarang = etJumlahBarang.text.toString().trim()
-                val hargaPasar = etHargaPasar.text.toString().trim()
-                val hargaBeli = etHargaBeli.text.toString().trim()
+                val jumlahBarang = etJumlahBarang.text.toString().toIntOrNull()
+                val hargaPasar = etHargaPasar.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
+                val hargaBeli = etHargaBeli.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
                 val catatan = etCatatan.text.toString().trim()
 
-                if (namaBarang.isEmpty() || jumlahBarang.isEmpty() || hargaPasar.isEmpty() || hargaBeli.isEmpty() || catatan.isEmpty()) {
+                if (namaBarang.isEmpty() || jumlahBarang == null || hargaPasar == null || hargaBeli == null || catatan.isEmpty()) {
                     Toast.makeText(this, "Please fill out all fields in additional items", Toast.LENGTH_SHORT).show()
                     return
                 }
@@ -164,19 +205,19 @@ class ActivityPengajuan : AppCompatActivity() {
             }
         }
 
-        viewModel.submitForm(
-            mainNamaPetani,
-            mainNamaBarang,
-            mainJumlahBarang,
-            mainHargaPasar,
-            mainHargaBeli,
-            mainCatatan,
-            mainJenisPembayaran,
-            additionalPengajuanDataList
-        )
+        if (mainHargaBeli != null && mainHargaPasar != null && mainJumlahBarang != null) {
+            viewModel.submitForm(
+                mainNamaPetani,
+                mainNamaBarang,
+                mainJumlahBarang,
+                mainHargaPasar,
+                mainHargaBeli,
+                mainCatatan,
+                mainJenisPembayaran,
+                additionalPengajuanDataList
+            )
+        }
     }
-
-
 
     private fun incrementCount() {
         val currentCount = binding.editTextQuantity.text.toString().toIntOrNull() ?: 0
@@ -211,8 +252,11 @@ class ActivityPengajuan : AppCompatActivity() {
         val etHargaPasar = newPengajuanView.findViewById<EditText>(R.id.inputHargaPasarTambahan)
         val etHargaBeli = newPengajuanView.findViewById<EditText>(R.id.inputHargaBeliTambahan)
         val etCatatan = newPengajuanView.findViewById<EditText>(R.id.inputCatatanTambahan)
-
         val btnHapus = newPengajuanView.findViewById<ImageButton>(R.id.btn_hapus)
+
+        // Setup currency TextWatcher for etHargaPasar and etHargaBeli
+        setupCurrencyTextWatcher(etHargaPasar)
+        setupCurrencyTextWatcher(etHargaBeli)
 
         etNamaBarang.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(this)
@@ -246,4 +290,5 @@ class ActivityPengajuan : AppCompatActivity() {
 
         binding.cardContainer.addView(newPengajuanView)
     }
+
 }

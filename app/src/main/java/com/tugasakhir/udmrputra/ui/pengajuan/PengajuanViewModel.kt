@@ -88,9 +88,9 @@ class PengajuanViewModel : ViewModel() {
     fun submitForm(
         mainNamaPetani: String,
         mainNamaBarang: String,
-        mainJumlahBarang: String,
-        mainHargaPasar: String,
-        mainHargaBeli: String,
+        mainJumlahBarang: Int,
+        mainHargaPasar: Long,
+        mainHargaBeli: Long,
         mainCatatan: String,
         mainJenisPembayaran: String,
         additionalPengajuanDataList: List<Map<String, Any>>
@@ -120,6 +120,7 @@ class PengajuanViewModel : ViewModel() {
                     "namaPetani" to mainNamaPetani,
                     "userId" to userId,
                     "status" to "pending",
+                    "hargaDeal" to 0,
                     "jenisPembayaran" to mainJenisPembayaran,
                     "tanggalPengajuan" to currentDate,
                     "address" to mainAlamat,

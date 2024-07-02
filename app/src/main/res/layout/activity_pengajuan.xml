@@ -123,7 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
+
                         android:layout_marginEnd="20dp"
                         android:orientation="vertical">
 
@@ -138,7 +138,7 @@
                             android:id="@+id/inputNamaPetani"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
+
                             android:hint="Masukan nama pengaju"
                             android:imeOptions="actionDone"
                             android:inputType="text"
@@ -169,9 +169,12 @@
                             android:id="@+id/textViewInputBarang"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
                             android:text="Pilih Jenis Barang"
                             android:padding="16dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:fontFamily="@font/nunito_semibold"
+                            android:background="@drawable/rounded_background"
+                            android:textColor="@color/black"
                             android:clickable="true"
                             android:focusable="true"/>
 
@@ -195,8 +198,8 @@
 
                         <ImageButton
                             android:id="@+id/button_decrement"
-                            android:layout_width="39dp"
-                            android:layout_height="35dp"
+                            android:layout_width="30dp"
+                            android:layout_height="25dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="20dp"
                             android:background="@drawable/button_decrement_bg"
@@ -214,8 +217,8 @@
 
                         <ImageButton
                             android:id="@+id/button_increment"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="30dp"
+                            android:layout_height="25dp"
                             android:background="@drawable/button_decrement_pressed"
                             android:contentDescription="@string/increment"
                             android:layout_marginTop="10dp"
@@ -226,7 +229,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="10dp"
-                            android:text="/KG"
+                            android:text="/Kg"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -255,7 +258,7 @@
                             android:layout_marginBottom="10dp"
                             android:hint="Masukan harga pasar"
                             android:imeOptions="actionDone"
-                            android:inputType="text"
+                            android:inputType="number"
                             android:maxLines="1"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
@@ -284,7 +287,7 @@
                             android:layout_marginBottom="10dp"
                             android:hint="Masukan harga Beli"
                             android:imeOptions="actionDone"
-                            android:inputType="text"
+                            android:inputType="number"
                             android:maxLines="1"
                             android:textColor="@color/black"
                             android:textSize="12sp" />

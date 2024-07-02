@@ -87,6 +87,7 @@ class PesananMitraActivity : AppCompatActivity() {
         }
 
         adapter.notifyDataSetChanged()
+        checkIfEmpty()
     }
 
     private fun fetchPengajuanData() {
@@ -133,5 +134,15 @@ class PesananMitraActivity : AppCompatActivity() {
                         }
                 }
             }
+    }
+
+    private fun checkIfEmpty() {
+        if (adapter.itemCount == 0) {
+            binding.recyclerView.visibility = View.GONE
+            binding.emptyView.visibility = View.VISIBLE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.emptyView.visibility = View.GONE
+        }
     }
 }

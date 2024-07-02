@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:layout_marginBottom="10dp"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
@@ -48,9 +49,11 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_viewPengiriman"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:visibility="visible"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,11 +68,13 @@
                     android:text="Informasi Pengiriman" />
 
                 <TextView
+                    android:id="@+id/tv_nama_supir"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="nama supir" />
 
                 <TextView
+                    android:id="@+id/tv_status_pengiriman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="status" />
@@ -177,6 +182,7 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/total_harga_deal_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -189,7 +195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                     />
+                        />
 
 
 
@@ -201,6 +207,7 @@
                     android:gravity="center_horizontal">
 
                     <Button
+                        android:id="@+id/btn_terima"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
@@ -209,7 +216,7 @@
                         android:textColor="@color/white" />
 
                     <Button
-                        android:id="@+id/btn_logout"
+                        android:id="@+id/btn_tolak"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"

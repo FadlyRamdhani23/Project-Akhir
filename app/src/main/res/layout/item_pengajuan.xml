@@ -35,11 +35,14 @@
                 android:id="@+id/textViewInputBarangTambahan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
+                android:layout_marginTop="5dp"
+                android:text="Pilih Jenis Barang"
                 android:padding="16dp"
-                android:text="Pilih Jenis Barang" />
+                android:fontFamily="@font/nunito_semibold"
+                android:background="@drawable/rounded_background"
+                android:textColor="@color/black"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,7 +116,7 @@
                     android:layout_marginBottom="10dp"
                     android:hint="Masukan harga pasar"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -138,7 +141,7 @@
                     android:layout_height="50dp"
                     android:hint="Masukan harga Beli"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="12sp" />

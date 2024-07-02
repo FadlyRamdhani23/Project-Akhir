@@ -12,12 +12,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.data.DetailPengajuan
-import com.tugasakhir.udmrputra.data.Pengajuan
-import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.ActivityDetailPengajuanBinding
 import com.tugasakhir.udmrputra.ui.chat.ChatActivity
-import com.tugasakhir.udmrputra.ui.dashboard.PengirimanAdapter
-import com.tugasakhir.udmrputra.ui.notifications.PengajuanAdapter
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -76,7 +72,10 @@ class DetailPengajuanActivity : AppCompatActivity() {
             }
         })
 
-
+        // Add click listener for "Terima" button
+        binding.btnTerima.setOnClickListener {
+            saveTotalHarga(pengajuanId.toString())
+        }
     }
 
     private fun fetchPengajuanData(pengajuanId: String) {
@@ -90,11 +89,37 @@ class DetailPengajuanActivity : AppCompatActivity() {
                 val address = result.getString("address") ?: ""
                 val jenisPembayaran = result.getString("jenisPembayaran") ?: ""
                 val idPengiriman = result.getString("idPengiriman") ?: ""
+                val hargaDeal = result.getLong("totalHarga") ?: 0
 
                 binding.tvNamaPengaju.text = namaPengaju
                 binding.tvNamaMitra.text = namaPengaju
                 binding.tvAlamatMitra.text = address
                 binding.tvStatus.text = statusPengajuan
+
+                if(idPengiriman == ""){
+                    binding.cardViewPengiriman.visibility = android.view.View.GONE
+                } else {
+                    binding.cardViewPengiriman.visibility = android.view.View.VISIBLE
+                    db.collection("pengiriman").document(idPengiriman).get()
+                        .addOnSuccessListener { pengirimanResult ->
+                            val namaSupir = pengirimanResult.getString("supir") ?: ""
+                            binding.tvNamaSupir.text = "Mana supir : $namaSupir"
+                        }
+                }
+
+                if (hargaDeal == 0L) {
+                    Log.d("DetailPengajuanActivity", "Harga deal is 0")
+                } else {
+                    binding.totalHargaDeal.isFocusable = false
+                    binding.totalHargaDeal.isFocusableInTouchMode = false
+                    binding.totalHargaDeal.isClickable = false
+                    binding.totalHargaDeal.setText(hargaDeal.toString())
+                    binding.btnTerima.visibility = android.view.View.GONE
+                    binding.btnTolak.visibility = android.view.View.GONE
+                    binding.totalHargaDealLayout.hint = "Harga yang disepakati"
+
+                }
+
 
                 db.collection("pengajuan").document(pengajuanId).collection("barang")
                     .get()
@@ -102,9 +127,9 @@ class DetailPengajuanActivity : AppCompatActivity() {
                         for (barangDocument in barangResult) {
                             val barangId = barangDocument.getString("barangId") ?: ""
                             val namaBarang = barangDocument.getString("namaBarang") ?: ""
-                            val hargaPasar = barangDocument.getString("hargaPasar") ?: ""
-                            val hargaBeli = barangDocument.getString("hargaBeli") ?: ""
-                            val jumlah = barangDocument.getString("jumlahBarang") ?: ""
+                            val hargaPasar: Long? = barangDocument.getLong("hargaPasar")
+                            val hargaBeli: Long? = barangDocument.getLong("hargaBeli")
+                            val jumlah: Long? = barangDocument.getLong("jumlahBarang")
                             val catatan = barangDocument.getString("catatan") ?: ""
                             val imageUrls =  barangDocument.getString("imageUrl") ?: ""
 
@@ -116,8 +141,8 @@ class DetailPengajuanActivity : AppCompatActivity() {
                                 hargaBeli,
                                 catatan,
                                 jenisPembayaran,
-                                idPengiriman,
                                 tanggalPengajuan,
+                                idPengiriman,
                                 imageUrls,
                             )
                             pengajuanList.add(detailPengajuan)
@@ -207,5 +232,27 @@ class DetailPengajuanActivity : AppCompatActivity() {
         val intent = android.content.Intent(this, ChatActivity::class.java)
         intent.putExtra("chatroomId", chatroomId)
         startActivity(intent)
+    }
+
+    private fun saveTotalHarga(pengajuanId: String) {
+        val totalHargaDeal = binding.totalHargaDeal.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
+        if (totalHargaDeal != null) {
+            val db = FirebaseFirestore.getInstance()
+            val updateData = hashMapOf(
+                "totalHarga" to totalHargaDeal,
+                "status" to "approved"
+            )
+            db.collection("pengajuan").document(pengajuanId)
+                .update(updateData as Map<String, Any>)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(this, "Total harga tidak valid", Toast.LENGTH_SHORT).show()
+        }
     }
 }

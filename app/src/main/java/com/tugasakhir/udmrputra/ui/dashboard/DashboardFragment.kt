@@ -93,6 +93,7 @@ class DashboardFragment : Fragment() {
                         pengirimanList.add(pengiriman)
                     }
                     pengirimanAdapter.notifyDataSetChanged()
+
                 } else {
                     Log.d("wow", "Current data: null")
                 }
