@@ -81,7 +81,7 @@
             android:id="@+id/warna_jenis"
             android:layout_width="30dp"
             android:layout_height="77dp"
-            android:src="@color/blue"
+            android:background="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

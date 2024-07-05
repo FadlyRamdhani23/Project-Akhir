@@ -4,12 +4,15 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +20,9 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangKeluarBinding
+import java.text.NumberFormat
 import java.util.Calendar
+import java.util.Locale
 
 class InputKeluarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInputBarangKeluarBinding
@@ -31,6 +36,7 @@ class InputKeluarActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setupTextWatchers()
         initializeSpinner()
         setupButtonListeners()
     }
@@ -100,6 +106,42 @@ class InputKeluarActivity : AppCompatActivity() {
             showDatePickerDialog()
         }
     }
+    private fun setupTextWatchers() {
+        setupCurrencyTextWatcher(binding.inputHargaJual)
+    }
+    private fun setupCurrencyTextWatcher(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                editText.removeTextChangedListener(this)
+                try {
+                    val originalString = s.toString()
+
+                    // Remove formatting characters
+                    val cleanString = originalString.replace("[Rp,.]".toRegex(), "")
+
+                    if (cleanString.isNotEmpty()) {
+                        val longVal: Long = cleanString.toLong()
+
+                        val formatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+                        formatter.maximumFractionDigits = 0
+                        val formattedString = formatter.format(longVal)
+
+                        // Update input field with formatted currency
+                        editText.setText(formattedString)
+                        editText.setSelection(formattedString.length)
+                    }
+                } catch (nfe: NumberFormatException) {
+                    nfe.printStackTrace()
+                }
+
+                editText.addTextChangedListener(this)
+            }
+        })
+    }
 
     private fun handleCheckout() {
         binding.progressBar.visibility = View.VISIBLE
@@ -111,7 +153,7 @@ class InputKeluarActivity : AppCompatActivity() {
         val jumlahString = binding.editTextQuantity.text?.toString()
         val catatan = binding.inputCatatan.text?.toString()
         val tanggal = binding.buttonDatePicker.text?.toString()
-        val hargaJual = binding.inputHargaJual.text?.toString()
+        val hargaJual = binding.inputHargaJual.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
 
         val barangId = categoryMap.entries.find { it.value == barangName }?.key
         val jumlah = if (!jumlahString.isNullOrEmpty()) {

@@ -84,4 +84,7 @@
     <color name="chat_color_receiver">#7CB342</color>
     <color name="chatkiri">#232526</color>
     <color name="chatkanan">#244B38</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="light_blue">#00FFFF</color>
+    <color name="gray">#808080</color>
 </resources>

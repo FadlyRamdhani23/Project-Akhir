@@ -21,6 +21,7 @@ class LocationService : Service() {
     private lateinit var locationCallback: LocationCallback
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var pengirimanId: String
 
     companion object {
         private const val CHANNEL_ID = "LocationServiceChannel"
@@ -34,10 +35,11 @@ class LocationService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         createLocationRequest()
         createLocationCallback()
-        startLocationUpdates()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        pengirimanId = intent?.getStringExtra("PENGIRIMAN_ID").toString()
+        startLocationUpdates()
         return START_STICKY
     }
 
@@ -95,24 +97,13 @@ class LocationService : Service() {
             "longitudeSupir" to longitude,
         )
 
-        firestore.collection("pengiriman")
-            .whereEqualTo("supirId", userId)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot.documents) {
-                    document.reference.update(pengirimanUpdate)
-                        .addOnSuccessListener {
-                            Log.d("LocationService", "Location updated successfully for document: ${document.id}")
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.e("LocationService", "Error updating location for document: ${document.id}, $exception")
-                        }
-                }
+        firestore.collection("pengiriman").document(pengirimanId).update(pengirimanUpdate)
+            .addOnSuccessListener {
+                Log.d("LocationService", "Location updated successfully for document: $pengirimanId")
             }
             .addOnFailureListener { exception ->
-                Log.e("LocationService", "Error getting documents: $exception")
+                Log.e("LocationService", "Error updating location for document: $pengirimanId, $exception")
             }
-
 
         firestore.collection("location")
             .add(pengirimanUpdate)

@@ -1,11 +1,17 @@
 package com.tugasakhir.udmrputra.ui.pengaturan
 
+import android.Manifest
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,15 +31,20 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.FragmentPengaturanBinding
+import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 import com.tugasakhir.udmrputra.ui.mitra.LocationAdapter
 import java.util.Locale
+import java.util.UUID
 
 class PengaturanFragment : Fragment(), OnMapReadyCallback {
 
@@ -44,6 +56,8 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationAdapter: LocationAdapter
     private var selectedAddress: Address? = null
+    private var currentImageUri: Uri? = null
+    private val imageList = mutableListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +88,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
         binding.btnGantiAlamat.setOnClickListener {
             toggleVisibility(binding.materialCardView2)
         }
-
+        setupImagePicker()
         // Show ProgressBar
         binding.profileProgressBar.visibility = View.VISIBLE
 
@@ -184,6 +198,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
             getMyLocation()
         }
     }
+
 
     private fun toggleVisibility(view: View) {
         if (view.visibility == View.VISIBLE) {
@@ -330,6 +345,39 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 getMyLocation()
+            }
+        }
+
+    private fun setupImagePicker() {
+        binding.imgProfile.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
+            } else {
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    123
+                )
+            }
+        }
+    }
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        pickImageLauncher.launch(gallery)
+    }
+
+    private val pickImageLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.let {
+                    currentImageUri = it
+                    imageList.add(it)
+                    binding.imgProfile.setImageURI(currentImageUri)
+                }
             }
         }
 }

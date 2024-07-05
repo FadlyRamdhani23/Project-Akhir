@@ -6,6 +6,7 @@ import android.os.Parcelable
 data class Pencatatan(
     val id: String? = "",
     val catId: String? = "",
+    val barId : String? = "",
     val barangId: String? = "",
     val namaPetani: String? = "",
     val jumlah: String? = "",
@@ -14,9 +15,10 @@ data class Pencatatan(
     val tanggal: String? = "",
     val hargaBeli: String? = ""
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "", "", "","")
 
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -31,6 +33,7 @@ data class Pencatatan(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(catId)
+        parcel.writeString(barId)
         parcel.writeString(barangId)
         parcel.writeString(namaPetani)
         parcel.writeString(jumlah)

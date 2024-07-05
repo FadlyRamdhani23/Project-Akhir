@@ -32,8 +32,7 @@ class BarangActivity : AppCompatActivity() {
 
         binding = ActivityBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val toolbar: Toolbar = findViewById(R.id.topAppBarr)
-        setSupportActionBar(toolbar)
+        setupToolbar()
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
@@ -49,13 +48,11 @@ class BarangActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val  topBar = findViewById<MaterialToolbar>(R.id.topAppBarr);
-        topBar.setNavigationOnClickListener {
-            val intent = Intent(this, HomeFragment::class.java)
-            startActivity(intent)
-            finish()
-        }
 
+    }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.topAppBarr)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun catRecyclerView() {
@@ -130,7 +127,12 @@ class BarangActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+            android.R.id.home -> {
+                finish()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

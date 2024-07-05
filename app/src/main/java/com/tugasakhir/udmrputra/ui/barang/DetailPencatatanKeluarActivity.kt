@@ -15,7 +15,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-class DetailPencatatanActivity : AppCompatActivity() {
+class DetailPencatatanKeluarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailPencatatanBinding
     private lateinit var firestore: FirebaseFirestore
@@ -31,16 +31,16 @@ class DetailPencatatanActivity : AppCompatActivity() {
         // Retrieve data from intent
         val barangId = intent.getStringExtra("barangId") ?: ""
         val barId = intent.getStringExtra("barId") ?: ""
-        val masukId = intent.getStringExtra("masukId") ?: ""
+        val masukId = intent.getStringExtra("keluarId") ?: ""
         Log.d("DetailPencatatanActivity", "masukId: $masukId")
         val namaPetani = intent.getStringExtra("namaPetani")
         val jumlah = intent.getStringExtra("jumlah")
-        val hargaBeli = intent.getStringExtra("hargaBeli")
+        val hargaBeli = intent.getStringExtra("hargaJual")
         val tanggal = intent.getStringExtra("tanggal")
         val catatan = intent.getStringExtra("catatan")
         val catId = intent.getStringExtra("catId")
 
-        getImageSlider(masukId, barId)
+        getImageSlider(barId)
 
         if (barangId.isNotEmpty() && masukId.isNotEmpty()) {
             binding.pctKategori.text = if (catId == "JV9d40TfUWOHoyg8i5Wt") {
@@ -57,11 +57,11 @@ class DetailPencatatanActivity : AppCompatActivity() {
         }
     }
 
-    private fun getImageSlider(masukId: String, barangId: String) {
+    private fun getImageSlider(barangId: String) {
         val imageSlider = binding.ImageSlider
         val imageList = ArrayList<SlideModel>()
 
-        firestore.collection("barang").document(barangId).collection("masuk").document(masukId).get()
+        firestore.collection("barang").document(barangId).get()
             .addOnSuccessListener { result ->
                 val imageUrls = result.get("gambar") as? List<String>
                 if (imageUrls != null && imageUrls.isNotEmpty()) {
@@ -87,6 +87,7 @@ class DetailPencatatanActivity : AppCompatActivity() {
         val decimalFormat = DecimalFormat("Rp #,###", symbols)
         return decimalFormat.format(number)
     }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

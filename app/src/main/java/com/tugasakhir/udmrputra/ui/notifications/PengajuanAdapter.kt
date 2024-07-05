@@ -1,15 +1,17 @@
 package com.tugasakhir.udmrputra.ui.notifications
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.ui.pengajuan.DetailPengajuanActivity
-import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 
 class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
     RecyclerView.Adapter<PengajuanAdapter.PengajuanViewHolder>() {
@@ -21,7 +23,7 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         val listBarang: TextView = view.findViewById(R.id.listBarang)
         val jenisPembayaran: TextView = view.findViewById(R.id.jenisPembayaran)
         val statusPengajuan: TextView = view.findViewById(R.id.statusPengajuan)
-        val warna = view.findViewById<View>(R.id.warna_jenis)
+        val warna: ImageView = view.findViewById(R.id.warna_jenis)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PengajuanViewHolder {
@@ -37,14 +39,39 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         holder.listBarang.text = pengajuan.listBarang.joinToString(", ")
         holder.jenisPembayaran.text = pengajuan.jenisPembayaran
         holder.statusPengajuan.text = pengajuan.statusPengajuan
-        holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, DetailPengajuanActivity::class.java)
-            intent.putExtra("pengajuanId", pengajuan.id) // Menambahkan ID Pengiriman ke Intent
-            context.startActivity(intent)
+        Log.d("status", pengajuan.statusPengajuan)
+
+        val context = holder.itemView.context
+
+        // Mengatur warna berdasarkan status pengajuan
+        when (pengajuan.statusPengajuan) {
+            "pending" -> {
+                holder.warna.setBackgroundResource(R.color.yellow) // Warna kuning untuk pending
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
+            "approved" -> {
+                holder.warna.setBackgroundResource(R.color.green) // Warna hijau untuk approve
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
+            }
+            "dikemas" -> {
+                holder.warna.setBackgroundResource(R.color.blue) // Warna biru untuk dikemas
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
+            }
+            "pengiriman" -> {
+                holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk pengiriman
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
+            else -> {
+                holder.warna.setBackgroundResource(R.color.gray) // Warna abu-abu untuk status tidak dikenal
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
         }
 
-
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, DetailPengajuanActivity::class.java)
+            intent.putExtra("pengajuanId", pengajuan.id) // Menambahkan ID Pengajuan ke Intent
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

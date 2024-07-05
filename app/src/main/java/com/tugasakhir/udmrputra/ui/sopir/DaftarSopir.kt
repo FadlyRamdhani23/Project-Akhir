@@ -3,6 +3,7 @@ package com.tugasakhir.udmrputra.ui.dashboard.sopir
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ class DaftarSopir : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityDaftarSopirBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupToolbar()
 
         recyclerView = findViewById(R.id.recyclerViewSopir)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -58,6 +60,19 @@ class DaftarSopir : AppCompatActivity(){
             startActivity(intent)
         }
     }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
 }

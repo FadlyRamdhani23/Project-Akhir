@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,11 +29,14 @@ class StockBarangActivity : AppCompatActivity() {
 
         catListRecyclerView()
 
-        val topBar = binding.topAppBarr
-        topBar.setNavigationOnClickListener {
-            finish()
-        }
+
+        setupToolbar()
     }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.topAppBarr)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
 
     private fun catListRecyclerView() {
         val barangList = arrayListOf<Barang>()
@@ -104,5 +108,14 @@ class StockBarangActivity : AppCompatActivity() {
                 Log.w("StockBarangActivity", "Data gagal ditampilkan", exception)
                 progressBar.visibility = View.GONE
             }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

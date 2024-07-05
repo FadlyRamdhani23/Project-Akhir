@@ -2,6 +2,7 @@ package com.tugasakhir.udmrputra.ui.barang
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class PencatatanMasukAdapter(private val context: Context, private val pencatatanList: List<Pencatatan>) : RecyclerView.Adapter<PencatatanMasukAdapter.PencatatanViewHolder>() {
     class PencatatanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,7 +35,15 @@ class PencatatanMasukAdapter(private val context: Context, private val pencatata
     override fun getItemCount(): Int {
         return pencatatanList.size
     }
-
+    private fun formatRupiah(numberString: String?): String {
+        if (numberString.isNullOrEmpty()) return "Rp 0"
+        val number = numberString.replace(".", "").toLongOrNull() ?: return "Rp 0"
+        val symbols = DecimalFormatSymbols(Locale("id", "ID")).apply {
+            groupingSeparator = '.'
+        }
+        val decimalFormat = DecimalFormat("Rp #,###", symbols)
+        return decimalFormat.format(number)
+    }
     override fun onBindViewHolder(holder: PencatatanViewHolder, position: Int) {
         val data = pencatatanList[position]
         holder.jenis.text = if (data.catId == "JV9d40TfUWOHoyg8i5Wt") {
@@ -44,6 +56,8 @@ class PencatatanMasukAdapter(private val context: Context, private val pencatata
         holder.namaBrg.text = data.barangId
         holder.namaMitra.text = data.namaPetani
         holder.harga.text = " Rp" + data.hargaBeli
+        holder.harga.text = formatRupiah(data.hargaBeli)
+        Log.d("harga", data.hargaBeli.toString())
         holder.jumlah.text = "+${data.jumlah} Kg"
         holder.tanggal.text = data.tanggal
 
@@ -51,6 +65,7 @@ class PencatatanMasukAdapter(private val context: Context, private val pencatata
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailPencatatanActivity::class.java)
             intent.putExtra("masukId", data.id)
+            intent.putExtra("barId", data.barId)
             intent.putExtra("barangId", data.barangId)
             intent.putExtra("catId", data.catId)
             intent.putExtra("namaPetani", data.namaPetani)

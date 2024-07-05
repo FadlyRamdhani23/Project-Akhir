@@ -62,6 +62,7 @@ class PlaceholderFragment2 : Fragment() {
         val barangDocRef = db.collection("barang").document(barangId ?: "")
 
         barangDocRef.get().addOnSuccessListener { barangDocument ->
+            val bard = barangDocument.id
             val catId = barangDocument.getString("catId") ?: ""
             val namaBarang = barangDocument.getString("nama") ?: ""
 
@@ -77,20 +78,21 @@ class PlaceholderFragment2 : Fragment() {
                         val gambar = gambarList?.joinToString(",") ?: ""
                         val catatan = masukDocument.getString("catatan") ?: ""
                         val tanggal = masukDocument.getString("tanggal") ?: ""
-                        val hargaBeli = masukDocument.getString("hargaBeli") ?: ""
+                        val hargaBeli = masukDocument.getLong("hargaBeli")?.toString() ?: ""
 
                         dataList.add(
-                            Pencatatan(
+                        Pencatatan(
                                 id = id,
-                                catId = catId,
-                                barangId = namaBarang,
-                                namaPetani = namaPetani,
-                                jumlah = jumlah,
-                                gambar = gambar,
-                                catatan = catatan,
-                                tanggal = tanggal,
-                                hargaBeli = hargaBeli
-                            )
+                        catId = catId,
+                        barId = barangId,
+                        barangId = namaBarang,
+                        namaPetani = namaPetani,
+                        jumlah = jumlah,
+                        gambar = gambar,
+                        catatan = catatan,
+                        tanggal = tanggal,
+                        hargaBeli = hargaBeli
+                        )
                         )
                     }
                     if (isAdded) {
@@ -112,6 +114,7 @@ class PlaceholderFragment2 : Fragment() {
         val barangDocRef = db.collection("barang").document(barangId ?: "")
 
         barangDocRef.get().addOnSuccessListener { barangDocument ->
+            val bard = barangDocument.id
             val catId = barangDocument.getString("catId") ?: ""
             val namaBarang = barangDocument.getString("nama") ?: ""
 
@@ -120,16 +123,18 @@ class PlaceholderFragment2 : Fragment() {
                 .addOnSuccessListener { keluarResult ->
                     val dataList = mutableListOf<PencatatanKeluar>()
                     keluarResult.forEach { keluarDocument ->
+                        val keluarId = keluarDocument.id
                         val namaPetani = keluarDocument.getString("namaPetani") ?: ""
                         val jumlah = keluarDocument.getLong("jumlah")?.toString() ?: ""
                         val catatan = keluarDocument.getString("catatan") ?: ""
                         val tanggal = keluarDocument.getString("tanggal") ?: ""
-                        val hargaJual = keluarDocument.getString("hargaJual") ?: ""
+                        val hargaJual = keluarDocument.getLong("hargaJual")?.toString() ?: ""
 
                         dataList.add(
                             PencatatanKeluar(
-                                id = 0,
+                                id = keluarId,
                                 catId = catId,
+                                barId = bard,
                                 barangId = namaBarang,
                                 namaPetani = namaPetani,
                                 jumlah = jumlah,

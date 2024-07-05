@@ -55,6 +55,8 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
     private val auth = FirebaseAuth.getInstance()
+    private lateinit var pengirimanId: String
+    private var endLatLng: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,46 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        pengirimanId = intent.getStringExtra("PENGIRIMAN_ID").toString()
+
+        firestore = FirebaseFirestore.getInstance()
+
+        // Add Firestore Listener
+        firestore.collection("pengiriman").document(pengirimanId)
+            .addSnapshotListener { documentSnapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val latitude = documentSnapshot.getDouble("latitudeTujuan")
+                    val longitude = documentSnapshot.getDouble("longitudeTujuan")
+                    val status = documentSnapshot.getString("status")
+                    binding.alamatPengiriman.text = documentSnapshot.getString("address")
+                    binding.namaSopir.text = documentSnapshot.getString("supir")
+                    binding.noHpSopir.text = documentSnapshot.getString("status")
+
+                    if (latitude != null && longitude != null) {
+                        endLatLng = LatLng(latitude, longitude)
+                    }
+
+                    if (status == "pengiriman") {
+                        binding.btnKirim.text = "Perjalanan"
+                        binding.btnKirim.isEnabled = false
+                    } else {
+                        binding.btnKirim.text = "Kirim"
+                        binding.btnKirim.isEnabled = true
+                    }
+                } else {
+                    Log.d(TAG, "Current data: null")
+                }
+            }
+
+        // Set up click listener for btnKirim
+        binding.btnKirim.setOnClickListener {
+            updatePengirimanStatus(pengirimanId, "pengiriman")
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -106,8 +148,15 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     val latLng = LatLng(it.latitude, it.longitude)
-                    val end = LatLng(-6.1753871, 106.8271805)
-                    findRoute(latLng, end)
+                    if (endLatLng != null) {
+                        findRoute(latLng, endLatLng!!)
+                    } else {
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Endpoint location not available",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
             }
@@ -226,7 +275,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             "longitudeSupir" to longitude,
         )
 
-        firestore.collection("pengiriman").document("D4snBD7t2rKM7BZu581E").update(pengirimanUpdate)
+        firestore.collection("pengiriman").document(pengirimanId).update(pengirimanUpdate)
             .addOnSuccessListener {
                 Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
             }
@@ -283,5 +332,34 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
     override fun onRouteCancelled() {
         Log.d("Route", "Cancel Route")
+    }
+
+    private fun updatePengirimanStatus(pengirimanId: String, status: String) {
+        firestore.collection("pengiriman").document(pengirimanId)
+            .update("status", status)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Status updated to $status", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
+            }
+        firestore.collection("pengajuan").whereEqualTo("pengirimanId", pengirimanId)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val pengajuan = document.toObject(Pengajuan::class.java)
+                    firestore.collection("pengajuan").document(pengajuan.id)
+                        .update("status", status)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Status updated to $status", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
+            }
     }
 }

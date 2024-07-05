@@ -146,7 +146,7 @@
 
                     <TextView
                         android:id="@+id/nama_sopir"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
@@ -157,21 +157,16 @@
 
                     <TextView
                         android:id="@+id/noHp_sopir"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                         tools:text="Pak Budi" />
 
-                    <TextView
-                        android:id="@+id/status_pengiriman"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                        tools:text="Descripsi" />
+
 
                     <TextView
                         android:id="@+id/alamat_pengiriman"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         tools:text="Alamat" />
@@ -230,6 +225,7 @@
                     android:text="Start"/>
 
                     <Button
+                        android:id="@+id/btn_kirim"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"

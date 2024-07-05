@@ -173,8 +173,12 @@ class NotificationsFragment : Fragment() {
             else dateFilteredPengajuan.filter { it.statusPengajuan.lowercase(Locale.getDefault()) == statusFilter }
         )
 
+        // Sort the filtered list by tanggalPengajuan in descending order
+        filteredPengajuanList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
+
         pengajuanAdapter.notifyDataSetChanged()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

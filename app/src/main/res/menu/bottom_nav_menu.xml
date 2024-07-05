@@ -17,7 +17,7 @@
         <item
             android:id="@+id/navigation_pengiriman"
             android:icon="@drawable/baseline_note_24"
-            android:title="@string/title_pencatatan" />
+            android:title="@string/approval" />
         <item
             android:id="@+id/navigation_pengaturan"
             android:icon="@drawable/ic_baseline_account_circle_24"

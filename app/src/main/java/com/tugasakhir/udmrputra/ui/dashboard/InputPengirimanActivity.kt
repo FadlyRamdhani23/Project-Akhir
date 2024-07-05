@@ -216,7 +216,7 @@ class InputPengirimanActivity : AppCompatActivity() {
                 "tanggalPengajuan" to pengajuan.tanggalPengajuan,
                 "listBarang" to pengajuan.listBarang,
                 "jenisPembayaran" to pengajuan.jenisPembayaran,
-                "statusPengajuan" to "pengiriman",
+                "statusPengajuan" to "dikemas",
                 "address" to pengajuan.address,
                 "latitude" to pengajuan.latitude,
                 "longitude" to pengajuan.longitude
@@ -225,7 +225,7 @@ class InputPengirimanActivity : AppCompatActivity() {
             // Update status dan idPengiriman di koleksi "pengajuan"
             val pengajuanRef = db.collection("pengajuan").document(pengajuan.id)
             val pengajuanUpdateData: HashMap<String, Any> = hashMapOf(
-                "status" to "pengiriman",
+                "status" to "dikemas",
                 "idPengiriman" to pengirimanId
             )
 

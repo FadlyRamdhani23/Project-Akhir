@@ -13,6 +13,9 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.data.PencatatanKeluar
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class PencatatanKeluarAdapter(private val context: Context, private val pencatatanList: List<PencatatanKeluar>) : RecyclerView.Adapter<PencatatanKeluarAdapter.PencatatanViewHolder>() {
     class PencatatanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,6 +26,15 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         val jumlah: TextView = itemView.findViewById(R.id.jumlah_barang)
         val warna = itemView.findViewById<ImageView>(R.id.warna_jenis)
         val tanggal: TextView = itemView.findViewById(R.id.tanggal_masuk)
+    }
+    private fun formatRupiah(numberString: String?): String {
+        if (numberString.isNullOrEmpty()) return "Rp 0"
+        val number = numberString.replace(".", "").toLongOrNull() ?: return "Rp 0"
+        val symbols = DecimalFormatSymbols(Locale("id", "ID")).apply {
+            groupingSeparator = '.'
+        }
+        val decimalFormat = DecimalFormat("Rp #,###", symbols)
+        return decimalFormat.format(number)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PencatatanViewHolder {
@@ -45,15 +57,24 @@ class PencatatanKeluarAdapter(private val context: Context, private val pencatat
         }
         holder.namaBrg.text = data.barangId
         holder.namaMitra.text = data.namaPetani
-        holder.harga.text = " Rp" +  data.hargaJual
+        holder.harga.text = formatRupiah(data.hargaJual)
         holder.jumlah.text = "-${data.jumlah} Kg"
         holder.jumlah.setTextColor(context.resources.getColor(R.color.red))
         holder.tanggal.text = data.tanggal
 
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, DetailPencatatanActivity::class.java)
-            intent.putExtra("pencatatanId", data.id)
+            val intent = Intent(context, DetailPencatatanKeluarActivity::class.java)
+            intent.putExtra("keluarId", data.id)
+            intent.putExtra("barId", data.barId)
+            intent.putExtra("barangId", data.barangId)
+            intent.putExtra("catId", data.catId)
+            intent.putExtra("namaPetani", data.namaPetani)
+            intent.putExtra("hargaJual", data.hargaJual)
+            intent.putExtra("jumlah", data.jumlah)
+            intent.putExtra("tanggal", data.tanggal)
+            intent.putExtra("catatan", data.catatan)
+            intent.putExtra("gambar", data.gambar)
             context.startActivity(intent)
         }
     }

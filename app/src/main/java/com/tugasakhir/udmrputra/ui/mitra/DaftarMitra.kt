@@ -3,6 +3,7 @@ package com.tugasakhir.udmrputra.ui.mitra
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ class DaftarMitra : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MitraAdapter(mitraList)
         recyclerView.adapter = adapter
+        setupToolbar()
 
         val db = FirebaseFirestore.getInstance()
         db.collection("users")
@@ -53,6 +55,20 @@ class DaftarMitra : AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this, RegisterMitraActivity::class.java)
             startActivity(intent)
+        }
+    }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

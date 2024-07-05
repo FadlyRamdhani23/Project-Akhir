@@ -3,6 +3,7 @@ package com.tugasakhir.udmrputra.ui.barang
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,7 @@ class DetailStockListActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityDetailListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setupToolbar()
         val barangId = intent.getStringExtra("barangId")
 
         val sectionsPagerAdapter = SectionsPagerAdapter2(this, supportFragmentManager, barangId)
@@ -35,12 +36,6 @@ class DetailStockListActivity : AppCompatActivity(){
         val tabs: TabLayout = binding.tabs2
         tabs.setupWithViewPager(viewPager)
 
-        val topBar = binding.topAppBar
-        topBar.setNavigationOnClickListener {
-            val intent = Intent(this, HomeFragment::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         val db = FirebaseFirestore.getInstance()
 
@@ -79,5 +74,18 @@ class DetailStockListActivity : AppCompatActivity(){
                     }
                 }
             }
+    }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

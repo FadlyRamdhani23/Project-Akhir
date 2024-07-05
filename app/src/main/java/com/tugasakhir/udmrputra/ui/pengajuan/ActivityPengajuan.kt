@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -35,7 +36,7 @@ class ActivityPengajuan : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPengajuanBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setupToolbar()
         setupSpinner()
         initializeTextView()
 
@@ -289,6 +290,20 @@ class ActivityPengajuan : AppCompatActivity() {
         }
 
         binding.cardContainer.addView(newPengajuanView)
+    }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

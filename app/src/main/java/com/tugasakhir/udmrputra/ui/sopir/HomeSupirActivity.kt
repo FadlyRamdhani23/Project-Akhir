@@ -15,7 +15,7 @@ class HomeSupirActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnToPengiriman.setOnClickListener {
-            val intent = Intent(this, SupirActivity::class.java)
+            val intent = Intent(this, DaftarPengirimanToday::class.java)
             startActivity(intent)
             binding.progressBarPengiriman.visibility = View.VISIBLE
         }

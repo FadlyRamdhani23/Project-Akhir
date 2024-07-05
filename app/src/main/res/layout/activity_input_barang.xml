@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
@@ -19,15 +19,15 @@
             android:layout_height="?actionBarSize"
             app:navigationIcon="@drawable/ic_back">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    android:text="Tambah Barang"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:text="Tambah Barang"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -83,8 +83,6 @@
                     </LinearLayout>
 
 
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -129,7 +127,7 @@
                             android:id="@+id/input_namaBarang"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="masukan jumlah barang"
+                            android:hint="masukan nama barang"
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"
@@ -137,35 +135,54 @@
                             android:textSize="16sp" />
 
                     </LinearLayout>
+
                     <ProgressBar
                         android:id="@+id/progressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:visibility="gone" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="20dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Jumlah Barang"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_jumlahBarang"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:hint="masukan jumlah barang"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jumlah Barang"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_jumlahBarang"
-                            android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="masukan jumlah barang"
-                            android:imeOptions="actionDone"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="23dp"
+                            android:text="/kg"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -175,18 +192,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:visibility="gone"
-                        android:contentDescription="@string/preview_image_view" />
-
-<!--                    <androidx.recyclerview.widget.RecyclerView-->
-<!--                        android:id="@+id/rvImageList"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="210dp"-->
-<!--                        android:layout_marginStart="20dp"-->
-<!--                        android:layout_marginEnd="20dp"-->
-<!--                        tools:listitem="@layout/item_image_list"/>-->
-
-
+                        android:contentDescription="@string/preview_image_view"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -219,20 +226,10 @@
                             android:id="@+id/buttonChooseImage"
                             android:layout_width="120dp"
                             android:layout_height="120dp"
-                            android:src="@drawable/baseline_image_24"
-                            android:layout_marginStart="20dp"/>
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/baseline_image_24" />
 
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/buttonAmbilPhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="Ambil Photo"
-                        android:layout_gravity="right"/>
-
-
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
