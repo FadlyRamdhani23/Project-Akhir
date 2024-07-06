@@ -7,6 +7,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -23,6 +24,8 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivityInputPengirimanBinding
 import com.tugasakhir.udmrputra.databinding.BottomSheetSelectItemBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 
@@ -42,7 +45,7 @@ class InputPengirimanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-
+        setupToolbar()
         initializeTextView()
         setupSpinner()
 
@@ -55,6 +58,10 @@ class InputPengirimanActivity : AppCompatActivity() {
         binding.textViewInputBarang.setOnClickListener {
             showBottomSheetDialog()
         }
+    }
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun showBottomSheetDialog() {
@@ -175,6 +182,7 @@ class InputPengirimanActivity : AppCompatActivity() {
             val longitude = results[0].longitude
            val latitudeSupir = -6.904033999999999
             val longitudeSupir = 107.6207242
+            val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
             // Persiapkan data untuk dikirim
             val data = hashMapOf(
                 "address" to selectedAlamat,
@@ -184,6 +192,7 @@ class InputPengirimanActivity : AppCompatActivity() {
                 "supir" to selectedSupir,
                 "latitudeSupir" to latitudeSupir,
                 "longitudeSupir" to longitudeSupir,
+                "tanggal" to currentDate,
                 "supirId" to selectedSupirId  // Use selected driver ID
             )
 
@@ -324,6 +333,15 @@ class InputPengirimanActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Handle nothing selected if needed
             }
+        }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

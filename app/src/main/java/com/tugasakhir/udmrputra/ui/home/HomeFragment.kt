@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.JumlahBarang
 import com.tugasakhir.udmrputra.databinding.FragmentHomeBinding
 import com.tugasakhir.udmrputra.ui.barang.BarangActivity
@@ -83,8 +85,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupPieChart() {
-        val pieChartView = binding.pieChartView
-        pieChartView.setData(jumlahBarang.jumlahBuah, jumlahBarang.jumlahSayur)
+        _binding?.let {
+            val pieChartView = it.pieChartView
+            pieChartView.setData(jumlahBarang.jumlahBuah, jumlahBarang.jumlahSayur)
+        }
     }
 
     private fun loadBarangData() {

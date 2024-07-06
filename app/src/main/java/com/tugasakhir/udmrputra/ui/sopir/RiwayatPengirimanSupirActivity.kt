@@ -70,6 +70,7 @@ class RiwayatPengirimanSupirActivity : AppCompatActivity() {
                         val supir = document.getString("supir") ?: ""
                         val supirId = document.getString("supirId") ?: ""
                         val status = document.getString("status") ?: ""
+                        val tanggal = document.getString("tanggal") ?: ""
 
                         val pengiriman = Pengiriman(
                             pengirimanId,
@@ -81,6 +82,7 @@ class RiwayatPengirimanSupirActivity : AppCompatActivity() {
                             supirId,
                             address,
                             status,
+                            tanggal,
                         )
                         pengirimanList.add(pengiriman)
                     }

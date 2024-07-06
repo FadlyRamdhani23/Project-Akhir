@@ -17,7 +17,6 @@ import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
 import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
 import com.tugasakhir.udmrputra.ui.notifications.PengajuanAdapter
 
-
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
@@ -26,7 +25,6 @@ class DashboardFragment : Fragment() {
 
     private lateinit var pengirimanAdapter: PengirimanAdapter
     private val pengirimanList = mutableListOf<Pengiriman>()
-
 
     private val binding get() = _binding!!
 
@@ -70,7 +68,7 @@ class DashboardFragment : Fragment() {
                     pengirimanList.clear()
                     for (document in snapshots) {
                         val pengirimanId = document.id
-                        val address = document.getString("address") ?: ""
+                        var address = document.getString("address") ?: ""
                         val latitudeTujuan = document.getDouble("latitudeTujuan") ?: 0.0
                         val longitudeTujuan = document.getDouble("longitudeTujuan") ?: 0.0
                         val latitudeSupir = document.getDouble("latitudeSupir") ?: 0.0
@@ -78,6 +76,13 @@ class DashboardFragment : Fragment() {
                         val supir = document.getString("supir") ?: ""
                         val supirId = document.getString("supirId") ?: ""
                         val status = document.getString("status") ?: ""
+                        val tanggal = document.getString("tanggal") ?: ""
+
+                        // Truncate address if it's too long
+                        val maxLength = 30
+                        if (address.length > maxLength) {
+                            address = address.substring(0, maxLength) + "..."
+                        }
 
                         val pengiriman = Pengiriman(
                             pengirimanId,
@@ -89,6 +94,7 @@ class DashboardFragment : Fragment() {
                             supirId,
                             address,
                             status,
+                            tanggal
                         )
                         pengirimanList.add(pengiriman)
                     }
@@ -99,7 +105,6 @@ class DashboardFragment : Fragment() {
                 }
             }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

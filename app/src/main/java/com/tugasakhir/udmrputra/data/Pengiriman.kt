@@ -15,4 +15,5 @@ data class Pengiriman(
     val supirId : String,
     val address: String,
     val status: String,
+    val tanggal : String,
 ): Parcelable

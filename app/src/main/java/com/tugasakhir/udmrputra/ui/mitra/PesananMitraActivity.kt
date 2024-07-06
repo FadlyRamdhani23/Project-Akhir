@@ -94,9 +94,14 @@ class PesananMitraActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val userId = auth.currentUser?.uid ?: ""
         db.collection("pengajuan").whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
+            .addSnapshotListener { result, error ->
+                if (error != null) {
+                    // Handle the error
+                    return@addSnapshotListener
+                }
+
+                pesananList.clear()
+                for (document in result!!) {
                     val pengajuanId = document.id
                     val namaPetani = document.getString("namaPetani") ?: ""
                     val tanggalPengajuan = document.getString("tanggalPengajuan") ?: ""
@@ -109,10 +114,14 @@ class PesananMitraActivity : AppCompatActivity() {
                     val idPengiriman = document.getString("idPengiriman") ?: ""
 
                     db.collection("pengajuan").document(pengajuanId).collection("barang")
-                        .get()
-                        .addOnSuccessListener { barangResult ->
+                        .addSnapshotListener { barangResult, error ->
+                            if (error != null) {
+                                // Handle the error
+                                return@addSnapshotListener
+                            }
+
                             val listBarang = mutableListOf<String>()
-                            for (barangDocument in barangResult) {
+                            for (barangDocument in barangResult!!) {
                                 val namaBarang = barangDocument.getString("namaBarang") ?: ""
                                 listBarang.add(namaBarang)
                             }
@@ -135,6 +144,7 @@ class PesananMitraActivity : AppCompatActivity() {
                 }
             }
     }
+
 
     private fun checkIfEmpty() {
         if (adapter.itemCount == 0) {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.ActivityDaftarPengirimanTodayBinding
@@ -42,45 +43,73 @@ class DaftarPengirimanToday : AppCompatActivity() {
 
     private fun fetchPengirimanData(supirId: String) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("pengiriman")
+
+        // Query untuk status "dikemas"
+        val queryDikemas = db.collection("pengiriman")
             .whereEqualTo("supirId", supirId)
             .whereEqualTo("status", "dikemas")
-            .addSnapshotListener { snapshots, e ->
-                if (e != null) {
-                    Log.w("wow", "Listen failed", e)
+
+        // Query untuk status "pengiriman"
+        val queryPengiriman = db.collection("pengiriman")
+            .whereEqualTo("supirId", supirId)
+            .whereEqualTo("status", "pengiriman")
+
+        // Menggabungkan hasil kedua query
+        queryDikemas.addSnapshotListener { snapshotsDikemas, e ->
+            if (e != null) {
+                Log.w("fetchPengirimanData", "Listen failed", e)
+                return@addSnapshotListener
+            }
+
+            queryPengiriman.addSnapshotListener { snapshotsPengiriman, e2 ->
+                if (e2 != null) {
+                    Log.w("fetchPengirimanData", "Listen failed", e2)
                     return@addSnapshotListener
                 }
 
-                if (snapshots != null && !snapshots.isEmpty) {
-                    pengirimanList.clear()
-                    for (document in snapshots) {
-                        val pengirimanId = document.id
-                        val address = document.getString("address") ?: ""
-                        val latitudeTujuan = document.getDouble("latitudeTujuan") ?: 0.0
-                        val longitudeTujuan = document.getDouble("longitudeTujuan") ?: 0.0
-                        val latitudeSupir = document.getDouble("latitudeSupir") ?: 0.0
-                        val longitudeSupir = document.getDouble("longitudeSupir") ?: 0.0
-                        val supir = document.getString("supir") ?: ""
-                        val status = document.getString("status") ?: ""
+                pengirimanList.clear()
 
-                        val pengiriman = Pengiriman(
-                            pengirimanId,
-                            latitudeTujuan,
-                            longitudeTujuan,
-                            latitudeSupir,
-                            longitudeSupir,
-                            supir,
-                            supirId,
-                            address,
-                            status
-                        )
-                        pengirimanList.add(pengiriman)
+                if (snapshotsDikemas != null && !snapshotsDikemas.isEmpty) {
+                    for (document in snapshotsDikemas) {
+                        addDocumentToList(document)
                     }
-                    pengirimanAdapter.notifyDataSetChanged()
-                } else {
-                    Log.d("wow", "Current data: null")
                 }
+
+                if (snapshotsPengiriman != null && !snapshotsPengiriman.isEmpty) {
+                    for (document in snapshotsPengiriman) {
+                        addDocumentToList(document)
+                    }
+                }
+
+                pengirimanAdapter.notifyDataSetChanged()
             }
+        }
+    }
+
+    private fun addDocumentToList(document: DocumentSnapshot) {
+        val pengirimanId = document.id
+        val address = document.getString("address") ?: ""
+        val latitudeTujuan = document.getDouble("latitudeTujuan") ?: 0.0
+        val longitudeTujuan = document.getDouble("longitudeTujuan") ?: 0.0
+        val latitudeSupir = document.getDouble("latitudeSupir") ?: 0.0
+        val longitudeSupir = document.getDouble("longitudeSupir") ?: 0.0
+        val supir = document.getString("supir") ?: ""
+        val status = document.getString("status") ?: ""
+        val tanggal = document.getString("tanggal") ?: ""
+
+        val pengiriman = Pengiriman(
+            pengirimanId,
+            latitudeTujuan,
+            longitudeTujuan,
+            latitudeSupir,
+            longitudeSupir,
+            supir,
+            document.getString("supirId") ?: "",
+            address,
+            status,
+            tanggal
+        )
+        pengirimanList.add(pengiriman)
     }
 
     private fun setupRecyclerView() {

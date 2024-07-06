@@ -70,7 +70,8 @@ class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                         document.getString("supir") ?: "",
                         document.getString("supirId") ?: "",
                         document.getString("address") ?: "",
-                        document.getString("status") ?: ""
+                        document.getString("status") ?: "",
+                        document.getString("tanggal") ?: ""
                     )
                     mapsViewModel.setPengirimanData(pengiriman)
                 } else {

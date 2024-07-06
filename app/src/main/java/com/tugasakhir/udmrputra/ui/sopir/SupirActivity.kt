@@ -343,12 +343,11 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
             }
-        firestore.collection("pengajuan").whereEqualTo("pengirimanId", pengirimanId)
+        firestore.collection("pengajuan").whereEqualTo("idPengiriman", pengirimanId)
             .get()
             .addOnSuccessListener { result ->
-                for (document in result) {
-                    val pengajuan = document.toObject(Pengajuan::class.java)
-                    firestore.collection("pengajuan").document(pengajuan.id)
+                val pengajuanId = result.documents[0].id
+                    firestore.collection("pengajuan").document(pengajuanId)
                         .update("status", status)
                         .addOnSuccessListener {
                             Toast.makeText(this, "Status updated to $status", Toast.LENGTH_SHORT).show()
@@ -356,7 +355,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                         .addOnFailureListener { e ->
                             Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
                         }
-                }
+
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()

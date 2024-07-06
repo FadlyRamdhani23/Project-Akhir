@@ -1,6 +1,8 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,8 @@ import com.tugasakhir.udmrputra.data.DetailPengajuan
 import com.tugasakhir.udmrputra.databinding.ActivityDetailPesananMitraBinding
 import com.tugasakhir.udmrputra.ui.chat.ChatActivity
 import com.tugasakhir.udmrputra.ui.pengajuan.PengajuanAdapterDetailBarang
+import java.text.NumberFormat
+import java.util.Locale
 
 class DetailPesananMitra : AppCompatActivity() {
 
@@ -37,8 +41,37 @@ class DetailPesananMitra : AppCompatActivity() {
         binding.chatButton.setOnClickListener {
             createOrFindChatRoom()
         }
+        binding.totalHargaDeal.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                binding.totalHargaDeal.removeTextChangedListener(this)
+                try {
+                    val originalString = s.toString()
+
+                    // Remove formatting characters
+                    val cleanString = originalString.replace("[Rp,.]".toRegex(), "")
+
+                    val longVal: Long = cleanString.toLong()
+
+                    val formatter = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
+                    formatter.maximumFractionDigits = 0
+                    val formattedString = formatter.format(longVal)
+
+                    // Update input field with formatted currency
+                    binding.totalHargaDeal.setText(formattedString)
+                    binding.totalHargaDeal.setSelection(formattedString.length)
+                } catch (nfe: NumberFormatException) {
+                    nfe.printStackTrace()
+                }
+
+                binding.totalHargaDeal.addTextChangedListener(this)
+            }
+        })
     }
+
     private fun createOrFindChatRoom() {
         val db = Firebase.firestore
         val auth = Firebase.auth
@@ -117,60 +150,76 @@ class DetailPesananMitra : AppCompatActivity() {
     private fun fetchPengajuanData(pengajuanId: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengajuan").document(pengajuanId)
-            .get()
-            .addOnSuccessListener { result ->
-                val namaPengaju = result.getString("namaPetani") ?: ""
-                val tanggalPengajuan = result.getString("tanggalPengajuan") ?: ""
-                val statusPengajuan = result.getString("status") ?: ""
-                val address = result.getString("address") ?: ""
-                val jenisPembayaran = result.getString("jenisPembayaran") ?: ""
-                val idPengiriman = result.getString("idPengiriman") ?: ""
+            .addSnapshotListener { result, error ->
+                if (error != null) {
+                    Toast.makeText(
+                        this,
+                        "Failed to fetch pengajuan details",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
 
-                binding.tvNamaPengaju.text = namaPengaju
-                binding.tvNamaMitra.text = namaPengaju
-                binding.tvAlamatMitra.text = address
-                binding.tvStatus.text = statusPengajuan
+                result?.let {
+                    val namaPengaju = it.getString("namaPetani") ?: ""
+                    val tanggalPengajuan = it.getString("tanggalPengajuan") ?: ""
+                    val statusPengajuan = it.getString("status") ?: ""
+                    val address = it.getString("address") ?: ""
+                    val jenisPembayaran = it.getString("jenisPembayaran") ?: ""
+                    val idPengiriman = it.getString("idPengiriman") ?: ""
+                    val hargaDeal = it.getLong("totalHarga") ?: 0
+                    binding.tvNamaPengaju.text = namaPengaju
+                    binding.tvNamaMitra.text = namaPengaju
+                    binding.tvAlamatMitra.text = address
+                    binding.tvStatus.text = statusPengajuan
 
-                db.collection("pengajuan").document(pengajuanId).collection("barang")
-                    .get()
-                    .addOnSuccessListener { barangResult ->
-                        for (barangDocument in barangResult) {
-                            val barangId = barangDocument.getString("barangId") ?: ""
-                            val namaBarang = barangDocument.getString("namaBarang") ?: ""
-                            val hargaPasar: Long? = barangDocument.getLong("hargaPasar")
-                            val hargaBeli: Long? = barangDocument.getLong("hargaBeli")
-                            val jumlah: Long? = barangDocument.getLong("jumlahBarang")
-                            val catatan = barangDocument.getString("catatan") ?: ""
-                            val imageUrls =  barangDocument.getString("imageUrl") ?: ""
+                    db.collection("pengajuan").document(pengajuanId).collection("barang")
+                        .addSnapshotListener { barangResult, error ->
+                            if (error != null) {
+                                Toast.makeText(
+                                    this,
+                                    "Failed to fetch barang details",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@addSnapshotListener
+                            }
 
-                            val detailPengajuan = DetailPengajuan(
-                                pengajuanId,
-                                namaBarang,
-                                jumlah,
-                                hargaPasar,
-                                hargaBeli,
-                                catatan,
-                                jenisPembayaran,
-                                idPengiriman,
-                                tanggalPengajuan,
-                                imageUrls,
-                            )
-                            pengajuanList.add(detailPengajuan)
+                            barangResult?.let { snapshot ->
+                                pengajuanList.clear()
+                                for (barangDocument in snapshot) {
+                                    val barangId = barangDocument.getString("barangId") ?: ""
+                                    val namaBarang = barangDocument.getString("namaBarang") ?: ""
+                                    val hargaPasar: Long? = barangDocument.getLong("hargaPasar")
+                                    val hargaBeli: Long? = barangDocument.getLong("hargaBeli")
+                                    val jumlah: Long? = barangDocument.getLong("jumlahBarang")
+                                    val catatan = barangDocument.getString("catatan") ?: ""
+                                    val imageUrls = barangDocument.getString("imageUrl") ?: ""
+                                    binding.totalHargaDeal.setText(hargaDeal.toString())
+
+                                    val detailPengajuan = DetailPengajuan(
+                                        pengajuanId,
+                                        namaBarang,
+                                        jumlah,
+                                        hargaPasar,
+                                        hargaBeli,
+                                        catatan,
+                                        jenisPembayaran,
+                                        tanggalPengajuan,
+                                        idPengiriman,
+                                        imageUrls,
+                                    )
+                                    pengajuanList.add(detailPengajuan)
+                                }
+                                pengajuanDetailAdapter.notifyDataSetChanged()
+                            }
                         }
-                        pengajuanDetailAdapter.notifyDataSetChanged()
-                    }
-            }
-            .addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "Failed to fetch pengajuan details",
-                    Toast.LENGTH_SHORT
-                ).show()
+                }
             }
     }
 
+
     private fun setupRecyclerView() {
-        pengajuanDetailAdapter = PengajuanAdapterDetailBarang(this,pengajuanList)
+        pengajuanDetailAdapter = PengajuanAdapterDetailBarang(this, pengajuanList)
         binding.rvListBarang.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = pengajuanDetailAdapter
