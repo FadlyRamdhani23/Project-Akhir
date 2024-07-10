@@ -120,7 +120,7 @@ class PengajuanViewModel : ViewModel() {
                     "namaPetani" to mainNamaPetani,
                     "userId" to userId,
                     "status" to "pending",
-                    "hargaDeal" to 0,
+                    "totalHarga" to 0,
                     "jenisPembayaran" to mainJenisPembayaran,
                     "tanggalPengajuan" to currentDate,
                     "address" to mainAlamat,

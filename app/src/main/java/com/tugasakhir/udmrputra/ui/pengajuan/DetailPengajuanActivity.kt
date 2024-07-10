@@ -238,21 +238,38 @@ class DetailPengajuanActivity : AppCompatActivity() {
         val totalHargaDeal = binding.totalHargaDeal.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
         if (totalHargaDeal != null) {
             val db = FirebaseFirestore.getInstance()
-            val updateData = hashMapOf(
-                "totalHarga" to totalHargaDeal,
-                "status" to "approved"
-            )
-            db.collection("pengajuan").document(pengajuanId)
-                .update(updateData as Map<String, Any>)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
-                    finish()
+
+            val documentRef = db.collection("pengajuan").document(pengajuanId)
+
+            documentRef.addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.e("DetailPengajuanActivity", "Gagal mengambil data barang", e)
+                    return@addSnapshotListener
                 }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
+
+                if (snapshot != null && snapshot.exists()) {
+                    val jenisPembayaran = snapshot.getString("jenisPembayaran") ?: ""
+                    val status = if (jenisPembayaran == "Transfer") "Menunggu pembayaran" else "approved"
+                    val updateData = hashMapOf(
+                        "totalHarga" to totalHargaDeal,
+                        "status" to status
+                    )
+
+                    documentRef.update(updateData as Map<String, Any>)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "Dokumen tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
+            }
         } else {
             Toast.makeText(this, "Total harga tidak valid", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

@@ -99,6 +99,8 @@
     <string name="action_bar_detail_pencatatan">Detail Pencatatan</string>
     <string name="slide_udmr_putra">UD MR Putra adalah usaha dagang yang bergerak dalam distribusi sayur dan buah segar. Mengutamakan kualitas dan kesegaran, UD. MR Putra mendapatkan produk langsung dari petani lokal, memastikan bahwa setiap pengiriman memenuhi standar tinggi.</string>
     <string name="approval">Approval</string>
+    <string name="fcm_message">berhasil</string>
+    <string name="default_notification_channel_id">UD MR PUTRA</string>
 
 
     <string-array name="jenis_barang">

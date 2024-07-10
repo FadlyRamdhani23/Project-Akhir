@@ -1,7 +1,7 @@
 package com.tugasakhir.udmrputra.data
 
 data class Pengajuan(
-    val id : String,
+    val id: String,
     val userId: String,
     val tanggalPengajuan: String,
     val barangAjuan: String,
@@ -11,5 +11,6 @@ data class Pengajuan(
     val address: String,
     val latitude: Double,
     val longitude: Double,
-    val idPengiriman: String? = null
+    val idPengiriman: String? = null,
+    val totalHarga: Long? = null  // Ubah menjadi nullable
 )
