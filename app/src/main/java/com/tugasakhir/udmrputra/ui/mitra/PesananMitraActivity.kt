@@ -1,6 +1,5 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -17,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
@@ -31,7 +32,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+
 
 class PesananMitraActivity : AppCompatActivity() {
 
@@ -46,9 +49,25 @@ class PesananMitraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPesananMitraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupRecyclerView()
         setupSpinner()
         fetchPengajuanData()
+
+
+
+        FirebaseApp.initializeApp(this)
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task: Task<String> ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                    return@addOnCompleteListener
+                }
+                // Get new FCM registration token
+                val token = task.result
+                Log.d("FCM", "Token: $token")
+            }
     }
 
     private fun setupRecyclerView() {
@@ -272,6 +291,7 @@ class PesananMitraActivity : AppCompatActivity() {
                     val longitude = document.getDouble("longitude") ?: 0.0
                     val idPengiriman = document.getString("idPengiriman") ?: ""
                     val totalHarga = document.getLong("totalHarga") ?: 0
+
 
                     db.collection("pengajuan").document(pengajuanId).collection("barang")
                         .addSnapshotListener { barangResult, error ->

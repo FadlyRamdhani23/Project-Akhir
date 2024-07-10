@@ -27,6 +27,9 @@ class ChatActivity : AppCompatActivity() {
     private val openDocument = registerForActivityResult(MyOpenDocumentContract()) { uri ->
         uri?.let { onImageSelected(it) }
     }
+    companion object {
+        var isChatActivityActive = false
+    }
 
     private lateinit var chatroomId: String
 
@@ -34,7 +37,7 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        isChatActivityActive = true
         val intent = intent
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -242,7 +245,10 @@ class ChatActivity : AppCompatActivity() {
     public override fun onPause() {
         if (::myAdapter.isInitialized) {
             myAdapter.stopListening()
+
         }
+        isChatActivityActive = false
+
         super.onPause()
     }
 
@@ -251,5 +257,7 @@ class ChatActivity : AppCompatActivity() {
         if (::myAdapter.isInitialized) {
             myAdapter.startListening()
         }
+        isChatActivityActive = true
+
     }
 }

@@ -163,7 +163,7 @@ class PesananMitraAdapter(
 
         holder.itemView.setOnClickListener {
             val intent =
-                Intent(holder.itemView.context, DetailPengajuanActivity::class.java).apply {
+                Intent(holder.itemView.context, DetailPesananMitra::class.java).apply {
                     putExtra("pengajuanId", pengajuan.id)
                 }
             holder.itemView.context.startActivity(intent)
