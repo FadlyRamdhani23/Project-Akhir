@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
@@ -99,14 +100,21 @@ class InputPengirimanActivity : AppCompatActivity() {
     private fun loadBarangData(bottomSheetBinding: BottomSheetSelectItemBinding) {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengajuan")
-            .whereEqualTo("status", "approved")
+            .whereEqualTo("status", "Disetujui")
             .get()
             .addOnSuccessListener { result ->
                 barangList.clear()
                 for (document in result) {
                     val pengajuanId = document.id
                     val userId = document.getString("namaPetani") ?: ""
-                    val tanggalPengajuan = document.getString("tanggalPengajuan") ?: ""
+                    val tanggalPengajuanTimestamp = document.get("tanggalPengajuan") // Read without casting
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                    val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                        dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                    } else {
+                        // Handle the case where tanggalPengajuan is not a Timestamp
+                        ""
+                    }
                     val barangAjuan = document.getString("barangAjuan") ?: ""
                     val jenisPembayaran = document.getString("jenisPembayaran") ?: ""
                     val statusPengajuan = document.getString("status") ?: ""
@@ -182,17 +190,17 @@ class InputPengirimanActivity : AppCompatActivity() {
             val longitude = results[0].longitude
            val latitudeSupir = -6.904033999999999
             val longitudeSupir = 107.6207242
-            val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+
             // Persiapkan data untuk dikirim
             val data = hashMapOf(
                 "address" to selectedAlamat,
-                "status" to "dikemas",
+                "status" to "Dikemas",
                 "latitudeTujuan" to latitude,
                 "longitudeTujuan" to longitude,
                 "supir" to selectedSupir,
                 "latitudeSupir" to latitudeSupir,
                 "longitudeSupir" to longitudeSupir,
-                "tanggal" to currentDate,
+                "tanggal" to Timestamp(Date()),
                 "supirId" to selectedSupirId  // Use selected driver ID
             )
 
@@ -225,7 +233,7 @@ class InputPengirimanActivity : AppCompatActivity() {
                 "tanggalPengajuan" to pengajuan.tanggalPengajuan,
                 "listBarang" to pengajuan.listBarang,
                 "jenisPembayaran" to pengajuan.jenisPembayaran,
-                "statusPengajuan" to "dikemas",
+                "statusPengajuan" to "Dikemas",
                 "address" to pengajuan.address,
                 "latitude" to pengajuan.latitude,
                 "longitude" to pengajuan.longitude
@@ -234,7 +242,7 @@ class InputPengirimanActivity : AppCompatActivity() {
             // Update status dan idPengiriman di koleksi "pengajuan"
             val pengajuanRef = db.collection("pengajuan").document(pengajuan.id)
             val pengajuanUpdateData: HashMap<String, Any> = hashMapOf(
-                "status" to "dikemas",
+                "status" to "Dikemas",
                 "idPengiriman" to pengirimanId
             )
 
@@ -335,6 +343,8 @@ class InputPengirimanActivity : AppCompatActivity() {
             }
         }
     }
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {

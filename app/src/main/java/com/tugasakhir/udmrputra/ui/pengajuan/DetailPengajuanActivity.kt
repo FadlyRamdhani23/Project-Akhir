@@ -15,13 +15,12 @@ import com.tugasakhir.udmrputra.data.DetailPengajuan
 import com.tugasakhir.udmrputra.databinding.ActivityDetailPengajuanBinding
 import com.tugasakhir.udmrputra.ui.chat.ChatActivity
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 class DetailPengajuanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailPengajuanBinding
-    private lateinit var adapter: PengajuanAdapterDetailBarang
-
     private lateinit var pengajuanDetailAdapter: PengajuanAdapterDetailBarang
     private val pengajuanList = mutableListOf<DetailPengajuan>()
 
@@ -76,6 +75,10 @@ class DetailPengajuanActivity : AppCompatActivity() {
         binding.btnTerima.setOnClickListener {
             saveTotalHarga(pengajuanId.toString())
         }
+        binding.btnTolak.setOnClickListener {
+            rejectButton(pengajuanId.toString())
+            finish()
+        }
     }
 
     private fun fetchPengajuanData(pengajuanId: String) {
@@ -84,7 +87,7 @@ class DetailPengajuanActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 val namaPengaju = result.getString("namaPetani") ?: ""
-                val tanggalPengajuan = result.getString("tanggalPengajuan") ?: ""
+                val tanggalPengajuanTimestamp = result.get("tanggalPengajuan") // Read without casting
                 val statusPengajuan = result.getString("status") ?: ""
                 val address = result.getString("address") ?: ""
                 val jenisPembayaran = result.getString("jenisPembayaran") ?: ""
@@ -95,8 +98,15 @@ class DetailPengajuanActivity : AppCompatActivity() {
                 binding.tvNamaMitra.text = namaPengaju
                 binding.tvAlamatMitra.text = address
                 binding.tvStatus.text = statusPengajuan
-
-                if(idPengiriman == ""){
+                binding.tvPaymentMethod.text = jenisPembayaran
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                    dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                } else {
+                    // Handle the case where tanggalPengajuan is not a Timestamp
+                    ""
+                }
+                if (idPengiriman == "") {
                     binding.cardViewPengiriman.visibility = android.view.View.GONE
                 } else {
                     binding.cardViewPengiriman.visibility = android.view.View.VISIBLE
@@ -107,7 +117,7 @@ class DetailPengajuanActivity : AppCompatActivity() {
                         }
                 }
 
-                if (hargaDeal == 0L) {
+                if (statusPengajuan == "Penawaran") {
                     Log.d("DetailPengajuanActivity", "Harga deal is 0")
                 } else {
                     binding.totalHargaDeal.isFocusable = false
@@ -125,13 +135,12 @@ class DetailPengajuanActivity : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { barangResult ->
                         for (barangDocument in barangResult) {
-                            val barangId = barangDocument.getString("barangId") ?: ""
                             val namaBarang = barangDocument.getString("namaBarang") ?: ""
                             val hargaPasar: Long? = barangDocument.getLong("hargaPasar")
                             val hargaBeli: Long? = barangDocument.getLong("hargaBeli")
                             val jumlah: Long? = barangDocument.getLong("jumlahBarang")
                             val catatan = barangDocument.getString("catatan") ?: ""
-                            val imageUrls =  barangDocument.getString("imageUrl") ?: ""
+                            val imageUrls = barangDocument.getString("imageUrl") ?: ""
 
                             val detailPengajuan = DetailPengajuan(
                                 pengajuanId,
@@ -160,7 +169,7 @@ class DetailPengajuanActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        pengajuanDetailAdapter = PengajuanAdapterDetailBarang(this,pengajuanList)
+        pengajuanDetailAdapter = PengajuanAdapterDetailBarang(this, pengajuanList)
         binding.recylerview.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = pengajuanDetailAdapter
@@ -235,41 +244,60 @@ class DetailPengajuanActivity : AppCompatActivity() {
     }
 
     private fun saveTotalHarga(pengajuanId: String) {
-        val totalHargaDeal = binding.totalHargaDeal.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
+        val totalHargaDeal =
+            binding.totalHargaDeal.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
+        val jenisPembayaran = binding.tvPaymentMethod.text.toString()
+
+        val status: String = when (jenisPembayaran) {
+            "Titip supir" -> {
+                "Disetujui"
+            }
+
+            "Transfer BCA" -> {
+                "Bayar"
+            }
+
+            else -> {
+                Toast.makeText(this, "Jenis pembayaran tidak valid", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
         if (totalHargaDeal != null) {
             val db = FirebaseFirestore.getInstance()
-
-            val documentRef = db.collection("pengajuan").document(pengajuanId)
-
-            documentRef.addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.e("DetailPengajuanActivity", "Gagal mengambil data barang", e)
-                    return@addSnapshotListener
+            val updateData = hashMapOf(
+                "totalHarga" to totalHargaDeal,
+                "status" to status
+            )
+            db.collection("pengajuan").document(pengajuanId)
+                .update(updateData as Map<String, Any>)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
-
-                if (snapshot != null && snapshot.exists()) {
-                    val jenisPembayaran = snapshot.getString("jenisPembayaran") ?: ""
-                    val status = if (jenisPembayaran == "Transfer") "Menunggu pembayaran" else "approved"
-                    val updateData = hashMapOf(
-                        "totalHarga" to totalHargaDeal,
-                        "status" to status
-                    )
-
-                    documentRef.update(updateData as Map<String, Any>)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
-                        }
-                } else {
-                    Toast.makeText(this, "Dokumen tidak ditemukan", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener {
+                    Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
                 }
-            }
         } else {
             Toast.makeText(this, "Total harga tidak valid", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun rejectButton(pengajuanId: String) {
+        val db = FirebaseFirestore.getInstance()
+        val updateData = hashMapOf(
+            "status" to "Ditolak"
+        )
+        db.collection("pengajuan").document(pengajuanId)
+            .update(updateData as Map<String, Any>)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Total harga berhasil disimpan", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Gagal menyimpan total harga", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
 }

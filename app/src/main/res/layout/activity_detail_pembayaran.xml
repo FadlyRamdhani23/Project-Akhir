@@ -160,14 +160,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF0000"
-        android:text="Cek status pembayaran"
+        android:text="Kembali ke pesanan"
         android:textColor="#FFFFFF"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

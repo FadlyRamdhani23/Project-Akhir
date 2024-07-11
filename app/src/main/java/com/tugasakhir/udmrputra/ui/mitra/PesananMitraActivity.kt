@@ -98,120 +98,18 @@ class PesananMitraActivity : AppCompatActivity() {
                         "Transaction Finished. ID: ${it.transactionId}"
                     }
                     UiKitConstants.STATUS_PENDING -> {
-                        "Transaction Finished. ID: ${it.message}"
-                        fetchTransactionStatusByTransactionId(it.transactionId.toString())
+                        "Transaction Pending. ID: ${it.message}"
                     }
                     UiKitConstants.STATUS_FAILED -> "Transaction Failed. ID: ${it.transactionId}"
                     UiKitConstants.STATUS_CANCELED -> "Transaction Cancelled"
                     UiKitConstants.STATUS_INVALID -> "Transaction Invalid. ID: ${it.transactionId}"
                     else -> "Transaction ID: ${it.transactionId}. Message: ${it.status}"
                 }
+                Log.d("TransactionStatus", message)
             } ?: run {
-                Toast.makeText(this, "Transaction Invalid", Toast.LENGTH_LONG).show()
+                Log.e("TransactionStatus", "Transaction Invalid")
             }
         }
-    }
-    private fun fetchTransactionStatusByTransactionId(transactionId: String) {
-        ApiClient.instance.getTransactionStatusByTransactionId(transactionId).enqueue(object :
-            Callback<TransactionStatus> {
-            override fun onResponse(call: Call<TransactionStatus>, response: Response<TransactionStatus>) {
-                if (response.isSuccessful) {
-                    val transactionStatus = response.body()
-                    if (transactionStatus != null) {
-                        if (transactionStatus.transaction_status == "settlement") {
-                            sendNotification(
-                                "Transaksi Berhasil",
-                                "Transaksi dengan ID Pesanan $transactionId telah berhasil diselesaikan"
-                            )
-                        } else if (transactionStatus.transaction_status == "pending") {
-                            sendNotification(
-                                "Transaksi Tertunda",
-                                "Transaksi dengan ID Pesanan $transactionId masih tertunda"
-                            )
-                        } else if (transactionStatus.transaction_status == "cancel") {
-                            sendNotification(
-                                "Transaksi Dibatalkan",
-                                "Transaksi dengan ID Pesanan $transactionId telah dibatalkan"
-                            )
-                        } else if (transactionStatus.transaction_status == "deny") {
-                            sendNotification(
-                                "Transaksi Ditolak",
-                                "Transaksi dengan ID Pesanan $transactionId telah ditolak"
-                            )
-                        } else if (transactionStatus.transaction_status == "expire") {
-                            sendNotification(
-                                "Transaksi Kedaluwarsa",
-                                "Transaksi dengan ID Pesanan $transactionId telah kedaluwarsa"
-                            )
-                        } else if (transactionStatus.transaction_status == "refund") {
-                            sendNotification(
-                                "Transaksi Dikembalikan",
-                                "Transaksi dengan ID Pesanan $transactionId telah dikembalikan"
-                            )
-                        } else if (transactionStatus.transaction_status == "capture") {
-                            sendNotification(
-                                "Transaksi Ditangkap",
-                                "Transaksi dengan ID Pesanan $transactionId telah ditangkap"
-                            )
-                        } else if (transactionStatus.transaction_status == "authorize") {
-                            sendNotification(
-                                "Transaksi Diotorisasi",
-                                "Transaksi dengan ID Pesanan $transactionId telah diotorisasi"
-                            )
-                        } else if (transactionStatus.transaction_status == "void") {
-                            sendNotification(
-                                "Transaksi Dibatalkan",
-                                "Transaksi dengan ID Pesanan $transactionId telah dibatalkan"
-                            )
-                        } else {
-                            Toast.makeText(
-                                this@PesananMitraActivity,
-                                "Status transaksi tidak diketahui",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                    } else {
-                        Toast.makeText(
-                            this@PesananMitraActivity,
-                            "Failed to fetch transaction status",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
-                    Toast.makeText(
-                        this@PesananMitraActivity,
-                        "Failed to fetch transaction status",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(call: Call<TransactionStatus>, t: Throwable) {
-                Toast.makeText(this@PesananMitraActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-    }
-
-    private fun sendNotification(title: String, message: String) {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "transaction_status_channel"
-        val channelName = "Transaction Status"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.logo4)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        notificationManager.notify(0, notification)
     }
 
 
@@ -230,44 +128,6 @@ class PesananMitraActivity : AppCompatActivity() {
         }
     }
 
-    private fun filterByDate(filter: String) {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val currentDate = Calendar.getInstance()
-        filteredList.clear()
-
-        when (filter) {
-            "Semua" -> filteredList.addAll(pesananList)
-            "Hari Ini" -> {
-                val today = dateFormat.format(currentDate.time)
-                filteredList.addAll(pesananList.filter { it.tanggalPengajuan == today })
-            }
-            "Minggu Ini" -> {
-                currentDate.set(Calendar.DAY_OF_WEEK, currentDate.firstDayOfWeek)
-                val startOfWeek = dateFormat.format(currentDate.time)
-                currentDate.add(Calendar.DAY_OF_WEEK, 6)
-                val endOfWeek = dateFormat.format(currentDate.time)
-                filteredList.addAll(pesananList.filter {
-                    val date = dateFormat.parse(it.tanggalPengajuan)
-                    date >= dateFormat.parse(startOfWeek) && date <= dateFormat.parse(endOfWeek)
-                })
-            }
-            "Bulan Ini" -> {
-                currentDate.set(Calendar.DAY_OF_MONTH, 1)
-                val startOfMonth = dateFormat.format(currentDate.time)
-                currentDate.add(Calendar.MONTH, 1)
-                currentDate.add(Calendar.DAY_OF_MONTH, -1)
-                val endOfMonth = dateFormat.format(currentDate.time)
-                filteredList.addAll(pesananList.filter {
-                    val date = dateFormat.parse(it.tanggalPengajuan)
-                    date >= dateFormat.parse(startOfMonth) && date <= dateFormat.parse(endOfMonth)
-                })
-            }
-        }
-
-        adapter.notifyDataSetChanged()
-        checkIfEmpty()
-    }
-
     private fun fetchPengajuanData() {
         val db = FirebaseFirestore.getInstance()
         val userId = auth.currentUser?.uid ?: return
@@ -282,7 +142,7 @@ class PesananMitraActivity : AppCompatActivity() {
                 for (document in result!!) {
                     val pengajuanId = document.id
                     val namaPetani = document.getString("namaPetani") ?: ""
-                    val tanggalPengajuan = document.getString("tanggalPengajuan") ?: ""
+                    val tanggalPengajuanTimestamp = document.get("tanggalPengajuan") // Read without casting
                     val barangAjuan = document.getString("barangAjuan") ?: ""
                     val jenisPembayaran = document.getString("jenisPembayaran") ?: ""
                     val statusPengajuan = document.getString("status") ?: ""
@@ -291,7 +151,6 @@ class PesananMitraActivity : AppCompatActivity() {
                     val longitude = document.getDouble("longitude") ?: 0.0
                     val idPengiriman = document.getString("idPengiriman") ?: ""
                     val totalHarga = document.getLong("totalHarga") ?: 0
-
 
                     db.collection("pengajuan").document(pengajuanId).collection("barang")
                         .addSnapshotListener { barangResult, error ->
@@ -305,6 +164,16 @@ class PesananMitraActivity : AppCompatActivity() {
                                 val namaBarang = barangDocument.getString("namaBarang") ?: ""
                                 listBarang.add(namaBarang)
                             }
+
+                            // Convert Timestamp to String including time
+                            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                            val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                                dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                            } else {
+                                // Handle the case where tanggalPengajuan is not a Timestamp
+                                ""
+                            }
+
                             val pengajuan = Pengajuan(
                                 pengajuanId,
                                 namaPetani,
@@ -320,11 +189,64 @@ class PesananMitraActivity : AppCompatActivity() {
                                 totalHarga
                             )
                             pesananList.add(pengajuan)
+
+                            // Sort pesananList by tanggalPengajuan in descending order
+                            pesananList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
+
                             filterByDate(binding.spinnerFilter.selectedItem.toString())
                         }
                 }
             }
     }
+
+    private fun filterByDate(filter: String) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        val currentDate = Calendar.getInstance()
+        filteredList.clear()
+
+        when (filter) {
+            "Semua" -> filteredList.addAll(pesananList)
+            "Hari Ini" -> {
+                val startOfDay = currentDate.apply { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }.time
+                val endOfDay = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
+                filteredList.addAll(pesananList.filter {
+                    val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
+                    pengajuanDate >= startOfDay && pengajuanDate <= endOfDay
+                })
+            }
+            "Minggu Ini" -> {
+                currentDate.set(Calendar.DAY_OF_WEEK, currentDate.firstDayOfWeek)
+                val startOfWeek = currentDate.apply { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }.time
+                currentDate.add(Calendar.DAY_OF_WEEK, 6)
+                val endOfWeek = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
+                filteredList.addAll(pesananList.filter {
+                    val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
+                    pengajuanDate >= startOfWeek && pengajuanDate <= endOfWeek
+                })
+            }
+            "Bulan Ini" -> {
+                currentDate.set(Calendar.DAY_OF_MONTH, 1)
+                val startOfMonth = currentDate.apply { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }.time
+                currentDate.add(Calendar.MONTH, 1)
+                currentDate.add(Calendar.DAY_OF_MONTH, -1)
+                val endOfMonth = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
+                filteredList.addAll(pesananList.filter {
+                    val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
+                    pengajuanDate >= startOfMonth && pengajuanDate <= endOfMonth
+                })
+            }
+        }
+
+        // Sort filteredList by tanggalPengajuan in descending order
+        filteredList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
+
+        adapter.notifyDataSetChanged()
+        checkIfEmpty()
+    }
+
+
+
+
 
     private fun checkIfEmpty() {
         if (adapter.itemCount == 0) {

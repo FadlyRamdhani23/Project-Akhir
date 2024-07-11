@@ -3,6 +3,7 @@ package com.tugasakhir.udmrputra.ui.pengajuan
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.data.Barang
@@ -114,15 +115,14 @@ class PengajuanViewModel : ViewModel() {
                 val mainAlamat = userDocument.getString("address") ?: ""
                 val mainLatitude = userDocument.getDouble("latitude") ?: 0.0
                 val mainLongitude = userDocument.getDouble("longitude") ?: 0.0
-                val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
                 val mainPengajuanData = hashMapOf(
                     "namaPetani" to mainNamaPetani,
                     "userId" to userId,
-                    "status" to "pending",
+                    "status" to "Penawaran",
                     "totalHarga" to 0,
                     "jenisPembayaran" to mainJenisPembayaran,
-                    "tanggalPengajuan" to currentDate,
+                    "tanggalPengajuan" to Timestamp(Date()),
                     "address" to mainAlamat,
                     "latitude" to mainLatitude,
                     "longitude" to mainLongitude

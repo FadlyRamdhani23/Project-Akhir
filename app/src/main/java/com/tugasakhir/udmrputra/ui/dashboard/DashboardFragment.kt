@@ -16,6 +16,8 @@ import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
 import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
 import com.tugasakhir.udmrputra.ui.notifications.PengajuanAdapter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
 
@@ -76,7 +78,13 @@ class DashboardFragment : Fragment() {
                         val supir = document.getString("supir") ?: ""
                         val supirId = document.getString("supirId") ?: ""
                         val status = document.getString("status") ?: ""
-                        val tanggal = document.getString("tanggal") ?: ""
+                        val tanggalPengajuanTimestamp = document.get("tanggal")
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                        val tanggal = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                            dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                        } else {
+                            ""
+                        }
 
                         // Truncate address if it's too long
                         val maxLength = 30
@@ -98,6 +106,10 @@ class DashboardFragment : Fragment() {
                         )
                         pengirimanList.add(pengiriman)
                     }
+
+                    // Sort the list by date with the latest at the top
+                    pengirimanList.sortByDescending { it.tanggal }
+
                     pengirimanAdapter.notifyDataSetChanged()
 
                 } else {
@@ -105,6 +117,7 @@ class DashboardFragment : Fragment() {
                 }
             }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

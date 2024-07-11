@@ -11,6 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.ActivityDaftarPengirimanTodayBinding
 import com.tugasakhir.udmrputra.ui.dashboard.PengirimanAdapter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DaftarPengirimanToday : AppCompatActivity() {
 
@@ -95,7 +97,14 @@ class DaftarPengirimanToday : AppCompatActivity() {
         val longitudeSupir = document.getDouble("longitudeSupir") ?: 0.0
         val supir = document.getString("supir") ?: ""
         val status = document.getString("status") ?: ""
-        val tanggal = document.getString("tanggal") ?: ""
+        val tanggalPengajuanTimestamp = document.get("tanggal") // Read without casting
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        val tanggal = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+            dateFormat.format(tanggalPengajuanTimestamp.toDate())
+        } else {
+            // Handle the case where tanggalPengajuan is not a Timestamp
+            ""
+        }
 
         val pengiriman = Pengiriman(
             pengirimanId,

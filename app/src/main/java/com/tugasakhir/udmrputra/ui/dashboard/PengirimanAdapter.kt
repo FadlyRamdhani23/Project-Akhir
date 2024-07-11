@@ -35,27 +35,87 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
         holder.tanggal.text = currentItem.tanggal
         val context = holder.itemView.context
         when (currentItem.status) {
-            "pending" -> {
-                holder.warna.setBackgroundResource(R.color.yellow) // Warna kuning untuk pending
-                holder.status.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            "Penawaran" -> {
+                holder.warna.setBackgroundResource(R.color.blue) // Warna biru untuk penawaran
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                ) // Warna teks hitam
             }
-            "approved" -> {
-                holder.warna.setBackgroundResource(R.color.green) // Warna hijau untuk approve
-                holder.status.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
+
+            "Bayar" -> {
+                holder.warna.setBackgroundResource(R.color.yellow) // Warna kuning untuk bayar
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                ) // Warna teks hitam
             }
-            "dikemas" -> {
-                holder.warna.setBackgroundResource(R.color.blue) // Warna biru untuk dikemas
-                holder.status.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
+
+            "Disetujui" -> {
+                holder.warna.setBackgroundResource(R.color.green) // Warna hijau untuk disetujui
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white
+                    )
+                ) // Warna teks putih
             }
-            "pengiriman" -> {
+
+            "Dikemas" -> {
+                holder.warna.setBackgroundResource(R.color.orange) // Warna oranye untuk dikemas
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white
+                    )
+                ) // Warna teks putih
+            }
+
+            "Pengiriman" -> {
                 holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk pengiriman
-                holder.status.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                ) // Warna teks hitam
             }
+
+            "Selesai" -> {
+                holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk selesai
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                ) // Warna teks hitam
+            }
+
+            "Ditolak" -> {
+                holder.warna.setBackgroundResource(R.color.red) // Warna merah untuk ditolak
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white
+                    )
+                ) // Warna teks putih
+            }
+
             else -> {
                 holder.warna.setBackgroundResource(R.color.gray) // Warna abu-abu untuk status tidak dikenal
-                holder.status.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+                holder.status.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                ) // Warna teks hitam
             }
         }
+
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, MapsActivity::class.java)

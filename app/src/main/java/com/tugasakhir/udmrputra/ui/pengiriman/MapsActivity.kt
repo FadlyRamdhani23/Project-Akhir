@@ -24,6 +24,8 @@ import com.codebyashish.googledirectionapi.RouteDrawing
 import com.codebyashish.googledirectionapi.RouteInfoModel
 import com.codebyashish.googledirectionapi.RouteListener
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
@@ -61,6 +63,14 @@ class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 }
 
                 if (document != null && document.exists()) {
+                    val tanggalPengajuanTimestamp = document.get("tanggal") // Read without casting
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                    val tanggal = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                        dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                    } else {
+                        // Handle the case where tanggalPengajuan is not a Timestamp
+                        ""
+                    }
                     val pengiriman = Pengiriman(
                         document.id,
                         document.getDouble("latitudeTujuan") ?: 0.0,
@@ -71,7 +81,7 @@ class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                         document.getString("supirId") ?: "",
                         document.getString("address") ?: "",
                         document.getString("status") ?: "",
-                        document.getString("tanggal") ?: ""
+                        tanggal
                     )
                     mapsViewModel.setPengirimanData(pengiriman)
                 } else {
@@ -87,7 +97,7 @@ class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 binding.alamatPengiriman.text = it.address
                 binding.statusPengiriman.text = it.status
 
-                if (it.status == "dikemas") {
+                if (it.status == "Dikemas") {
                     binding.imageStatus.visibility = View.VISIBLE
                     binding.googleMap.visibility = View.GONE
                 } else {

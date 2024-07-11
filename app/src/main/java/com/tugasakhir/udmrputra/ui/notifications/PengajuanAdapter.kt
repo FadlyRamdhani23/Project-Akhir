@@ -19,7 +19,6 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
     class PengajuanViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userId: TextView = view.findViewById(R.id.userId)
         val tanggalPengajuan: TextView = view.findViewById(R.id.tanggalPengajuan)
-        val barangAjuan: TextView = view.findViewById(R.id.barangAjuan)
         val listBarang: TextView = view.findViewById(R.id.listBarang)
         val jenisPembayaran: TextView = view.findViewById(R.id.jenisPembayaran)
         val statusPengajuan: TextView = view.findViewById(R.id.statusPengajuan)
@@ -35,7 +34,6 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
         val pengajuan = pengajuanList[position]
         holder.userId.text = pengajuan.userId
         holder.tanggalPengajuan.text = pengajuan.tanggalPengajuan
-        holder.barangAjuan.text = pengajuan.barangAjuan
         holder.listBarang.text = pengajuan.listBarang.joinToString(", ")
         holder.jenisPembayaran.text = pengajuan.jenisPembayaran
         holder.statusPengajuan.text = pengajuan.statusPengajuan
@@ -45,27 +43,40 @@ class PengajuanAdapter(private val pengajuanList: List<Pengajuan>) :
 
         // Mengatur warna berdasarkan status pengajuan
         when (pengajuan.statusPengajuan) {
-            "pending" -> {
-                holder.warna.setBackgroundResource(R.color.yellow) // Warna kuning untuk pending
+            "Penawaran" -> {
+                holder.warna.setBackgroundResource(R.color.blue) // Warna biru untuk penawaran
                 holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
             }
-            "approved" -> {
-                holder.warna.setBackgroundResource(R.color.green) // Warna hijau untuk approve
+            "Bayar" -> {
+                holder.warna.setBackgroundResource(R.color.yellow) // Warna kuning untuk bayar
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
+            "Disetujui" -> {
+                holder.warna.setBackgroundResource(R.color.green) // Warna hijau untuk disetujui
                 holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
             }
-            "dikemas" -> {
-                holder.warna.setBackgroundResource(R.color.blue) // Warna biru untuk dikemas
+            "Dikemas" -> {
+                holder.warna.setBackgroundResource(R.color.orange) // Warna oranye untuk dikemas
                 holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
             }
-            "pengiriman" -> {
+            "Pengiriman" -> {
                 holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk pengiriman
                 holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
+            "Selesai" -> {
+                holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk selesai
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
+            }
+            "Ditolak" -> {
+                holder.warna.setBackgroundResource(R.color.red) // Warna merah untuk ditolak
+                holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.white)) // Warna teks putih
             }
             else -> {
                 holder.warna.setBackgroundResource(R.color.gray) // Warna abu-abu untuk status tidak dikenal
                 holder.statusPengajuan.setTextColor(ContextCompat.getColor(context, R.color.black)) // Warna teks hitam
             }
         }
+
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailPengajuanActivity::class.java)

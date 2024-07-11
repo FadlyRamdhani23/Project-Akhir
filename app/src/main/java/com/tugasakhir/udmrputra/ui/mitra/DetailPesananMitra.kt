@@ -15,6 +15,7 @@ import com.tugasakhir.udmrputra.databinding.ActivityDetailPesananMitraBinding
 import com.tugasakhir.udmrputra.ui.chat.ChatActivity
 import com.tugasakhir.udmrputra.ui.pengajuan.PengajuanAdapterDetailBarang
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 class DetailPesananMitra : AppCompatActivity() {
@@ -162,7 +163,14 @@ class DetailPesananMitra : AppCompatActivity() {
 
                 result?.let {
                     val namaPengaju = it.getString("namaPetani") ?: ""
-                    val tanggalPengajuan = it.getString("tanggalPengajuan") ?: ""
+                    val tanggalPengajuanTimestamp = it.get("tanggalPengajuan") // Read without casting
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                    val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                        dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                    } else {
+                        // Handle the case where tanggalPengajuan is not a Timestamp
+                        ""
+                    }
                     val statusPengajuan = it.getString("status") ?: ""
                     val address = it.getString("address") ?: ""
                     val jenisPembayaran = it.getString("jenisPembayaran") ?: ""

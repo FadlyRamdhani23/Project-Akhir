@@ -12,19 +12,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.midtrans.sdk.corekit.core.PaymentMethod
 import com.midtrans.sdk.uikit.api.model.*
 import com.midtrans.sdk.uikit.external.UiKitApi
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
-import com.tugasakhir.udmrputra.data.TransactionStatus
-
-import com.tugasakhir.udmrputra.ui.pengajuan.DetailPengajuanActivity
+import com.tugasakhir.udmrputra.ui.chat.ChatActivity
 import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.NumberFormat
 import java.util.*
 
 class PesananMitraAdapter(
@@ -61,9 +63,20 @@ class PesananMitraAdapter(
         holder.barang.text = pengajuan.listBarang.joinToString(", ")
         holder.status.text = pengajuan.statusPengajuan
         holder.jumlahBarang.text = "${pengajuan.listBarang.size} Barang"
-        holder.totalHarga.text =
-            "Rp. ${pengajuan.totalHarga}" // Gunakan nilai totalHarga dari pengajuan
-        if (pengajuan.statusPengajuan == "pengiriman" || pengajuan.statusPengajuan == "dikemas") {
+        when (pengajuan.statusPengajuan) {
+            "Penawaran" -> {
+                holder.totalHarga.text = "Harga belum disetujui"
+            }
+            "Ditolak" -> {
+                holder.totalHarga.text = "Harga tidak disetujui"
+            }
+            else -> {
+                val numberFormat = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+                holder.totalHarga.text = numberFormat.format(pengajuan.totalHarga)
+            }
+        }
+
+        if (pengajuan.statusPengajuan == "pengiriman" || pengajuan.statusPengajuan == "Dikemas") {
             holder.llTrackPengiriman.visibility = View.VISIBLE
             holder.viewTrackPengiriman.visibility = View.VISIBLE
         } else {
@@ -81,15 +94,22 @@ class PesananMitraAdapter(
         holder.btnTerima.apply {
             when (pengajuan.statusPengajuan) {
                 "pengiriman" -> {
-                    text = "Terima"
+                    text = "Diterima"
                     isEnabled = true
                     visibility = View.VISIBLE
                     setOnClickListener {
                         updateStatus(pengajuan, holder, "selesai")
                     }
                 }
-
-                "Menunggu pembayaran" -> {
+                "Penawaran" -> {
+                    text = "Chat Admin"
+                    isEnabled = true
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        createOrFindChatRoom(holder.itemView.context)
+                    }
+                }
+                "Bayar" -> {
                     text = "Bayar"
                     isEnabled = true
                     visibility = View.VISIBLE
@@ -147,30 +167,82 @@ class PesananMitraAdapter(
                             }
                     }
                 }
-
                 "selesai" -> {
                     text = "Selesai"
                     isEnabled = false
                     visibility = View.VISIBLE
                 }
-
+                "Disetujui" -> {
+                    text = "Diterima"
+                    isEnabled = false
+                    visibility = View.VISIBLE
+                }
                 else -> {
                     visibility = View.GONE
                 }
             }
         }
 
-
         holder.itemView.setOnClickListener {
-            val intent =
-                Intent(holder.itemView.context, DetailPesananMitra::class.java).apply {
-                    putExtra("pengajuanId", pengajuan.id)
-                }
+            val intent = Intent(holder.itemView.context, DetailPesananMitra::class.java).apply {
+                putExtra("pengajuanId", pengajuan.id)
+            }
             holder.itemView.context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int = pengajuanList.size
+
+    private fun createOrFindChatRoom(context: Context) {
+        val db = Firebase.firestore
+        val auth = Firebase.auth
+        val user = auth.currentUser
+        val uid = user?.uid
+        val username = user?.displayName
+        val adminId = "7FnEe053S1PssDMv0RpGz9R3LHA2"
+        val adminName = "Admin"
+
+        val chatRoom = hashMapOf(
+            "userIdAdmin" to adminId,
+            "userIdMitra" to uid,
+            "usernameAdmin" to adminName,
+            "usernameMitra" to username,
+            "lastMessage" to "",
+            "lastMessageTimestamp" to "",
+        )
+        db.collection("chatRoom").get()
+            .addOnSuccessListener { documents ->
+                var isExist = false
+                var chatroomId = ""
+                for (document in documents) {
+                    if (document.data["userIdAdmin"] == adminId && document.data["userIdMitra"] == uid) {
+                        isExist = true
+                        chatroomId = document.id
+                        break
+                    }
+                }
+                if (isExist) {
+                    val intent = Intent(context, ChatActivity::class.java).apply {
+                        putExtra("chatroomId", chatroomId)
+                    }
+                    context.startActivity(intent)
+                } else {
+                    db.collection("chatRoom").add(chatRoom)
+                        .addOnSuccessListener {
+                            val intent = Intent(context, ChatActivity::class.java).apply {
+                                putExtra("chatroomId", it.id)
+                            }
+                            context.startActivity(intent)
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Chat room failed to create", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Error creating chat room", Toast.LENGTH_SHORT).show()
+            }
+    }
 
     private fun updateStatus(
         pengajuan: Pengajuan,
@@ -184,7 +256,7 @@ class PesananMitraAdapter(
                 holder.status.text = status
             }
             .addOnFailureListener {
-                // Handle the error
+                Toast.makeText(holder.itemView.context, "Error updating status", Toast.LENGTH_SHORT).show()
             }
         db.collection("pengiriman").document(pengajuan.idPengiriman.toString())
             .update("status", status)
@@ -192,10 +264,9 @@ class PesananMitraAdapter(
                 holder.status.text = status
             }
             .addOnFailureListener {
-                // Handle the error
+                Toast.makeText(holder.itemView.context, "Error updating delivery status", Toast.LENGTH_SHORT).show()
             }
     }
-
 
     private fun buildUiKit(context: Context) {
         UiKitApi.Builder()
@@ -207,7 +278,6 @@ class PesananMitraAdapter(
             .build()
         uiKitCustomSetting()
     }
-
 
     private fun uiKitCustomSetting() {
         val uIKitCustomSetting = UiKitApi.getDefaultInstance().uiKitSetting

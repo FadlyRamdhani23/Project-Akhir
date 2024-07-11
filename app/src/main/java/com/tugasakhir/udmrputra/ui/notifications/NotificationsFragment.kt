@@ -53,7 +53,7 @@ class NotificationsFragment : Fragment() {
 
     private fun setupSpinners() {
         val dateOptions = arrayOf("Semua", "Hari Ini", "Minggu Ini", "Bulan Ini")
-        val statusOptions = arrayOf("Semua", "Pengiriman", "Pending", "Dikemas", "Approved")
+        val statusOptions = arrayOf("Semua", "Penawaran", "Bayar", "Disetujui", "Ditolak","Dikemas", "Dikirim", "Selesai")
 
         val dateSpinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, dateOptions)
         dateSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -94,7 +94,7 @@ class NotificationsFragment : Fragment() {
                     for (document in snapshot.documents) {
                         val pengajuanId = document.id
                         val userId = document.getString("namaPetani") ?: ""
-                        val tanggalPengajuan = document.getString("tanggalPengajuan") ?: ""
+                        val tanggalPengajuanTimestamp = document.get("tanggalPengajuan") // Read without casting
                         val barangAjuan = document.getString("barangAjuan") ?: ""
                         val jenisPembayaran = document.getString("jenisPembayaran") ?: ""
                         val statusPengajuan = document.getString("status") ?: ""
@@ -105,6 +105,13 @@ class NotificationsFragment : Fragment() {
                         db.collection("pengajuan").document(pengajuanId).collection("barang")
                             .get()
                             .addOnSuccessListener { barangResult ->
+                                val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                                val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                                    dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                                } else {
+                                    // Handle the case where tanggalPengajuan is not a Timestamp
+                                    ""
+                                }
                                 val listBarang = mutableListOf<String>()
                                 for (barangDocument in barangResult) {
                                     val namaBarang = barangDocument.getString("namaBarang") ?: ""
@@ -133,7 +140,7 @@ class NotificationsFragment : Fragment() {
     private fun filterPengajuan() {
         val dateFilter = binding.spinnerFilterTanggal.selectedItem.toString()
         val statusFilter = binding.spinnerFilterStatus.selectedItem.toString().lowercase(Locale.getDefault())
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val currentDate = Calendar.getInstance()
 
         filteredPengajuanList.clear()
@@ -178,6 +185,8 @@ class NotificationsFragment : Fragment() {
 
         pengajuanAdapter.notifyDataSetChanged()
     }
+
+
 
 
     override fun onDestroyView() {

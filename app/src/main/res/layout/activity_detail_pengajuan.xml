@@ -18,8 +18,8 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:layout_marginBottom="10dp"
+            android:background="@color/white"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
@@ -52,8 +52,7 @@
             android:id="@+id/card_viewPengiriman"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            >
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,11 +73,11 @@
                     android:layout_marginBottom="5dp"
                     android:text="nama supir" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_status_pengiriman"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="status" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tv_status_pengiriman"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="status" />-->
 
             </LinearLayout>
 
@@ -147,12 +146,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="10dp"
-                        android:textColor="@color/blue_2"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_extrabold"
                         android:gravity="end"
-                        android:text="status" />
+                        android:text="status"
+                        android:textColor="@color/blue_2" />
 
                 </LinearLayout>
 
@@ -162,6 +161,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="7dp"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/nunito_extrabold"
+                    android:text="Jenis pebayaran" />
+
+                <TextView
+                    android:id="@+id/tv_payment_method"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Jenis pebayaran" />
+
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -196,9 +226,7 @@
                         android:id="@+id/total_harga_deal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        />
-
+                        android:inputType="number" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>

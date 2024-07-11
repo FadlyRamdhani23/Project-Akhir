@@ -17,17 +17,19 @@
 
         <LinearLayout
             android:id="@+id/linearLayout5"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/userId"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="userId"
                 android:textSize="16sp"
@@ -35,12 +37,39 @@
 
             <TextView
                 android:id="@+id/tanggalPengajuan"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Tanggal"
                 android:textSize="14sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="BarangAjuan"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="5dp"
+                    android:text=":"
+                    android:textColor="@color/green"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/listBarang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="List Barang"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -48,44 +77,36 @@
             android:id="@+id/linearLayout9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+            app:layout_constraintEnd_toStartOf="@+id/warna_jenis"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/barangAjuan"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="BarangAjuan"
-                android:textColor="@color/green" />
 
             <TextView
-                android:id="@+id/listBarang"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="List Barang"
-                android:textSize="10sp" />
+                android:text="Jenis Pembayaran"
+                android:textColor="@color/md_theme_dark_onSecondary"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/jenisPembayaran"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="Jenis Pembayaran"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/warna_jenis"
             android:layout_width="30dp"
-            android:layout_height="77dp"
+            android:layout_height="89dp"
             android:background="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
@@ -93,21 +114,18 @@
             android:id="@+id/statusPengajuan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_extrabold"
             android:rotation="270"
             android:text="pending"
-            android:textColor="@color/white"
             android:textSize="10sp"
+
             app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.997"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout9"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>
-
-

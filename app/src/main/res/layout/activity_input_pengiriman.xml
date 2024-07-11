@@ -149,7 +149,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="20dp"
-
                     android:layout_marginEnd="20dp"
                     android:orientation="vertical">
 
@@ -165,11 +164,14 @@
                         android:id="@+id/textViewInputBarang"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:layout_marginTop="5dp"
+                        android:text="Pilih Pengajuan"
                         android:padding="16dp"
-                        android:text="Pilih Pengajuan" />
+                        android:fontFamily="@font/nunito_semibold"
+                        android:background="@drawable/rounded_background"
+                        android:textColor="@color/black"
+                        android:clickable="true"
+                        android:focusable="true"/>
 
                 </LinearLayout>
 
@@ -178,6 +180,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:orientation="vertical">
 
