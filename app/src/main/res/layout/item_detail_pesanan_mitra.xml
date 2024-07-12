@@ -44,16 +44,7 @@
                     android:textSize="14sp"
                    />
 
-                    <TextView
-                        android:id="@+id/tv_tanggal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:layout_marginStart="8dp"
-                        android:text="tanggal"
-                        android:textSize="15sp"
-                         />
+
 
                 </LinearLayout>
                 <LinearLayout
@@ -130,13 +121,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="2dp"
-                        android:text="harga Ajuan"
+                        android:text="Harga Beli"
                         android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="35dp"
                         android:layout_marginTop="2dp"
                         android:text=":"
                         android:textSize="14sp" />
@@ -203,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:text="total Pesanan"
+                android:text="Total Pesanan"
                 android:textSize="14sp" />
 
             <TextView
@@ -231,6 +222,17 @@
             android:layout_height="1dp"
             android:layout_marginVertical="5dp"
             android:background="@color/grey_400" />
+
+        <TextView
+            android:id="@+id/tv_tanggal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:layout_marginStart="8dp"
+            android:text="tanggal"
+            android:textSize="15sp"
+            />
 
         <LinearLayout
             android:id="@+id/ll_track_pengiriman"

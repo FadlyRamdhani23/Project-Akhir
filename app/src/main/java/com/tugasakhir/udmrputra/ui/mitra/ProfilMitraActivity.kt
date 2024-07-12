@@ -5,42 +5,52 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.databinding.ProfileMitraActivityBinding
-import java.util.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.databinding.ProfileMitraActivityBinding
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
+import java.util.*
 
 class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ProfileMitraActivityBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageRef: StorageReference
     private lateinit var geocoder: Geocoder
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationAdapter: LocationAdapter
     private var selectedAddress: Address? = null
+    private var currentImageUri: Uri? = null
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +59,8 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        storage = FirebaseStorage.getInstance()
+        storageRef = storage.reference
         geocoder = Geocoder(this, Locale.getDefault())
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -75,7 +87,6 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
                 .addOnSuccessListener { document ->
                     // Hide ProgressBar
                     binding.profileProgressBar.visibility = View.GONE
-                    binding.imgProfile
 
                     if (document != null) {
                         binding.edtNama.setText(document.getString("nama"))
@@ -88,6 +99,12 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
                             binding.textViewAlamat.text = "Lengkapi Alamat"
                         } else {
                             binding.textViewAlamat.text = address
+                        }
+
+                        // Load profile image using Glide
+                        val imageUrl = document.getString("profileImage")
+                        if (!imageUrl.isNullOrEmpty()) {
+                            Glide.with(this).load(imageUrl).into(binding.imgProfile)
                         }
                     } else {
                         Toast.makeText(this, "No such document", Toast.LENGTH_SHORT).show()
@@ -160,14 +177,79 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     firestore.collection("users").document(userId).update(userUpdates)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener { exception ->
-                            Toast.makeText(this, "Error updating location: $exception", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Error updating profile: $exception", Toast.LENGTH_SHORT).show()
                         }
                 }
             }
         }
+
+        setupImagePicker()
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.let {
+                    currentImageUri = it
+                    binding.imgProfile.setImageURI(currentImageUri)
+                    val userId = auth.currentUser?.uid ?: return@registerForActivityResult
+                    uploadImageToStorage(userId) { imageUrl ->
+                        updateFirestore(userId, mapOf("profileImage" to imageUrl))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupImagePicker() {
+        binding.imgProfile.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
+            } else {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    123
+                )
+            }
+        }
+    }
+
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        pickImageLauncher.launch(gallery)
+    }
+
+    private fun uploadImageToStorage(userId: String, callback: (String) -> Unit) {
+        val imageRef = storageRef.child("profileImages/$userId/${UUID.randomUUID()}")
+        currentImageUri?.let { uri ->
+            imageRef.putFile(uri)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                        callback(downloadUri.toString())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Failed to upload image: $exception", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun updateFirestore(userId: String, updates: Map<String, Any>) {
+        firestore.collection("users").document(userId).update(updates)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                updates["profileImage"]?.let { imageUrl ->
+                    Glide.with(this).load(imageUrl as String).into(binding.imgProfile)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error updating profile: $exception", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun toggleVisibility(view: View) {

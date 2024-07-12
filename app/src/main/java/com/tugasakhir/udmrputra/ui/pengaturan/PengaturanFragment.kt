@@ -2,7 +2,6 @@ package com.tugasakhir.udmrputra.ui.pengaturan
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -11,7 +10,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +21,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -37,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.FragmentPengaturanBinding
@@ -55,6 +55,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationAdapter: LocationAdapter
+    private lateinit var storage: FirebaseStorage
     private var selectedAddress: Address? = null
     private var currentImageUri: Uri? = null
     private val imageList = mutableListOf<Uri>()
@@ -65,6 +66,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
         firestore = FirebaseFirestore.getInstance()
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        storage = Firebase.storage
     }
 
     override fun onCreateView(
@@ -113,6 +115,11 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
                             binding.textViewAlamat.text = "Lengkapi Alamat"
                         } else {
                             binding.textViewAlamat.text = address
+                        }
+
+                        val imageUrl = document.getString("profileImage")
+                        if (!imageUrl.isNullOrEmpty()) {
+                            Glide.with(this).load(imageUrl).into(binding.imgProfile)
                         }
                     } else {
                         Toast.makeText(requireContext(), "No such document", Toast.LENGTH_SHORT).show()
@@ -170,26 +177,28 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
             val currentUser = auth.currentUser
             if (currentUser != null) {
                 val userId = currentUser.uid
+                val nama = binding.edtNama.text.toString()
+                val noHp = binding.edtNoHp.text.toString()
+
+                val userUpdates: MutableMap<String, Any> = hashMapOf(
+                    "nama" to nama,
+                    "noHp" to noHp,
+                )
+
                 googleMap.cameraPosition?.target?.let { target ->
                     val latitude = target.latitude
                     val longitude = target.longitude
-                    val nama = binding.edtNama.text.toString()
-                    val noHp = binding.edtNoHp.text.toString()
+                    userUpdates["latitude"] = latitude
+                    userUpdates["longitude"] = longitude
+                }
 
-                    val userUpdates: Map<String, Any> = hashMapOf(
-                        "nama" to nama,
-                        "noHp" to noHp,
-                        "latitude" to latitude,
-                        "longitude" to longitude
-                    )
-
-                    firestore.collection("users").document(userId).update(userUpdates)
-                        .addOnSuccessListener {
-                            Toast.makeText(requireContext(), "Location updated successfully", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { exception ->
-                            Toast.makeText(requireContext(), "Error updating location: $exception", Toast.LENGTH_SHORT).show()
-                        }
+                if (currentImageUri != null) {
+                    uploadImageToStorage(userId) { imageUrl ->
+                        userUpdates["profileImage"] = imageUrl
+                        updateFirestore(userId, userUpdates)
+                    }
+                } else {
+                    updateFirestore(userId, userUpdates)
                 }
             }
         }
@@ -198,7 +207,6 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
             getMyLocation()
         }
     }
-
 
     private fun toggleVisibility(view: View) {
         if (view.visibility == View.VISIBLE) {
@@ -238,9 +246,10 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun saveLocation() {
-        val currentUser = auth.currentUser
-        if (currentUser != null && selectedAddress != null) {
+        if (selectedAddress != null) {
+            val currentUser = auth.currentUser ?: return
             val userId = currentUser.uid
+
             val address = selectedAddress!!
             val latitude = address.latitude
             val longitude = address.longitude
@@ -292,6 +301,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
                         val latitude = document.getDouble("latitude") ?: 0.0
                         val longitude = document.getDouble("longitude") ?: 0.0
                         val address = document.getString("address")
+                        val imageUrl = document.getString("profileImage")
                         if (latitude != 0.0 && longitude != 0.0) {
                             val location = LatLng(latitude, longitude)
                             googleMap.addMarker(MarkerOptions().position(location).title(address ?: "Lengkapi Alamat"))
@@ -300,6 +310,10 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
                             binding.editTextSearchAlamat.setText(address ?: "Lengkapi Alamat")
                         } else {
                             binding.textViewAlamat.text = "Lengkapi Alamat"
+                        }
+
+                        if (!imageUrl.isNullOrEmpty()) {
+                            Glide.with(this).load(imageUrl).into(binding.imgProfile)
                         }
                     } else {
                         Toast.makeText(requireContext(), "No such document", Toast.LENGTH_SHORT).show()
@@ -364,6 +378,7 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         pickImageLauncher.launch(gallery)
@@ -380,4 +395,32 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
+
+    private fun uploadImageToStorage(userId: String, callback: (String) -> Unit) {
+        val imageRef = storage.reference.child("profileImages/$userId/${UUID.randomUUID()}")
+        currentImageUri?.let { uri ->
+            imageRef.putFile(uri)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                        callback(downloadUri.toString())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Failed to upload image: $exception", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun updateFirestore(userId: String, updates: Map<String, Any>) {
+        firestore.collection("users").document(userId).update(updates)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                updates["profileImage"]?.let { imageUrl ->
+                    Glide.with(this).load(imageUrl as String).into(binding.imgProfile)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Error updating profile: $exception", Toast.LENGTH_SHORT).show()
+            }
+    }
 }

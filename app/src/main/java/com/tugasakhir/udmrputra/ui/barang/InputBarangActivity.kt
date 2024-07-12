@@ -42,18 +42,16 @@ class InputBarangActivity : AppCompatActivity() {
         binding = ActivityInputBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         progressBar = findViewById(R.id.progressBar)
-        setupToolbar()
         setupSpinner()
         setupImagePicker()
         setupSaveButton()
 //        setupTakePhotoButton()
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
     private fun setupSpinner() {
         val db = FirebaseFirestore.getInstance()
