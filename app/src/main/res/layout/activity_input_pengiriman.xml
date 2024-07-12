@@ -263,6 +263,7 @@
                         </androidx.recyclerview.widget.RecyclerView>
 
                         <androidx.fragment.app.FragmentContainerView
+                            android:visibility="gone"
                             android:id="@+id/google_map"
                             android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
@@ -270,6 +271,7 @@
                             android:layout_marginTop="16dp" />
 
                             <Button
+                                android:visibility="gone"
                                 android:id="@+id/btn_set_lokasi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="50dp"

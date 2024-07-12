@@ -52,6 +52,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
 
     // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
@@ -85,7 +87,7 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("com.midtrans:uikit:2.0.0-SANDBOX")
+    implementation("com.midtrans:uikit:2.0.0")
 
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")

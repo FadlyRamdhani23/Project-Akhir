@@ -6,6 +6,7 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -42,6 +43,7 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivitySupirBinding
 import com.tugasakhir.udmrputra.ui.service.LocationService
+import com.tugasakhir.udmrputra.ui.service.MyForegroundService
 import java.util.concurrent.TimeUnit
 
 class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
@@ -89,7 +91,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                         endLatLng = LatLng(latitude, longitude)
                     }
 
-                    if (status == "pengiriman") {
+                    if (status == "Pengiriman") {
                         binding.btnKirim.text = "Perjalanan"
                         binding.btnKirim.isEnabled = false
                     } else {
@@ -103,7 +105,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
         // Set up click listener for btnKirim
         binding.btnKirim.setOnClickListener {
-            updatePengirimanStatus(pengirimanId, "pengiriman")
+            updatePengirimanStatus(pengirimanId, "Pengiriman")
         }
     }
 
@@ -117,17 +119,23 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         createLocationRequest()
         createLocationCallback()
         binding.btnRouteMaps.setOnClickListener {
+            val foregroundServiceIntent = Intent(this, MyForegroundService::class.java)
+            foregroundServiceIntent.putExtra("PENGIRIMAN_ID", pengirimanId)
             if (!isTracking) {
                 updateTrackingStatus(true)
-                startLocationUpdates()
-                startService(Intent(this, LocationService::class.java))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(foregroundServiceIntent)
+                } else {
+                    startService(foregroundServiceIntent)
+                }
             } else {
                 updateTrackingStatus(false)
                 stopLocationUpdates()
-                stopService(Intent(this, LocationService::class.java))
+                stopService(foregroundServiceIntent)
             }
         }
     }
+
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -183,8 +191,8 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create().apply {
-            interval = TimeUnit.MINUTES.toMillis(2) // Set interval to 2 minutes
-            maxWaitTime = TimeUnit.MINUTES.toMillis(2) // Set max wait time to 2 minutes
+            interval = TimeUnit.SECONDS.toMillis(10)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(10)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder()
@@ -258,40 +266,39 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 for (location in locationResult.locations) {
                     Log.d(TAG, "onLocationResult: ${location.latitude}, ${location.longitude}")
                     val latLng = LatLng(location.latitude, location.longitude)
-                    saveLocationToFirebase(location.latitude, location.longitude)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
             }
         }
     }
 
-    private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
-        firestore = FirebaseFirestore.getInstance()
-        val userId = auth.currentUser?.uid ?: ""
-        val db = FirebaseFirestore.getInstance()
-        val pengirimanUpdate: Map<String, Any> = hashMapOf(
-            "userId" to userId,
-            "latitudeSupir" to latitude,
-            "longitudeSupir" to longitude,
-        )
-
-        firestore.collection("pengiriman").document(pengirimanId).update(pengirimanUpdate)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error updating location: $exception", Toast.LENGTH_SHORT).show()
-            }
-
-        db.collection("location")
-            .add(pengirimanUpdate)
-            .addOnSuccessListener { documentReference ->
-                Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Data gagal disimpan", Toast.LENGTH_SHORT).show()
-            }
-    }
+//    private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
+//        firestore = FirebaseFirestore.getInstance()
+//        val userId = auth.currentUser?.uid ?: ""
+//        val db = FirebaseFirestore.getInstance()
+//        val pengirimanUpdate: Map<String, Any> = hashMapOf(
+//            "userId" to userId,
+//            "latitudeSupir" to latitude,
+//            "longitudeSupir" to longitude,
+//        )
+//
+//        firestore.collection("pengiriman").document(pengirimanId).update(pengirimanUpdate)
+//            .addOnSuccessListener {
+//                Toast.makeText(this, "Location updated successfully", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener { exception ->
+//                Toast.makeText(this, "Error updating location: $exception", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        db.collection("location")
+//            .add(pengirimanUpdate)
+//            .addOnSuccessListener { documentReference ->
+//                Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener { e ->
+//                Toast.makeText(this, "Data gagal disimpan", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
     private fun startLocationUpdates() {
         try {
@@ -361,4 +368,5 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 Toast.makeText(this, "Failed to update status: $e", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

@@ -1,14 +1,17 @@
 package com.tugasakhir.udmrputra.ui.dashboard
 
+import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -17,6 +20,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -25,12 +34,13 @@ import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivityInputPengirimanBinding
 import com.tugasakhir.udmrputra.databinding.BottomSheetSelectItemBinding
+import com.tugasakhir.udmrputra.ui.mitra.LocationAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
-class InputPengirimanActivity : AppCompatActivity() {
+class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityInputPengirimanBinding
     private lateinit var auth: FirebaseAuth
@@ -39,6 +49,12 @@ class InputPengirimanActivity : AppCompatActivity() {
     private var isBarangDataLoaded = false
     private var selectedSupirId: String? = null  // Variable to store the selected driver ID
     private var selectedSupirName: String? = null  // Variable to store the selected driver name
+    private lateinit var geocoder: Geocoder
+    private lateinit var googleMap: GoogleMap
+    private lateinit var locationAdapter: LocationAdapter
+    private var selectedAddress: Address? = null
+    private val alamatOptions = mutableListOf<String>() // List to store address options
+    private lateinit var alamatAdapter: ArrayAdapter<String> // Adapter for the address spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +65,126 @@ class InputPengirimanActivity : AppCompatActivity() {
         setupToolbar()
         initializeTextView()
         setupSpinner()
+        geocoder = Geocoder(this, Locale.getDefault())
+        setupAlamatSpinner() // Initialize the alamat spinner here
 
         binding.btnCheckout.setOnClickListener {
             submitForm()
         }
+
+        binding.rvLokasi.layoutManager = LinearLayoutManager(this)
+        locationAdapter = LocationAdapter { address ->
+            updateMapWithLocation(address)
+        }
+        binding.rvLokasi.adapter = locationAdapter
+        binding.btnSearch.setOnClickListener {
+            val locationName = binding.editTextSearchAlamat.text.toString()
+            if (locationName.isNotEmpty()) {
+                searchLocation(locationName)
+            } else {
+                Toast.makeText(this, "Masukkan nama lokasi", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.google_map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        binding.editTextSearchAlamat.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                val locationName = v.text.toString()
+                if (locationName.isNotEmpty()) {
+                    searchLocation(locationName)
+                }
+                true
+            } else {
+                false
+            }
+        }
     }
+    // Example: Adding log in setupAlamatSpinner method
+    private fun setupAlamatSpinner(selectedItems: List<Pengajuan>? = null) {
+        Log.d("SetupAlamatSpinner", "Selected items: $selectedItems")
+
+        val defaultOptions = mutableListOf("Pilih Lokasi Pengiriman", "Custom")
+        alamatOptions.clear()
+        alamatOptions.addAll(defaultOptions)
+        selectedItems?.forEach { item ->
+            alamatOptions.add(item.address)
+        }
+        alamatAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            alamatOptions
+        )
+
+        binding.inpuAlamatPengiriman.adapter = alamatAdapter
+
+        val spinner: Spinner = findViewById(R.id.inpu_alamat_pengiriman)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, alamatOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedAlamat = alamatOptions[position]
+                Log.d("SpinnerItemSelected", "Selected address: $selectedAlamat")
+                if (selectedAlamat == "Custom") {
+                    binding.lokasiLayout.visibility = View.VISIBLE
+                } else {
+                    binding.lokasiLayout.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+
+
+    private fun updateMapWithLocation(address: Address) {
+        val latLng = LatLng(address.latitude, address.longitude)
+        googleMap.clear()
+        googleMap.addMarker(MarkerOptions().position(latLng).title(address.getAddressLine(0)))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        binding.editTextSearchAlamat.setText(address.getAddressLine(0))
+        binding.rvLokasi.visibility = View.GONE
+
+        // Log selected address
+        Log.d("UpdateMapWithLocation", "Selected address: ${address.getAddressLine(0)}")
+
+        // Add the selected address to the spinner
+        selectedAddress = address
+        addAddressToSpinner(address.getAddressLine(0))
+    }
+
+    private fun addAddressToSpinner(address: String) {
+        if (!alamatOptions.contains(address)) {
+            alamatOptions.add(address)
+            alamatAdapter.notifyDataSetChanged()
+            binding.inpuAlamatPengiriman.setSelection(alamatOptions.size - 1) // Select the newly added address
+        }
+    }
+
+    private fun searchLocation(locationName: String) {
+        try {
+            val addressList: List<Address> = geocoder.getFromLocationName(locationName, 5) ?: emptyList()
+
+            if (addressList.isNotEmpty()) {
+                Log.d("SearchLocation", "Locations found: ${addressList.size}")
+                locationAdapter.updateLocations(addressList)
+                binding.rvLokasi.visibility = View.VISIBLE
+            } else {
+                Log.d("SearchLocation", "No locations found for: $locationName")
+                Toast.makeText(this, "Lokasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("SearchLocation", "Error searching location", e)
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
     private fun initializeTextView() {
         binding.textViewInputBarang.setOnClickListener {
@@ -310,39 +441,27 @@ class InputPengirimanActivity : AppCompatActivity() {
             }
     }
 
-    private fun setupAlamatSpinner(selectedPengajuan: List<Pengajuan>) {
-        val spinner: Spinner = findViewById(R.id.inpu_alamat_pengiriman)
-        val alamatOptions = mutableListOf<String>()
 
-        // Ambil alamat dari setiap pengajuan yang dipilih dan tambahkan ke dalam daftar opsi alamat
-        selectedPengajuan.forEach { pengajuan ->
-            alamatOptions.add(pengajuan.address)
-        }
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        googleMap.uiSettings.isZoomControlsEnabled = true
 
-        // Tambahkan opsi "Custom" di akhir
-        alamatOptions.add("Custom")
+        googleMap.setOnMapClickListener { latLng ->
+            googleMap.clear()
+            googleMap.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, alamatOptions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+            // Update EditTextSearchAlamat
+            val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            if (addressList!!.isNotEmpty()) {
+                val address = addressList[0]
+                binding.editTextSearchAlamat.setText(address.getAddressLine(0))
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedAlamat = alamatOptions[position]
-                if (selectedAlamat == "Custom") {
-                    // Tampilkan lokasi_layout jika memilih "Custom"
-                    binding.lokasiLayout.visibility = View.VISIBLE
-                } else {
-                    // Sembunyikan lokasi_layout untuk pilihan lainnya
-                    binding.lokasiLayout.visibility = View.GONE
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Handle nothing selected if needed
+                // Update selected address
+                selectedAddress = address
             }
         }
     }
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

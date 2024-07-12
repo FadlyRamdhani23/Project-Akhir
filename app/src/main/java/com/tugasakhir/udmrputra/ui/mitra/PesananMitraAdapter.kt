@@ -147,7 +147,6 @@ class PesananMitraAdapter(
                                         transactionDetails = transactionDetails,
                                         customerDetails = customerDetails,
                                         itemDetails = itemDetails,
-                                        paymentMethod = PaymentMethod.BANK_TRANSFER_BCA
                                     )
                                 } else {
                                     // If order_id exists, navigate to DetailPembayaran
@@ -271,7 +270,7 @@ class PesananMitraAdapter(
     private fun buildUiKit(context: Context) {
         UiKitApi.Builder()
             .withContext(context.applicationContext)
-            .withMerchantClientKey("SB-Mid-client-PNAfOhBYVWEIX90f")
+            .withMerchantClientKey("G741518400")
             .withMerchantUrl("https://udmrputra.azurewebsites.net/serc.php/")
             .enableLog(true)
             .withColorTheme(CustomColorTheme("#FFE51255", "#B61548", "#FFE51255"))

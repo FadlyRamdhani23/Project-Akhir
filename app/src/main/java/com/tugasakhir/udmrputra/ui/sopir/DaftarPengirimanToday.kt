@@ -49,12 +49,12 @@ class DaftarPengirimanToday : AppCompatActivity() {
         // Query untuk status "dikemas"
         val queryDikemas = db.collection("pengiriman")
             .whereEqualTo("supirId", supirId)
-            .whereEqualTo("status", "dikemas")
+            .whereEqualTo("status", "Dikemas")
 
         // Query untuk status "pengiriman"
         val queryPengiriman = db.collection("pengiriman")
             .whereEqualTo("supirId", supirId)
-            .whereEqualTo("status", "pengiriman")
+            .whereEqualTo("status", "Pengiriman")
 
         // Menggabungkan hasil kedua query
         queryDikemas.addSnapshotListener { snapshotsDikemas, e ->
