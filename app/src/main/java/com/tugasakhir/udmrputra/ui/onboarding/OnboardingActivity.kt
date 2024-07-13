@@ -10,7 +10,6 @@ import androidx.viewpager.widget.ViewPager
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.ViewPagerAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityOnboardingBinding
-import com.tugasakhir.udmrputra.ui.Home
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 
 class OnboardingActivity : AppCompatActivity() {

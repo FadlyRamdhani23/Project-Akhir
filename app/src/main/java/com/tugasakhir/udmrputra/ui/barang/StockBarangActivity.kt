@@ -1,6 +1,6 @@
 package com.tugasakhir.udmrputra.ui.barang
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.adapter.StockBarangAdapter
 import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.databinding.ActivityStockBarangBinding
 
@@ -38,6 +39,7 @@ class StockBarangActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun catListRecyclerView() {
         val barangList = arrayListOf<Barang>()
         val db = FirebaseFirestore.getInstance()

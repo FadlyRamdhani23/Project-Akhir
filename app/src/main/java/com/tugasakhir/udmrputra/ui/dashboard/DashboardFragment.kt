@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
-import com.tugasakhir.udmrputra.ui.mitra.DaftarMitra
-import com.tugasakhir.udmrputra.ui.notifications.PengajuanAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -57,6 +55,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun fetchPengirimanData() {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengiriman")
@@ -115,12 +114,21 @@ class DashboardFragment : Fragment() {
                 } else {
                     Log.d("wow", "Current data: null")
                 }
+
+                // Toggle visibility of empty view and recycler view
+                if (pengirimanList.isEmpty()) {
+                    binding.emptyView.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                } else {
+                    binding.emptyView.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
             }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

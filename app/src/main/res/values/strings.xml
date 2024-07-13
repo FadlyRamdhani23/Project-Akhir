@@ -101,6 +101,20 @@
     <string name="approval">Approval</string>
     <string name="fcm_message">berhasil</string>
     <string name="default_notification_channel_id">UD MR PUTRA</string>
+    <string name="filter_status">Filter Status</string>
+    <string name="filter_tanggal">Filter Tanggal</string>
+    <string name="verifikasi_pengajuan">Verifikasi Pengajuan</string>
+    <string name="belum_ada_riwayat">Belum ada riwayat</string>
+    <string name="nama_petani">Nama Petani</string>
+    <string name="jenis">Jenis</string>
+    <string name="nama">Nama</string>
+    <string name="kategori">Kategori</string>
+    <string name="jumlah">Jumlah</string>
+    <string name="harga_beli">Harga Beli</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="catatan">Catatan</string>
+    <string name="tidak_ada_pengajuan">Tidak ada Pengajuan</string>
+    <string name="tidak_ada_pengiriman">Tidak ada pengiriman</string>
 
 
     <string-array name="jenis_barang">

@@ -192,7 +192,7 @@ class InputBarangActivity : AppCompatActivity() {
 
             Log.d("InputBarangActivity", "catId: $catId, nama: $nama, jumlah: $jumlah, imageList: $imageList")
 
-            if (catId != null && nama != null && nama.isNotBlank() && jumlah != null && imageList.isNotEmpty()) {
+            if (catId != null && !nama.isNullOrBlank() && jumlah != null && imageList.isNotEmpty()) {
                 uploadData(catId, nama, jumlah)
             } else {
                 Toast.makeText(this, "Data tidak lengkap atau tidak ada gambar yang dipilih", Toast.LENGTH_SHORT).show()

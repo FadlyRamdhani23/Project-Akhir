@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.barang
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,17 +8,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.databinding.ActivityBarangBinding
-import com.tugasakhir.udmrputra.ui.home.HomeFragment
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter
 
 class BarangActivity : AppCompatActivity() {
@@ -55,6 +53,7 @@ class BarangActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun catRecyclerView() {
         val barangList = arrayListOf<Barang>()
         val db = FirebaseFirestore.getInstance()

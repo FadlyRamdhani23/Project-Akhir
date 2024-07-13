@@ -1,8 +1,8 @@
 package com.tugasakhir.udmrputra.ui.barang
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -209,6 +209,7 @@ class InputKeluarActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun incrementCount() {
         val current = binding.editTextQuantity.text.toString().toInt()
         binding.editTextQuantity.setText((current + 1).toString())

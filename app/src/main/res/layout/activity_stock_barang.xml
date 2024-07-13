@@ -6,44 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.barang.StockBarangActivity">
 
-
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_activity_barang"
-            />
+            app:title="@string/title_activity_barang" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBarangList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/topAppBarr"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topAppBarr"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/stock_item_list"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/stock_item_list" />
 
         <ProgressBar
             android:id="@+id/stockLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/topAppBarr"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topAppBarr"
-            app:layout_constraintVertical_bias="0.447" />
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -309,7 +309,7 @@ class InputMasukActivity : AppCompatActivity() {
         val options = arrayOf("Ambil Foto", "Pilih dari Galeri")
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Pilih Gambar")
-        builder.setItems(options) { dialog, which ->
+        builder.setItems(options) { _, which ->
             when (which) {
                 0 -> {
                     if (ContextCompat.checkSelfPermission(

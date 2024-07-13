@@ -1,5 +1,6 @@
-package com.tugasakhir.udmrputra.ui.barang
+package com.tugasakhir.udmrputra.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -11,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Barang
+import com.tugasakhir.udmrputra.ui.barang.DetailStockListActivity
 
 class StockBarangAdapter(private val context: Context, private val barangList: List<Barang>) : RecyclerView.Adapter<StockBarangAdapter.BarangViewHolder>() {
 
-    class BarangViewHolder(itemView: View,) : RecyclerView.ViewHolder(itemView) {
+    class BarangViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.stock_nama)
         val gambar: ImageView = itemView.findViewById(R.id.stock_image)
         val jenis: TextView = itemView.findViewById(R.id.stock_jenis)
@@ -26,6 +28,7 @@ class StockBarangAdapter(private val context: Context, private val barangList: L
         return BarangViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BarangViewHolder, position: Int) {
         val currentItem = barangList[position]
         holder.name.text = currentItem.name

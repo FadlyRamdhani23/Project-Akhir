@@ -1,28 +1,22 @@
 package com.tugasakhir.udmrputra.ui.barang
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.databinding.ActivityDetailListBinding
-import com.tugasakhir.udmrputra.ui.home.HomeFragment
 import com.tugasakhir.udmrputra.ui.ui.main.SectionsPagerAdapter2
 
 class DetailStockListActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityDetailListBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailListBinding.inflate(layoutInflater)

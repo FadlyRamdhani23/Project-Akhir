@@ -17,8 +17,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
+            android:contentDescription="@string/tanggal"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/icon_putra"/>
+            android:src="@drawable/icon_profile_supir"/>
 
         <LinearLayout
             android:layout_width="match_parent"

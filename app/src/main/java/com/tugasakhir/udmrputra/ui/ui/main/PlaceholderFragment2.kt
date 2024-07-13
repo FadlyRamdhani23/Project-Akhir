@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,24 +14,25 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.data.Pencatatan
 import com.tugasakhir.udmrputra.data.PencatatanKeluar
 import com.tugasakhir.udmrputra.databinding.FragmentBarang2Binding
-import com.tugasakhir.udmrputra.ui.barang.PencatatanKeluarAdapter
-import com.tugasakhir.udmrputra.ui.barang.PencatatanMasukAdapter
+import com.tugasakhir.udmrputra.adapter.PencatatanKeluarAdapter
+import com.tugasakhir.udmrputra.adapter.PencatatanMasukAdapter
 
 class PlaceholderFragment2 : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentBarang2Binding? = null
     private lateinit var recyclerView: RecyclerView
-    private lateinit var p_adapter: PencatatanMasukAdapter
-    private lateinit var p_adapter2: PencatatanKeluarAdapter
+    private lateinit var pAdapter: PencatatanMasukAdapter
+    private lateinit var pAdapter2: PencatatanKeluarAdapter
     private lateinit var progressBar: ProgressBar
     private var barangId: String? = null
+    private lateinit var emptyView: TextView
 
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
         barangId = arguments?.getString(ARG_BARANG_ID)
@@ -39,7 +41,7 @@ class PlaceholderFragment2 : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentBarang2Binding.inflate(inflater, container, false)
         val root = binding.root
@@ -48,6 +50,7 @@ class PlaceholderFragment2 : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         progressBar = binding.progressBar
+        emptyView = binding.emptyView
 
         if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) fetchDataFromFirestore()
         else fetchDataFromFirestore2()
@@ -62,7 +65,7 @@ class PlaceholderFragment2 : Fragment() {
         val barangDocRef = db.collection("barang").document(barangId ?: "")
 
         barangDocRef.get().addOnSuccessListener { barangDocument ->
-            val bard = barangDocument.id
+//            val bard = barangDocument.id
             val catId = barangDocument.getString("catId") ?: ""
             val namaBarang = barangDocument.getString("nama") ?: ""
 
@@ -74,7 +77,7 @@ class PlaceholderFragment2 : Fragment() {
                         val id = masukDocument.id
                         val namaPetani = masukDocument.getString("namaPetani") ?: ""
                         val jumlah = masukDocument.getLong("jumlah")?.toString() ?: ""
-                        val gambarList = masukDocument.get("gambar") as? List<String>
+                        val gambarList = masukDocument.get("gambar") as? List<*>
                         val gambar = gambarList?.joinToString(",") ?: ""
                         val catatan = masukDocument.getString("catatan") ?: ""
                         val tanggal = masukDocument.getString("tanggal") ?: ""
@@ -96,12 +99,19 @@ class PlaceholderFragment2 : Fragment() {
                         )
                     }
                     if (isAdded) {
-                        p_adapter = PencatatanMasukAdapter(requireContext(), pencatatanList = dataList)
-                        recyclerView.adapter = p_adapter
+                        if (dataList.isEmpty()) {
+                            emptyView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            pAdapter = PencatatanMasukAdapter(requireContext(), pencatatanList = dataList)
+                            recyclerView.adapter = pAdapter
+                            emptyView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                        }
                         progressBar.visibility = View.GONE
                     }
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     progressBar.visibility = View.GONE
                 }
         }
@@ -145,12 +155,19 @@ class PlaceholderFragment2 : Fragment() {
                         )
                     }
                     if (isAdded) {
-                        p_adapter2 = PencatatanKeluarAdapter(requireContext(), pencatatanList = dataList)
-                        recyclerView.adapter = p_adapter2
+                        if (dataList.isEmpty()) {
+                            emptyView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            pAdapter2 = PencatatanKeluarAdapter(requireContext(), pencatatanList = dataList)
+                            recyclerView.adapter = pAdapter2
+                            emptyView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                        }
                         progressBar.visibility = View.GONE
                     }
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     progressBar.visibility = View.GONE
                 }
         }

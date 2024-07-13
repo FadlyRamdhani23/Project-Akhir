@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.notifications
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,8 +31,7 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        ViewModelProvider(this)[NotificationsViewModel::class.java]
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -137,6 +137,7 @@ class NotificationsFragment : Fragment() {
             }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun filterPengajuan() {
         val dateFilter = binding.spinnerFilterTanggal.selectedItem.toString()
         val statusFilter = binding.spinnerFilterStatus.selectedItem.toString().lowercase(Locale.getDefault())
@@ -184,6 +185,15 @@ class NotificationsFragment : Fragment() {
         filteredPengajuanList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
 
         pengajuanAdapter.notifyDataSetChanged()
+
+
+        if (filteredPengajuanList.isEmpty()) {
+            binding.emptyView.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            binding.emptyView.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+        }
     }
 
 

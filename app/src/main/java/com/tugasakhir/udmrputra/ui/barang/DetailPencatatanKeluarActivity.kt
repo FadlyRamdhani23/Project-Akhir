@@ -1,6 +1,5 @@
 package com.tugasakhir.udmrputra.ui.barang
 
-import ImageSliderAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem

@@ -19,8 +19,8 @@ import com.tugasakhir.udmrputra.data.PencatatanKeluar
 import com.tugasakhir.udmrputra.databinding.FragmentBarangBinding
 import com.tugasakhir.udmrputra.ui.barang.InputMasukActivity
 import com.tugasakhir.udmrputra.ui.barang.InputKeluarActivity
-import com.tugasakhir.udmrputra.ui.barang.PencatatanKeluarAdapter
-import com.tugasakhir.udmrputra.ui.barang.PencatatanMasukAdapter
+import com.tugasakhir.udmrputra.adapter.PencatatanKeluarAdapter
+import com.tugasakhir.udmrputra.adapter.PencatatanMasukAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,7 +45,7 @@ class PlaceholderFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentBarangBinding.inflate(inflater, container, false)
         val root = binding.root
@@ -273,7 +273,7 @@ class PlaceholderFragment : Fragment() {
         val date = dateFormat.parse(dateString) ?: return false
 
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"))
-        val now = calendar.time
+        calendar.time
 
         val dateCalendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"))
         dateCalendar.time = date

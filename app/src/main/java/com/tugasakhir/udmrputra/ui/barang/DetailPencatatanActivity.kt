@@ -1,6 +1,5 @@
 package com.tugasakhir.udmrputra.ui.barang
 
-import ImageSliderAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -25,10 +24,9 @@ class DetailPencatatanActivity : AppCompatActivity() {
         binding = ActivityDetailPencatatanBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
-        // Initialize Firebase Firestore
+
         firestore = Firebase.firestore
 
-        // Retrieve data from intent
         val barangId = intent.getStringExtra("barangId") ?: ""
         val barId = intent.getStringExtra("barId") ?: ""
         val masukId = intent.getStringExtra("masukId") ?: ""
@@ -64,7 +62,7 @@ class DetailPencatatanActivity : AppCompatActivity() {
         firestore.collection("barang").document(barangId).collection("masuk").document(masukId).get()
             .addOnSuccessListener { result ->
                 val imageUrls = result.get("gambar") as? List<String>
-                if (imageUrls != null && imageUrls.isNotEmpty()) {
+                if (!imageUrls.isNullOrEmpty()) {
                     for (imageUrl in imageUrls) {
                         imageList.add(SlideModel(imageUrl, ScaleTypes.CENTER_CROP))
                     }
