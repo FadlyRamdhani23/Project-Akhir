@@ -253,7 +253,7 @@ class DetailPengajuanActivity : AppCompatActivity() {
                 "Disetujui"
             }
 
-            "Transfer BCA" -> {
+            "Transfer" -> {
                 "Bayar"
             }
 

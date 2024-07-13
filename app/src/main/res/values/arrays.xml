@@ -3,6 +3,6 @@
     <!-- Array for Spinner -->
     <string-array name="payment_methods">
         <item>Titip Supir</item>
-        <item>Transfer BCA</item>
+        <item>Transfer</item>
     </string-array>
 </resources>

@@ -6,6 +6,7 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -32,6 +33,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.RoundCap
@@ -59,6 +62,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
     private val auth = FirebaseAuth.getInstance()
     private lateinit var pengirimanId: String
     private var endLatLng: LatLng? = null
+    private var destinationMarker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +93,11 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
                     if (latitude != null && longitude != null) {
                         endLatLng = LatLng(latitude, longitude)
+                        if(::mMap.isInitialized) {
+                            addDestinationMarker(endLatLng!!)
+                        }
                     }
+
 
                     if (status == "Pengiriman") {
                         binding.btnKirim.text = "Perjalanan"
@@ -108,6 +116,30 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
             updatePengirimanStatus(pengirimanId, "Pengiriman")
         }
     }
+    private fun addDestinationMarker(endLatLng: LatLng) {
+        destinationMarker?.remove() // Remove existing marker if any
+        destinationMarker = mMap.addMarker(
+            MarkerOptions()
+                .position(endLatLng)
+                .title("Destination")
+                .snippet("Click to navigate")
+        )
+        mMap.setOnMarkerClickListener { marker ->
+            if (marker == destinationMarker) {
+                val gmmIntentUri = Uri.parse("google.navigation:q=${endLatLng.latitude},${endLatLng.longitude}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                if (mapIntent.resolveActivity(packageManager) != null) {
+                    startActivity(mapIntent)
+                } else {
+                    Toast.makeText(this, "Google Maps not installed", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -118,6 +150,7 @@ class SupirActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
         getMyLocation()
         createLocationRequest()
         createLocationCallback()
+        endLatLng?.let { addDestinationMarker(it) }
         binding.btnRouteMaps.setOnClickListener {
             val foregroundServiceIntent = Intent(this, MyForegroundService::class.java)
             foregroundServiceIntent.putExtra("PENGIRIMAN_ID", pengirimanId)
