@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.dashboard
+package com.tugasakhir.udmrputra.ui.pengiriman
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.adapter.PengirimanAdapter
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DashboardFragment : Fragment() {
+class PengirimanFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var recyclerView: RecyclerView

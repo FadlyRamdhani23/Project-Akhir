@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -52,6 +53,7 @@ class ProfilMitraActivity : AppCompatActivity(), OnMapReadyCallback {
     private var currentImageUri: Uri? = null
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ProfileMitraActivityBinding.inflate(layoutInflater)

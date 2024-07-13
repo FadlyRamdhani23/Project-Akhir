@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Mitra
-import com.tugasakhir.udmrputra.data.Users
 import com.tugasakhir.udmrputra.databinding.ActivityDaftarMitraBinding
 import com.tugasakhir.udmrputra.ui.logreg.RegisterMitraActivity
 

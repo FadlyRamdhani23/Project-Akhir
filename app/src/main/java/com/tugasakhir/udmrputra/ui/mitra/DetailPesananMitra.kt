@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,7 +22,6 @@ import java.util.Locale
 class DetailPesananMitra : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailPesananMitraBinding
-    private lateinit var adapter: PengajuanAdapterDetailBarang
     private lateinit var pengajuanDetailAdapter: PengajuanAdapterDetailBarang
     private val pengajuanList = mutableListOf<DetailPengajuan>()
 
@@ -93,7 +93,6 @@ class DetailPesananMitra : AppCompatActivity() {
         db.collection("chatRoom").get()
             .addOnSuccessListener { documents ->
                 var isExist = false
-                val chatroomId = ""
                 for (document in documents) {
                     if (document.data["userIdAdmin"] == adminId && document.data["userIdMitra"] == uid) {
                         isExist = true
@@ -148,6 +147,7 @@ class DetailPesananMitra : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun fetchPengajuanData(pengajuanId: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengajuan").document(pengajuanId)
@@ -195,7 +195,7 @@ class DetailPesananMitra : AppCompatActivity() {
                             barangResult?.let { snapshot ->
                                 pengajuanList.clear()
                                 for (barangDocument in snapshot) {
-                                    val barangId = barangDocument.getString("barangId") ?: ""
+//                                    val barangId = barangDocument.getString("barangId") ?: ""
                                     val namaBarang = barangDocument.getString("namaBarang") ?: ""
                                     val hargaPasar: Long? = barangDocument.getLong("hargaPasar")
                                     val hargaBeli: Long? = barangDocument.getLong("hargaBeli")

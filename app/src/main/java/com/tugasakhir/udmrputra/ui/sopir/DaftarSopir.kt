@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.dashboard.sopir
+package com.tugasakhir.udmrputra.ui.pengiriman.sopir
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.data.Mitra
 import com.tugasakhir.udmrputra.data.Sopir
 import com.tugasakhir.udmrputra.databinding.ActivityDaftarSopirBinding
 import com.tugasakhir.udmrputra.ui.logreg.RegisterSupirActivity

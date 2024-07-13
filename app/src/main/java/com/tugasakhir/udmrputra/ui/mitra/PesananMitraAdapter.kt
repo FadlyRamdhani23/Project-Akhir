@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,16 +17,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.midtrans.sdk.corekit.core.PaymentMethod
 import com.midtrans.sdk.uikit.api.model.*
 import com.midtrans.sdk.uikit.external.UiKitApi
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.ui.chat.ChatActivity
-import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.tugasakhir.udmrputra.ui.pengiriman.DetailPengirimanActivity
 import java.text.NumberFormat
 import java.util.*
 
@@ -57,6 +54,7 @@ class PesananMitraAdapter(
         return PesananViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PesananViewHolder, position: Int) {
         val pengajuan = pengajuanList[position]
         holder.tanggalPesanan.text = pengajuan.tanggalPengajuan
@@ -85,7 +83,7 @@ class PesananMitraAdapter(
         }
 
         holder.llTrackPengiriman.setOnClickListener {
-            val intent = Intent(holder.itemView.context, MapsActivity::class.java).apply {
+            val intent = Intent(holder.itemView.context, DetailPengirimanActivity::class.java).apply {
                 putExtra("PENGIRIMAN_ID", pengajuan.idPengiriman)
             }
             holder.itemView.context.startActivity(intent)
@@ -93,12 +91,12 @@ class PesananMitraAdapter(
 
         holder.btnTerima.apply {
             when (pengajuan.statusPengajuan) {
-                "pengiriman" -> {
+                "Pengiriman" -> {
                     text = "Diterima"
                     isEnabled = true
                     visibility = View.VISIBLE
                     setOnClickListener {
-                        updateStatus(pengajuan, holder, "selesai")
+                        updateStatus(pengajuan, holder, "Selesai")
                     }
                 }
                 "Penawaran" -> {

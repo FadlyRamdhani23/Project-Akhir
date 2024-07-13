@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.pengiriman.MapsActivity">
+    tools:context=".ui.pengiriman.DetailPengirimanActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -66,6 +66,7 @@
         android:id="@+id/image_status"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/tanggal"
         android:scaleType="centerCrop"
         android:src="@drawable/dikemas"
         android:visibility="visible"
@@ -117,17 +118,17 @@
                 android:text="@string/detail_pengiriman"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/materialDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -143,10 +144,10 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/image_maps_content"
-                    android:layout_width="80dp"
-                    android:layout_height="100dp"
+                    android:layout_width="95dp"
+                    android:layout_height="91dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icon_putra" />
+                    android:src="@drawable/icon_profile_supir" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -208,6 +209,8 @@
                         android:id="@+id/action_call"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:contentDescription="@string/tanggal"
+                        android:visibility="gone"
                         android:src="@drawable/whatsapp" />
 
                 </LinearLayout>
@@ -218,9 +221,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
             <LinearLayout
                 android:id="@+id/linearLayouttempat"
                 android:layout_width="0dp"
@@ -229,18 +233,9 @@
                 android:layout_marginTop="8dp"
                 android:gravity="left"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/materialDivider4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:textSize="12sp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="Prediksi Waktu" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/materialDivider4">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -248,7 +243,16 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text=":" />
+                    android:text="@string/prediksi_waktu"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@string/titikdua" />
 
                 <TextView
                     android:id="@+id/tv_arrival_times_maps"
@@ -268,36 +272,36 @@
                 android:layout_marginTop="8dp"
                 android:gravity="left"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/linearLayouttempat"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayouttempat">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:layout_marginBottom="8dp"
-                    android:text="Lokasi saat ini" />
+                    android:text="@string/lokasi_saat_ini"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:layout_marginBottom="8dp"
-                    android:text=":" />
+                    android:text="@string/titikdua" />
 
                 <TextView
                     android:id="@+id/tv_location_right_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:layout_marginBottom="8dp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:textStyle="bold"
 
                     tools:text="Jl. Guntur Sari No.501" />

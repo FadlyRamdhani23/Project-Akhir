@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Mitra
-import com.tugasakhir.udmrputra.data.Users
 
 class MitraAdapter(private val mitraList: ArrayList<Mitra>) : RecyclerView.Adapter<MitraAdapter.ViewHolder>() {
 

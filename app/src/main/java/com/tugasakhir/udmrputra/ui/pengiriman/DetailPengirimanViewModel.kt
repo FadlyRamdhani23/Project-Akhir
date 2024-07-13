@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.tugasakhir.udmrputra.R
 import java.util.Locale
 
-class MapsViewModel(application: Application) : AndroidViewModel(application) {
+class DetailPengirimanViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _pengirimanData = MutableLiveData<Pengiriman?>()
     val pengirimanData: LiveData<Pengiriman?> get() = _pengirimanData

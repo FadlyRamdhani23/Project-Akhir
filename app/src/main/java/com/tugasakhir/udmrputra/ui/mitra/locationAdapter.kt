@@ -1,5 +1,6 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.annotation.SuppressLint
 import android.location.Address
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ class LocationAdapter(
 
     override fun getItemCount(): Int = locations.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateLocations(newLocations: List<Address>) {
         locations = newLocations
         notifyDataSetChanged()

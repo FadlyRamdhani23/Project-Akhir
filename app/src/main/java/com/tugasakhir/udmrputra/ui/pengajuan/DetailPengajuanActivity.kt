@@ -249,7 +249,7 @@ class DetailPengajuanActivity : AppCompatActivity() {
         val jenisPembayaran = binding.tvPaymentMethod.text.toString()
 
         val status: String = when (jenisPembayaran) {
-            "Titip supir" -> {
+            "Titip Supir" -> {
                 "Disetujui"
             }
 

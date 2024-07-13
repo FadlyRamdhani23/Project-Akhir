@@ -127,7 +127,7 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        binding.chatMessageInput.setOnKeyListener { v, keyCode, event ->
+        binding.chatMessageInput.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 binding.messageSendBtn.performClick()
                 return@setOnKeyListener true
@@ -142,8 +142,7 @@ class ChatActivity : AppCompatActivity() {
         db.collection("users").document(uid.toString()).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    val username1 = uid
-                    myAdapter = MessageRecyclerAdapter(options, username1.toString())
+                    myAdapter = MessageRecyclerAdapter(options, uid.toString())
                     val manager = LinearLayoutManager(this)
                     manager.stackFromEnd = true
                     binding.chatRecyclerView.layoutManager = manager

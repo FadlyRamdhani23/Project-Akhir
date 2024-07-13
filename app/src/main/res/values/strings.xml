@@ -115,6 +115,24 @@
     <string name="catatan">Catatan</string>
     <string name="tidak_ada_pengajuan">Tidak ada Pengajuan</string>
     <string name="tidak_ada_pengiriman">Tidak ada pengiriman</string>
+    <string name="username">username</string>
+    <string name="titikdua">:</string>
+    <string name="lokasi_saat_ini">Lokasi saat ini</string>
+    <string name="prediksi_waktu">Prediksi Waktu</string>
+    <string name="pengiriman">Pengiriman</string>
+    <string name="mohon_isi_data_dibawah_ini_dengan_benar">Mohon isi data dibawah ini dengan benar</string>
+    <string name="nama_supir">Nama supir</string>
+    <string name="alamat">Alamat</string>
+    <string name="masuk">Masuk</string>
+    <string name="search">Search</string>
+    <string name="cari">Cari</string>
+    <string name="set_lokasi">Set Lokasi</string>
+    <string name="pilih_pengajuan">Pilih Pengajuan</string>
+    <string name="nama_pengjuan">Nama Pengjuan</string>
+    <string name="lokasi">Lokasi</string>
+    <string name="pengajuan">Pengajuan</string>
+    <string name="masukan_catatan">Masukan catatan</string>
+    <string name="x25bc">▼</string>
 
 
     <string-array name="jenis_barang">

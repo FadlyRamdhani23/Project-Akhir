@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengiriman
-import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
 
 class DaftarPengirimanAdapter(private val pengirimanList: List<Pengiriman>) : RecyclerView.Adapter<DaftarPengirimanAdapter.MitraViewHolder>() {
 

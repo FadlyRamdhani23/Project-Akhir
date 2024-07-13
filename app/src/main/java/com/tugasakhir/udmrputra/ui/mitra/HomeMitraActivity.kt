@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.tugasakhir.udmrputra.databinding.ActivityHomeMitraBinding
 import com.tugasakhir.udmrputra.ui.pengajuan.ActivityPengajuan
-import com.tugasakhir.udmrputra.ui.pengaturan.PengaturanFragment
 
 class HomeMitraActivity : AppCompatActivity() {
 

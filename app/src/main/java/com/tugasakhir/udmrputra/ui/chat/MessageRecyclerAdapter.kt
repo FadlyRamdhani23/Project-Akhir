@@ -75,7 +75,7 @@ class MessageRecyclerAdapter(
         fun bind(item: MessageRoomModel) {
             binding.apply {
                 loadImageIntoView(messageImageViewLeft, item.imageUrl!!, false)
-                loadImageIntoView(messageImageViewRight, item.imageUrl!!, false)
+                loadImageIntoView(messageImageViewRight, item.imageUrl, false)
 
                 val isCurrentUser = item.username == currentUserName
                 messageImageViewLeft.visibility = if (isCurrentUser) android.view.View.GONE else android.view.View.VISIBLE

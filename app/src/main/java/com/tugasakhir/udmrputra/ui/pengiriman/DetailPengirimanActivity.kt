@@ -27,11 +27,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
+class  DetailPengirimanActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private val mapsViewModel: MapsViewModel by viewModels()
+    private val mapsViewModel: DetailPengirimanViewModel by viewModels()
     private val polylines = mutableListOf<Polyline>()
     private var truckMarker: Marker? = null
     private var zoomedInitially = false
@@ -191,11 +191,6 @@ class  MapsActivity : AppCompatActivity(), OnMapReadyCallback, RouteListener {
                 .build()
             routing.execute()
         }
-    }
-
-    private fun clearPolylines() {
-        polylines.forEach { it.remove() }
-        polylines.clear()
     }
 
     override fun onRouteFailure(e: ErrorHandling?) {

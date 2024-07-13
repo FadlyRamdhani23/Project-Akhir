@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/navigation_pencatatan"
-        android:name="com.tugasakhir.udmrputra.ui.dashboard.DashboardFragment"
+        android:name="com.tugasakhir.udmrputra.ui.pengiriman.PengirimanFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 

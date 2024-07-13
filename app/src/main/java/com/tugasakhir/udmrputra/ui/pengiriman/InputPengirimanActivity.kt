@@ -1,10 +1,10 @@
-package com.tugasakhir.udmrputra.ui.dashboard
+package com.tugasakhir.udmrputra.ui.pengiriman
 
+import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
@@ -14,10 +14,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,6 +29,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
+import com.tugasakhir.udmrputra.adapter.InputPengajuanAdapter
 import com.tugasakhir.udmrputra.data.Pengajuan
 import com.tugasakhir.udmrputra.databinding.ActivityInputPengirimanBinding
 import com.tugasakhir.udmrputra.databinding.BottomSheetSelectItemBinding
@@ -45,7 +44,7 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityInputPengirimanBinding
     private lateinit var auth: FirebaseAuth
     private val barangList = mutableListOf<Pengajuan>()
-    private lateinit var adapter: InpuPengajuanAdapter
+    private lateinit var adapter: InputPengajuanAdapter
     private var isBarangDataLoaded = false
     private var selectedSupirId: String? = null  // Variable to store the selected driver ID
     private var selectedSupirName: String? = null  // Variable to store the selected driver name
@@ -201,10 +200,10 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
         val bottomSheetBinding = BottomSheetSelectItemBinding.inflate(LayoutInflater.from(this))
         bottomSheetDialog.setContentView(bottomSheetBinding.root)
 
-        adapter = InpuPengajuanAdapter(this, barangList) { selectedPengajuan ->
+        adapter = InputPengajuanAdapter(this, barangList) { _ ->
             // Update daftar item yang dipilih
             val selectedItems = adapter.getSelectedItems()
-            binding.textViewInputBarang.text = selectedItems.map { it.userId }.joinToString(", ")
+            binding.textViewInputBarang.text = selectedItems.joinToString(", ") { it.userId }
             setupAlamatSpinner(selectedItems)
         }
 
@@ -228,6 +227,7 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
         bottomSheetDialog.show()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadBarangData(bottomSheetBinding: BottomSheetSelectItemBinding) {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengajuan")
@@ -240,7 +240,7 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
                     val userId = document.getString("namaPetani") ?: ""
                     val tanggalPengajuanTimestamp = document.get("tanggalPengajuan") // Read without casting
                     val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-                    val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                    val tanggalPengajuan = if (tanggalPengajuanTimestamp is Timestamp) {
                         dateFormat.format(tanggalPengajuanTimestamp.toDate())
                     } else {
                         // Handle the case where tanggalPengajuan is not a Timestamp
@@ -412,7 +412,7 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
                 for (document in documents) {
                     val namaSupir = document.getString("nama")
                     val uidSupir = document.id
-                    if (namaSupir != null && uidSupir != null) {
+                    if (namaSupir != null) {
                         usersList.add(namaSupir)
                         usersMap[namaSupir] = uidSupir
                     }

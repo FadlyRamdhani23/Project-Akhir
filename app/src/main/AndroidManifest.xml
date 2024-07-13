@@ -84,7 +84,7 @@
             android:name=".ui.barang.InputMasukActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.dashboard.InputPengirimanActivity"
+            android:name=".ui.pengiriman.InputPengirimanActivity"
             android:exported="false" />
         <activity
             android:name=".ui.barang.InputKeluarActivity"
@@ -111,7 +111,7 @@
             android:name=".ui.barang.DetailStockListActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.dashboard.sopir.DaftarSopir"
+            android:name=".ui.pengiriman.sopir.DaftarSopir"
             android:exported="false"
             android:label="@string/title_activity_daftar_sopir"
             android:theme="@style/Theme.UDMRPutra" />
@@ -130,7 +130,7 @@
             android:value="AIzaSyAlsEppzLKiH2dnUTVEwKJaBIMqYo4zhrc" />
 
         <activity
-            android:name=".ui.pengiriman.MapsActivity"
+            android:name=".ui.pengiriman.DetailPengirimanActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity

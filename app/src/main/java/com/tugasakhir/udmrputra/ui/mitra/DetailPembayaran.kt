@@ -1,24 +1,13 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.data.Pengajuan
-import com.tugasakhir.udmrputra.data.TransactionStatus
 import com.tugasakhir.udmrputra.databinding.ActivityDetailPembayaranBinding
-import com.tugasakhir.udmrputra.ui.service.ApiClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class DetailPembayaran : AppCompatActivity() {
 
@@ -81,6 +70,7 @@ class DetailPembayaran : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun fetchPengajuanDetail(pengajuanId: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("pengajuan").document(pengajuanId)

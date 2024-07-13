@@ -1,20 +1,16 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
+
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
@@ -23,14 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.midtrans.sdk.uikit.api.model.TransactionResult
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants
-import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengajuan
-import com.tugasakhir.udmrputra.data.TransactionStatus
 import com.tugasakhir.udmrputra.databinding.ActivityPesananMitraBinding
-import com.tugasakhir.udmrputra.ui.service.ApiClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -43,7 +33,6 @@ class PesananMitraActivity : AppCompatActivity() {
     private val pesananList = mutableListOf<Pengajuan>()
     private val filteredList = mutableListOf<Pengajuan>()
     private val auth = FirebaseAuth.getInstance()
-    private lateinit var paymentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -199,6 +188,7 @@ class PesananMitraActivity : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun filterByDate(filter: String) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val currentDate = Calendar.getInstance()
@@ -211,7 +201,7 @@ class PesananMitraActivity : AppCompatActivity() {
                 val endOfDay = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
                 filteredList.addAll(pesananList.filter {
                     val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
-                    pengajuanDate >= startOfDay && pengajuanDate <= endOfDay
+                    pengajuanDate!! >= startOfDay && pengajuanDate <= endOfDay
                 })
             }
             "Minggu Ini" -> {
@@ -221,7 +211,7 @@ class PesananMitraActivity : AppCompatActivity() {
                 val endOfWeek = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
                 filteredList.addAll(pesananList.filter {
                     val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
-                    pengajuanDate >= startOfWeek && pengajuanDate <= endOfWeek
+                    pengajuanDate!! >= startOfWeek && pengajuanDate <= endOfWeek
                 })
             }
             "Bulan Ini" -> {
@@ -232,7 +222,7 @@ class PesananMitraActivity : AppCompatActivity() {
                 val endOfMonth = currentDate.apply { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }.time
                 filteredList.addAll(pesananList.filter {
                     val pengajuanDate = dateFormat.parse(it.tanggalPengajuan)
-                    pengajuanDate >= startOfMonth && pengajuanDate <= endOfMonth
+                    pengajuanDate!! >= startOfMonth && pengajuanDate <= endOfMonth
                 })
             }
         }

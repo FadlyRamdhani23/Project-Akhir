@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:text="Pengiriman"
+                    android:text="@string/pengiriman"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -65,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
+                    android:contentDescription="@string/tanggal"
                     android:src="@drawable/ic_info" />
 
                 <TextView
@@ -73,7 +74,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Mohon isi data dibawah ini dengan benar"
+                    android:text="@string/mohon_isi_data_dibawah_ini_dengan_benar"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -105,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_extrabold"
-                        android:text="Pengajuan"
+                        android:text="@string/pengajuan"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -114,7 +115,7 @@
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#x25BC;"
+                        android:text="@string/x25bc"
                         android:textColor="@color/md_theme_light_primary"
                         android:textSize="10sp" />
                 </LinearLayout>
@@ -130,7 +131,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nama Supir"
+                        android:text="@string/nama_supir"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -156,7 +157,7 @@
                         android:id="@+id/textbarang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nama Pengjuan"
+                        android:text="@string/nama_pengjuan"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -165,7 +166,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Pilih Pengajuan"
+                        android:text="@string/pilih_pengajuan"
                         android:padding="16dp"
                         android:fontFamily="@font/nunito_semibold"
                         android:background="@drawable/rounded_background"
@@ -187,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Alamat"
+                            android:text="@string/alamat"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -219,7 +220,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Lokasi"
+                                android:text="@string/lokasi"
                                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                                 android:textColor="?attr/colorOnSurface"
                                 android:textStyle="bold" />
@@ -228,20 +229,21 @@
                                 android:id="@+id/btn_search"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Cari" />
+                                android:text="@string/cari" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:baselineAligned="true"
                             android:orientation="horizontal">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Search"
+                                android:hint="@string/search"
                                 app:endIconMode="clear_text"
                                 android:layout_marginEnd="8dp">
 
@@ -276,7 +278,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="50dp"
                                 android:layout_gravity="end"
-                                android:text="Set Lokasi" />
+                                android:text="@string/set_lokasi" />
 
                     </LinearLayout>
 
@@ -291,7 +293,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Catatan"
+                        android:text="@string/catatan"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -300,7 +302,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginBottom="10dp"
-                        android:hint="Masukan catatan"
+                        android:hint="@string/masukan_catatan"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLines="1"
@@ -334,7 +336,7 @@
                     android:layout_height="61dp"
                     android:layout_gravity="right"
                     android:layout_marginEnd="10dp"
-                    android:text="Masuk"
+                    android:text="@string/masuk"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp"

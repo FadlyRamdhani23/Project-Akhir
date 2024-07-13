@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.dashboard
+package com.tugasakhir.udmrputra.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.data.Pengiriman
-import com.tugasakhir.udmrputra.ui.pengiriman.MapsActivity
+import com.tugasakhir.udmrputra.ui.pengiriman.DetailPengirimanActivity
 
 class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : RecyclerView.Adapter<PengirimanAdapter.MitraViewHolder>() {
 
@@ -118,7 +118,7 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
-            val intent = Intent(context, MapsActivity::class.java)
+            val intent = Intent(context, DetailPengirimanActivity::class.java)
             intent.putExtra("PENGIRIMAN_ID", currentItem.id) // Menambahkan ID Pengiriman ke Intent
             context.startActivity(intent)
         }

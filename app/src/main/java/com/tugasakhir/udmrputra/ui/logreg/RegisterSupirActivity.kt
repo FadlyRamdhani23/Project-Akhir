@@ -1,6 +1,5 @@
 package com.tugasakhir.udmrputra.ui.logreg
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.databinding.ActivityRegisterBinding
 import com.tugasakhir.udmrputra.databinding.ActivityRegisterSupirBinding
-import com.tugasakhir.udmrputra.ui.dashboard.sopir.DaftarSopir
+import com.tugasakhir.udmrputra.ui.pengiriman.sopir.DaftarSopir
 
 class RegisterSupirActivity : AppCompatActivity() {
 

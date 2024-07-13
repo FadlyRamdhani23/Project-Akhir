@@ -1,4 +1,4 @@
-package com.tugasakhir.udmrputra.ui.dashboard
+package com.tugasakhir.udmrputra.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,16 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.tugasakhir.udmrputra.R
-import com.tugasakhir.udmrputra.data.Barang
 import com.tugasakhir.udmrputra.data.Pengajuan
-import com.tugasakhir.udmrputra.ui.pengajuan.PengajuanAdapterBarang
-class InpuPengajuanAdapter(
+
+class InputPengajuanAdapter(
     private val context: Context,
     private var pengajuanList: List<Pengajuan>,
     private val onItemClick: (Pengajuan) -> Unit
-) : RecyclerView.Adapter<InpuPengajuanAdapter.InputPengajuanViewHolder>() {
+) : RecyclerView.Adapter<InputPengajuanAdapter.InputPengajuanViewHolder>() {
 
     private val selectedPengajuan = mutableSetOf<Pengajuan>()
 
