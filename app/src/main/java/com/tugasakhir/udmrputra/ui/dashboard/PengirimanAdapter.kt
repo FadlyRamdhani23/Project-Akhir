@@ -76,7 +76,7 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
             }
 
             "Pengiriman" -> {
-                holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk pengiriman
+                holder.warna.setBackgroundResource(R.color.blue) // Warna biru muda untuk pengiriman
                 holder.status.setTextColor(
                     ContextCompat.getColor(
                         context,
@@ -86,7 +86,7 @@ class PengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Recycler
             }
 
             "Selesai" -> {
-                holder.warna.setBackgroundResource(R.color.light_blue) // Warna biru muda untuk selesai
+                holder.warna.setBackgroundResource(R.color.blue_2) // Warna biru muda untuk selesai
                 holder.status.setTextColor(
                     ContextCompat.getColor(
                         context,

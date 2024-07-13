@@ -11,18 +11,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tugasakhir.udmrputra.databinding.ActivityRegisterBinding
+import com.tugasakhir.udmrputra.databinding.ActivityRegisterSupirBinding
 import com.tugasakhir.udmrputra.ui.dashboard.sopir.DaftarSopir
 
 class RegisterSupirActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRegisterBinding
+    private lateinit var binding: ActivityRegisterSupirBinding
     lateinit var auth: FirebaseAuth
 
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = ActivityRegisterSupirBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()

@@ -50,7 +50,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SELAMAT SUPIR"
+                        android:text="SELAMAT DATANG SUPIR!"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/btn_to_profil">
 
         <androidx.cardview.widget.CardView
             android:layout_width="216dp"
@@ -112,11 +112,10 @@
 
             <ProgressBar
                 android:id="@+id/progressBarPengiriman"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:indeterminate="true"
-                />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,13 +156,14 @@
 
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/btn_to_profil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btn_to_pengiriman">
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
 
         <androidx.cardview.widget.CardView
@@ -177,11 +177,10 @@
 
             <ProgressBar
                 android:id="@+id/progressBarProfile"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:indeterminate="true"
-                />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -232,7 +231,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btn_to_profil">
+        app:layout_constraintTop_toBottomOf="@+id/btn_to_pengiriman">
 
 
         <androidx.cardview.widget.CardView
@@ -266,7 +265,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:padding="10dp"
-                    android:src="@drawable/onboarding_tracking_pengiriman" />
+                    android:src="@drawable/histori" />
 
                 <View
                     android:layout_width="match_parent"
