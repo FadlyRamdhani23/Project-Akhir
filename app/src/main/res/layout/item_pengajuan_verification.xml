@@ -117,7 +117,7 @@
             android:fontFamily="@font/nunito_extrabold"
             android:rotation="270"
             android:text="pending"
-            android:textSize="10sp"
+            android:textSize="8sp"
 
             app:layout_constraintBottom_toBottomOf="parent"
 

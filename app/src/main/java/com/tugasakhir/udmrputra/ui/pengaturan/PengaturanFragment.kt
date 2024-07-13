@@ -30,8 +30,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +38,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.FragmentPengaturanBinding
-import com.tugasakhir.udmrputra.ui.barang.BarangActivity
 import com.tugasakhir.udmrputra.ui.logreg.LoginActivity
 import com.tugasakhir.udmrputra.ui.mitra.LocationAdapter
 import java.util.Locale
@@ -140,7 +137,9 @@ class PengaturanFragment : Fragment(), OnMapReadyCallback {
             Firebase.auth.signOut()
             Toast.makeText(requireContext(), "Berhasil Keluar", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+            requireActivity().finish()
         }
 
         val mapFragment = childFragmentManager
