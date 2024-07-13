@@ -12,5 +12,6 @@ data class Pengajuan(
     val latitude: Double,
     val longitude: Double,
     val idPengiriman: String? = null,
-    val totalHarga: Long? = null  // Ubah menjadi nullable
+    val totalHarga: Long? = null,
+    val gambar: String? = null
 )

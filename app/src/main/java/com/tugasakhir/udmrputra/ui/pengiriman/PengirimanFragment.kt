@@ -21,38 +21,34 @@ import java.util.Locale
 class PengirimanFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PengirimanAdapter
-
-    private lateinit var pengirimanAdapter: PengirimanAdapter
     private val pengirimanList = mutableListOf<Pengiriman>()
-
-    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        recyclerView = root.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PengirimanAdapter(pengirimanList)
-        recyclerView.adapter = adapter
-
-        binding.inputPengiriman.setOnClickListener {
-            Intent(requireContext(), InputPengirimanActivity::class.java).also {
-                startActivity(it)
-            }
-        }
         setupRecyclerView()
+        setupInputPengirimanButton()
         fetchPengirimanData()
+
         return root
     }
 
     private fun setupRecyclerView() {
-        pengirimanAdapter = PengirimanAdapter(pengirimanList)
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = pengirimanAdapter
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = PengirimanAdapter(pengirimanList)
+        recyclerView.adapter = adapter
+    }
+
+    private fun setupInputPengirimanButton() {
+        binding.inputPengiriman.setOnClickListener {
+            Intent(requireContext(), InputPengirimanActivity::class.java).also {
+                startActivity(it)
+            }
         }
     }
 
@@ -67,7 +63,7 @@ class PengirimanFragment : Fragment() {
                 }
 
                 if (snapshots != null && !snapshots.isEmpty) {
-                    pengirimanList.clear()
+                    pengirimanList.clear() // Clear the list before adding new data
                     for (document in snapshots) {
                         val pengirimanId = document.id
                         var address = document.getString("address") ?: ""
@@ -110,8 +106,7 @@ class PengirimanFragment : Fragment() {
                     // Sort the list by date with the latest at the top
                     pengirimanList.sortByDescending { it.tanggal }
 
-                    pengirimanAdapter.notifyDataSetChanged()
-
+                    adapter.notifyDataSetChanged()
                 } else {
                     Log.d("wow", "Current data: null")
                 }
@@ -132,4 +127,3 @@ class PengirimanFragment : Fragment() {
         _binding = null
     }
 }
-

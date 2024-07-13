@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -46,6 +48,7 @@ class PesananMitraAdapter(
         val llTrackPengiriman: LinearLayout = view.findViewById(R.id.ll_track_pengiriman)
         val viewTrackPengiriman: View = view.findViewById(R.id.view_track_pengiriman)
         val btnTerima: TextView = view.findViewById(R.id.btn_terima)
+        val gambar: ImageView = itemView.findViewById(R.id.imageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PesananViewHolder {
@@ -57,6 +60,11 @@ class PesananMitraAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PesananViewHolder, position: Int) {
         val pengajuan = pengajuanList[position]
+        Glide.with(holder.itemView.context)
+            .load(pengajuan.gambar) // replace with your image URL or resource
+            .circleCrop()
+            .fitCenter()
+            .into(holder.gambar)
         holder.tanggalPesanan.text = pengajuan.tanggalPengajuan
         holder.barang.text = pengajuan.listBarang.joinToString(", ")
         holder.status.text = pengajuan.statusPengajuan

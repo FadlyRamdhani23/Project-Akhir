@@ -151,38 +151,43 @@ class PesananMitraActivity : AppCompatActivity() {
                             val listBarang = mutableListOf<String>()
                             for (barangDocument in barangResult!!) {
                                 val namaBarang = barangDocument.getString("namaBarang") ?: ""
+                                val imageUrls = barangDocument.getString("imageUrl") ?: ""
                                 listBarang.add(namaBarang)
+                                // Convert Timestamp to String including time
+                                val dateFormat =
+                                    SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                                val tanggalPengajuan =
+                                    if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
+                                        dateFormat.format(tanggalPengajuanTimestamp.toDate())
+                                    } else {
+                                        // Handle the case where tanggalPengajuan is not a Timestamp
+                                        ""
+                                    }
+
+                                val pengajuan = Pengajuan(
+                                    pengajuanId,
+                                    namaPetani,
+                                    tanggalPengajuan,
+                                    barangAjuan,
+                                    listBarang,
+                                    jenisPembayaran,
+                                    statusPengajuan,
+                                    address,
+                                    latitude,
+                                    longitude,
+                                    idPengiriman,
+                                    totalHarga,
+                                    imageUrls
+                                )
+                                if (pesananList.none { it.id == pengajuanId }) {
+                                    pesananList.add(pengajuan)
+                                }
+
+                                // Sort pesananList by tanggalPengajuan in descending order
+                                pesananList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
+
+                                filterByDate(binding.spinnerFilter.selectedItem.toString())
                             }
-
-                            // Convert Timestamp to String including time
-                            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-                            val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
-                                dateFormat.format(tanggalPengajuanTimestamp.toDate())
-                            } else {
-                                // Handle the case where tanggalPengajuan is not a Timestamp
-                                ""
-                            }
-
-                            val pengajuan = Pengajuan(
-                                pengajuanId,
-                                namaPetani,
-                                tanggalPengajuan,
-                                barangAjuan,
-                                listBarang,
-                                jenisPembayaran,
-                                statusPengajuan,
-                                address,
-                                latitude,
-                                longitude,
-                                idPengiriman,
-                                totalHarga
-                            )
-                            pesananList.add(pengajuan)
-
-                            // Sort pesananList by tanggalPengajuan in descending order
-                            pesananList.sortByDescending { dateFormat.parse(it.tanggalPengajuan) }
-
-                            filterByDate(binding.spinnerFilter.selectedItem.toString())
                         }
                 }
             }

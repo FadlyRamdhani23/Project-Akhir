@@ -90,7 +90,7 @@ class NotificationsFragment : Fragment() {
                 }
 
                 if (snapshot != null && !snapshot.isEmpty) {
-                    pengajuanList.clear()
+                    pengajuanList.clear() // Clear the list before adding new data
                     for (document in snapshot.documents) {
                         val pengajuanId = document.id
                         val userId = document.getString("namaPetani") ?: ""
@@ -186,7 +186,6 @@ class NotificationsFragment : Fragment() {
 
         pengajuanAdapter.notifyDataSetChanged()
 
-
         if (filteredPengajuanList.isEmpty()) {
             binding.emptyView.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
@@ -202,3 +201,4 @@ class NotificationsFragment : Fragment() {
         pengajuanListener?.remove()
     }
 }
+

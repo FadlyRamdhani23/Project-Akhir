@@ -65,8 +65,7 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
         initializeTextView()
         setupSpinner()
         geocoder = Geocoder(this, Locale.getDefault())
-        setupAlamatSpinner() // Initialize the alamat spinner here
-
+        setupAlamatSpinner()
         binding.btnCheckout.setOnClickListener {
             submitForm()
         }
@@ -200,10 +199,10 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
         val bottomSheetBinding = BottomSheetSelectItemBinding.inflate(LayoutInflater.from(this))
         bottomSheetDialog.setContentView(bottomSheetBinding.root)
 
-        adapter = InputPengajuanAdapter(this, barangList) { _ ->
+        adapter = InputPengajuanAdapter(this, barangList) { selectedPengajuan ->
             // Update daftar item yang dipilih
             val selectedItems = adapter.getSelectedItems()
-            binding.textViewInputBarang.text = selectedItems.joinToString(", ") { it.userId }
+            binding.textViewInputBarang.text = selectedItems.map { it.userId }.joinToString(", ")
             setupAlamatSpinner(selectedItems)
         }
 
@@ -301,7 +300,12 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
         val db = FirebaseFirestore.getInstance()
 
         // Get selected address
-        val selectedAlamat = binding.inpuAlamatPengiriman.selectedItem.toString()
+        val selectedAlamat = binding.inpuAlamatPengiriman.selectedItem?.toString()
+
+        if (selectedAlamat.isNullOrEmpty() || selectedAlamat == "Pilih Lokasi Pengiriman") {
+            Toast.makeText(this, "Silakan pilih atau masukkan alamat pengiriman", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Get selected driver (supir)
         val selectedSupir = selectedSupirName
@@ -312,47 +316,52 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val address = selectedAlamat // Ambil alamat yang sudah dipilih atau dimasukkan
-        val results = geocoder.getFromLocationName(address, 1)
-        // Prepare data for submission
-        if (results!!.isNotEmpty()) {
-            val latitude = results[0].latitude
-            val longitude = results[0].longitude
-           val latitudeSupir = -6.904033999999999
-            val longitudeSupir = 107.6207242
+        try {
+            val results = geocoder.getFromLocationName(selectedAlamat, 1)
+            if (results != null) {
+                if (results.isNotEmpty()) {
+                    val latitude = results[0].latitude
+                    val longitude = results[0].longitude
+                    val latitudeSupir = -6.904033999999999
+                    val longitudeSupir = 107.6207242
 
-            // Persiapkan data untuk dikirim
-            val data = hashMapOf(
-                "address" to selectedAlamat,
-                "status" to "Dikemas",
-                "latitudeTujuan" to latitude,
-                "longitudeTujuan" to longitude,
-                "supir" to selectedSupir,
-                "latitudeSupir" to latitudeSupir,
-                "longitudeSupir" to longitudeSupir,
-                "tanggal" to Timestamp(Date()),
-                "supirId" to selectedSupirId  // Use selected driver ID
-            )
+                    // Persiapkan data untuk dikirim
+                    val data = hashMapOf(
+                        "address" to selectedAlamat,
+                        "status" to "Dikemas",
+                        "latitudeTujuan" to latitude,
+                        "longitudeTujuan" to longitude,
+                        "supir" to selectedSupir,
+                        "latitudeSupir" to latitudeSupir,
+                        "longitudeSupir" to longitudeSupir,
+                        "tanggal" to Timestamp(Date()),
+                        "supirId" to selectedSupirId  // Use selected driver ID
+                    )
 
-            // Lanjutkan dengan menyimpan data ke Firestore
-            db.collection("pengiriman")
-                .add(data)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("pengiriman", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    // Lanjutkan dengan menyimpan data ke Firestore
+                    db.collection("pengiriman")
+                        .add(data)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d("pengiriman", "DocumentSnapshot added with ID: ${documentReference.id}")
 
-                    addSelectedItemsToPengajuanCollection(documentReference.id)
-                    Toast.makeText(this, "Pengiriman berhasil diajukan", Toast.LENGTH_SHORT).show()
-                    finish()
+                            addSelectedItemsToPengajuanCollection(documentReference.id)
+                            Toast.makeText(this, "Pengiriman berhasil diajukan", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("pengiriman", "Error adding document", e)
+                            Toast.makeText(this, "Gagal mengajukan pengiriman", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "Alamat tidak valid", Toast.LENGTH_SHORT).show()
                 }
-                .addOnFailureListener { e ->
-                    Log.w("pengiriman", "Error adding document", e)
-                    Toast.makeText(this, "Gagal mengajukan pengiriman", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "Alamat tidak valid", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("submitForm", "Error geocoding address", e)
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun addSelectedItemsToPengajuanCollection(pengirimanId: String) {
         val db = FirebaseFirestore.getInstance()
@@ -451,16 +460,24 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMap.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
 
             // Update EditTextSearchAlamat
-            val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            if (addressList!!.isNotEmpty()) {
-                val address = addressList[0]
-                binding.editTextSearchAlamat.setText(address.getAddressLine(0))
+            try {
+                val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                if (addressList != null) {
+                    if (addressList.isNotEmpty()) {
+                        val address = addressList[0]
+                        binding.editTextSearchAlamat.setText(address.getAddressLine(0))
 
-                // Update selected address
-                selectedAddress = address
+                        // Update selected address
+                        selectedAddress = address
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("onMapClick", "Error getting address from location", e)
+                Toast.makeText(this, "Error getting address: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
 
 
