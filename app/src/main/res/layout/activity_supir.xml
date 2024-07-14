@@ -132,10 +132,10 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/image_maps_content"
-                    android:layout_width="80dp"
-                    android:layout_height="100dp"
+                    android:layout_width="98dp"
+                    android:layout_height="96dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icon_putra" />
+                    android:src="@drawable/icon_profile_supir" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -192,6 +192,7 @@
                         android:id="@+id/action_call"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:visibility="gone"
                         android:src="@drawable/whatsapp" />
 
                 </LinearLayout>

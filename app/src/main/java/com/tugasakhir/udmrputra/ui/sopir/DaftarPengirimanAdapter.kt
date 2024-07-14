@@ -14,6 +14,8 @@ class DaftarPengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Re
     class MitraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.supirId)
         val status: TextView = itemView.findViewById(R.id.status_pengiriman)
+        val tanggal: TextView = itemView.findViewById(R.id.tanggalPengajuan)
+        val tujuan : TextView = itemView.findViewById(R.id.alamat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MitraViewHolder {
@@ -25,6 +27,8 @@ class DaftarPengirimanAdapter(private val pengirimanList: List<Pengiriman>) : Re
         val currentItem = pengirimanList[position]
         holder.name.text = currentItem.supir
         holder.status.text = currentItem.status
+        holder.tanggal.text = currentItem.tanggal
+        holder.tujuan.text = currentItem.address
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, SupirActivity::class.java)

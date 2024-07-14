@@ -1,6 +1,7 @@
 package com.tugasakhir.udmrputra.ui.pengiriman
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -318,50 +319,44 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
 
         try {
             val results = geocoder.getFromLocationName(selectedAlamat, 1)
-            if (results != null) {
-                if (results.isNotEmpty()) {
-                    val latitude = results[0].latitude
-                    val longitude = results[0].longitude
-                    val latitudeSupir = -6.904033999999999
-                    val longitudeSupir = 107.6207242
+            if (results != null && results.isNotEmpty()) {
+                val latitude = results[0].latitude
+                val longitude = results[0].longitude
+                val latitudeSupir = -6.904033999999999
+                val longitudeSupir = 107.6207242
 
-                    // Persiapkan data untuk dikirim
-                    val data = hashMapOf(
-                        "address" to selectedAlamat,
-                        "status" to "Dikemas",
-                        "latitudeTujuan" to latitude,
-                        "longitudeTujuan" to longitude,
-                        "supir" to selectedSupir,
-                        "latitudeSupir" to latitudeSupir,
-                        "longitudeSupir" to longitudeSupir,
-                        "tanggal" to Timestamp(Date()),
-                        "supirId" to selectedSupirId  // Use selected driver ID
-                    )
+                // Persiapkan data untuk dikirim
+                val data = hashMapOf(
+                    "address" to selectedAlamat,
+                    "status" to "Dikemas",
+                    "latitudeTujuan" to latitude,
+                    "longitudeTujuan" to longitude,
+                    "supir" to selectedSupir,
+                    "latitudeSupir" to latitudeSupir,
+                    "longitudeSupir" to longitudeSupir,
+                    "tanggal" to Timestamp(Date()),
+                    "supirId" to selectedSupirId  // Use selected driver ID
+                )
 
-                    // Lanjutkan dengan menyimpan data ke Firestore
-                    db.collection("pengiriman")
-                        .add(data)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("pengiriman", "DocumentSnapshot added with ID: ${documentReference.id}")
-
-                            addSelectedItemsToPengajuanCollection(documentReference.id)
-                            Toast.makeText(this, "Pengiriman berhasil diajukan", Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("pengiriman", "Error adding document", e)
-                            Toast.makeText(this, "Gagal mengajukan pengiriman", Toast.LENGTH_SHORT).show()
-                        }
-                } else {
-                    Toast.makeText(this, "Alamat tidak valid", Toast.LENGTH_SHORT).show()
-                }
+                // Lanjutkan dengan menyimpan data ke Firestore
+                db.collection("pengiriman")
+                    .add(data)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("submitForm", "DocumentSnapshot added with ID: ${documentReference.id}")
+                        addSelectedItemsToPengajuanCollection(documentReference.id)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("submitForm", "Error adding document", e)
+                        Toast.makeText(this, "Gagal mengajukan pengiriman", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Alamat tidak valid", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             Log.e("submitForm", "Error geocoding address", e)
             Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun addSelectedItemsToPengajuanCollection(pengirimanId: String) {
         val db = FirebaseFirestore.getInstance()
@@ -388,10 +383,10 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
 
             pengajuanRef.update(pengajuanUpdateData)
                 .addOnSuccessListener {
-                    Log.d("pengiriman", "Pengajuan updated with idPengiriman: $pengirimanId")
+                    Log.d("addSelectedItemsToPengajuanCollection", "Pengajuan updated with idPengiriman: $pengirimanId")
                 }
                 .addOnFailureListener { e ->
-                    Log.w("pengiriman", "Error updating pengajuan", e)
+                    Log.w("addSelectedItemsToPengajuanCollection", "Error updating pengajuan", e)
                 }
 
             // Tambahkan pengajuan ke koleksi nested "pengajuan" di bawah "pengirimanId"
@@ -399,13 +394,17 @@ class InputPengirimanActivity : AppCompatActivity(), OnMapReadyCallback {
                 .collection("pengajuan")
                 .add(pengajuanData)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("pengiriman", "Pengajuan added with ID: ${documentReference.id}")
+                    Log.d("addSelectedItemsToPengajuanCollection", "Pengajuan added with ID: ${documentReference.id}")
+                    Toast.makeText(this, "Pengiriman berhasil diajukan", Toast.LENGTH_SHORT).show()
+                    setResult(Activity.RESULT_OK) // Set the result code
+                    finish()
                 }
                 .addOnFailureListener { e ->
-                    Log.w("pengiriman", "Error adding pengajuan", e)
+                    Log.w("addSelectedItemsToPengajuanCollection", "Error adding pengajuan", e)
                 }
         }
     }
+
 
     private fun setupSpinner() {
         val spinner: Spinner = findViewById(R.id.inputNamaSupir)

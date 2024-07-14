@@ -1,6 +1,7 @@
 package com.tugasakhir.udmrputra.ui.pengiriman
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.adapter.PengirimanAdapter
 import com.tugasakhir.udmrputra.data.Pengiriman
 import com.tugasakhir.udmrputra.databinding.FragmentDashboardBinding
@@ -25,6 +25,11 @@ class PengirimanFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PengirimanAdapter
     private val pengirimanList = mutableListOf<Pengiriman>()
+    companion object {
+        private const val REQUEST_CODE_INPUT_PENGIRIMAN = 100
+    }
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -32,25 +37,42 @@ class PengirimanFragment : Fragment() {
 
         setupRecyclerView()
         setupInputPengirimanButton()
-        fetchPengirimanData()
 
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchPengirimanData()
+    }
+
     private fun setupRecyclerView() {
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PengirimanAdapter(pengirimanList)
-        recyclerView.adapter = adapter
+        _binding?.let {
+            recyclerView = it.recyclerView
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            adapter = PengirimanAdapter(pengirimanList)
+            recyclerView.adapter = adapter
+        }
     }
 
     private fun setupInputPengirimanButton() {
-        binding.inputPengiriman.setOnClickListener {
-            Intent(requireContext(), InputPengirimanActivity::class.java).also {
-                startActivity(it)
+        _binding?.let {
+            it.inputPengiriman.setOnClickListener {
+                Intent(requireContext(), InputPengirimanActivity::class.java).also {
+                    startActivityForResult(it, REQUEST_CODE_INPUT_PENGIRIMAN)
+                }
             }
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_INPUT_PENGIRIMAN && resultCode == Activity.RESULT_OK) {
+            // Refresh data pengiriman setelah InputPengirimanActivity selesai
+            fetchPengirimanData()
+        }
+    }
+
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun fetchPengirimanData() {
@@ -112,12 +134,14 @@ class PengirimanFragment : Fragment() {
                 }
 
                 // Toggle visibility of empty view and recycler view
-                if (pengirimanList.isEmpty()) {
-                    binding.emptyView.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
-                } else {
-                    binding.emptyView.visibility = View.GONE
-                    binding.recyclerView.visibility = View.VISIBLE
+                _binding?.let {
+                    if (pengirimanList.isEmpty()) {
+                        it.emptyView.visibility = View.VISIBLE
+                        it.recyclerView.visibility = View.GONE
+                    } else {
+                        it.emptyView.visibility = View.GONE
+                        it.recyclerView.visibility = View.VISIBLE
+                    }
                 }
             }
     }

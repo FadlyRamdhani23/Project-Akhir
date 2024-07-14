@@ -1,12 +1,14 @@
 package com.tugasakhir.udmrputra.ui.barang
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +26,9 @@ class BarangActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BarangAdapter
     private lateinit var progressBar: View
+    companion object {
+        const val REQUEST_CODE_INPUT_BARANG = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +48,22 @@ class BarangActivity : AppCompatActivity() {
 
         binding.fabAddBarang.setOnClickListener {
             val intent = Intent(this, InputBarangActivity::class.java)
-            startActivity(intent)
+            inputBarangLauncher.launch(intent)
         }
-
-
     }
+    private val inputBarangLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            catRecyclerView() // Refresh your data
+        }
+    }
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_INPUT_BARANG && resultCode == Activity.RESULT_OK) {
+            catRecyclerView() // Refresh your data
+        }
+    }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.topAppBarr)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

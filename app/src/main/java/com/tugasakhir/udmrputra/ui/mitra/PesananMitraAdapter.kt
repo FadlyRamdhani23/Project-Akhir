@@ -82,7 +82,7 @@ class PesananMitraAdapter(
             }
         }
 
-        if (pengajuan.statusPengajuan == "pengiriman" || pengajuan.statusPengajuan == "Dikemas") {
+        if (pengajuan.statusPengajuan == "Pengiriman" || pengajuan.statusPengajuan == "Dikemas") {
             holder.llTrackPengiriman.visibility = View.VISIBLE
             holder.viewTrackPengiriman.visibility = View.VISIBLE
         } else {

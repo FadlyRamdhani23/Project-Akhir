@@ -236,8 +236,7 @@ class InputBarangActivity : AppCompatActivity() {
                                 .add(barang)
                                 .addOnSuccessListener { documentReference ->
                                     progressBar.visibility = View.GONE
-                                    val intent = Intent(this, BarangActivity::class.java)
-                                    startActivity(intent)
+                                    setResult(Activity.RESULT_OK) // Set the result code
                                     finish()
                                     Log.d(
                                         "InputBarangActivity",

@@ -1,6 +1,7 @@
 package com.tugasakhir.udmrputra.ui.barang
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -250,8 +251,7 @@ class InputKeluarActivity : AppCompatActivity() {
                 barangRef.update("jumlah", newQuantity)
                     .addOnSuccessListener {
                         Log.d("InputKeluarActivity", "Jumlah barang berhasil diperbarui")
-                        val intent = Intent(this, BarangActivity::class.java)
-                        startActivity(intent)
+                        setResult(Activity.RESULT_OK) // Set the result code
                         finish()
                     }
                     .addOnFailureListener { e ->

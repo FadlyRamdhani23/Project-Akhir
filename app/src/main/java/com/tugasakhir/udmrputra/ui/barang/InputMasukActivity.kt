@@ -405,8 +405,7 @@ class InputMasukActivity : AppCompatActivity() {
                 barangRef.update("jumlah", newQuantity)
                     .addOnSuccessListener {
                         Log.d("InputMasukActivity", "Jumlah barang berhasil diperbarui")
-                        val intent = Intent(this, BarangActivity::class.java)
-                        startActivity(intent)
+                        setResult(Activity.RESULT_OK) // Set the result code
                         finish()
                     }
                     .addOnFailureListener { e ->
