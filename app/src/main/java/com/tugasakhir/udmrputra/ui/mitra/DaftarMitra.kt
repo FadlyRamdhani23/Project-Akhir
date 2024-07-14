@@ -1,9 +1,11 @@
 package com.tugasakhir.udmrputra.ui.mitra
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,12 +31,27 @@ class DaftarMitra : AppCompatActivity() {
         adapter = MitraAdapter(mitraList)
         recyclerView.adapter = adapter
         setupToolbar()
+        fecthData()
 
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, RegisterMitraActivity::class.java)
+            inputBarangLauncher.launch(intent)
+        }
+    }
+
+    private val inputBarangLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            fecthData()
+        }
+    }
+
+    private fun fecthData(){
         val db = FirebaseFirestore.getInstance()
         db.collection("users")
             .whereEqualTo("status", "mitra")
             .get()
             .addOnSuccessListener { result ->
+                mitraList.clear()
                 for (document in result) {
                     val userId = document.id
                     val nama = document.getString("nama") ?: ""
@@ -50,12 +67,8 @@ class DaftarMitra : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("DaftarMitra", "Error getting documents: ", exception)
             }
-
-        binding.fab.setOnClickListener {
-            val intent = Intent(this, RegisterMitraActivity::class.java)
-            startActivity(intent)
-        }
     }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

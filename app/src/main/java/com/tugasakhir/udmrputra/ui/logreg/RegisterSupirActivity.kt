@@ -1,24 +1,23 @@
 package com.tugasakhir.udmrputra.ui.logreg
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.tugasakhir.udmrputra.databinding.ActivityRegisterBinding
 import com.tugasakhir.udmrputra.databinding.ActivityRegisterSupirBinding
-import com.tugasakhir.udmrputra.ui.pengiriman.sopir.DaftarSopir
 
 class RegisterSupirActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterSupirBinding
-    lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,21 +65,21 @@ class RegisterSupirActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            //Validasi Password
+            // Validasi Password
             if (password.isEmpty()) {
                 binding.sandiTextField.error = "Password Harus Diisi"
                 binding.sandiTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            //Validasi panjang Password
+            // Validasi panjang Password
             if (password.length < 8) {
                 binding.sandiTextField.error = "Password Minimal 8 Karakter"
                 binding.sandiTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            //Validasi Konfirmasi Password
+            // Validasi Konfirmasi Password
             if (password != konfirmasiPassword) {
                 binding.konfirmasiTextField.error = "Password tidak sesuai"
                 binding.konfirmasiTextField.requestFocus()
@@ -95,11 +94,9 @@ class RegisterSupirActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Dapatkan UID pengguna yang baru terdaftar
                     val user = auth.currentUser
                     val uid = user?.uid ?: ""
 
-                    // Buat objek pengguna untuk disimpan di Firestore
                     val userMap = hashMapOf(
                         "nama" to nama,
                         "email" to email,
@@ -108,15 +105,12 @@ class RegisterSupirActivity : AppCompatActivity() {
                         "uid" to uid
                     )
 
-                    // Simpan data pengguna di Firestore dengan menggunakan UID sebagai ID dokumen
                     db.collection("users").document(uid)
                         .set(userMap)
                         .addOnSuccessListener {
-                            Log.d("RegisterActivity", "DocumentSnapshot added with ID: $uid")
                             Toast.makeText(this, "Register Berhasil", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, DaftarSopir::class.java)
-                            startActivity(intent)
-
+                            auth.signOut()
+                            signInAdmin() // Panggil fungsi untuk login ke akun admin
                         }
                         .addOnFailureListener { e ->
                             Log.w("RegisterActivity", "Error adding document", e)
@@ -124,6 +118,20 @@ class RegisterSupirActivity : AppCompatActivity() {
                         }
                 } else {
                     Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun signInAdmin() {
+        val adminEmail = "admin@mrputra.com"
+        val adminPassword = "12345678"
+        auth.signInWithEmailAndPassword(adminEmail, adminPassword)
+            .addOnCompleteListener { signInTask ->
+                if (signInTask.isSuccessful) {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Gagal masuk ke akun admin", Toast.LENGTH_SHORT).show()
                 }
             }
     }

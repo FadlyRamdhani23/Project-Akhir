@@ -1,9 +1,11 @@
 package com.tugasakhir.udmrputra.ui.pengiriman.sopir
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +32,24 @@ class DaftarSopir : AppCompatActivity(){
 
         recyclerView = findViewById(R.id.recyclerViewSopir)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        setData()
+        adapter = SopirAdapter(supirList)
+        recyclerView.adapter = adapter
 
+        binding.fabAddSopir.setOnClickListener {
+            val intent = Intent(this, RegisterSupirActivity::class.java)
+            inputBarangLauncher.launch(intent) // Start activity for result
+        }
+    }
+
+    private val inputBarangLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            setData()
+        }
+    }
+
+    private fun setData(){
+        supirList.clear() // Clear the list before fetching new data
         val db = FirebaseFirestore.getInstance()
         db.collection("users")
             .whereEqualTo("status", "supir")
@@ -44,21 +63,15 @@ class DaftarSopir : AppCompatActivity(){
 
                     val sopir = Sopir(userId, nama, noHp, status)
                     supirList.add(sopir)
-                    Log.d("DaftarMitra", "Data berhasil ditambahkan: $sopir")
+                    Log.d("DaftarSopir", "Data berhasil ditambahkan: $sopir")
                 }
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
-                Log.w("DaftarMitra", "Error getting documents: ", exception)
+                Log.w("DaftarSopir", "Error getting documents: ", exception)
             }
-        adapter = SopirAdapter(supirList)
-        recyclerView.adapter = adapter
-
-        binding.fabAddSopir.setOnClickListener {
-            val intent = Intent(this, RegisterSupirActivity::class.java)
-            startActivity(intent)
-        }
     }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -73,5 +86,4 @@ class DaftarSopir : AppCompatActivity(){
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }
