@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityLoginBinding
 import com.tugasakhir.udmrputra.ui.Home
 import com.tugasakhir.udmrputra.ui.mitra.HomeMitraActivity
@@ -28,63 +30,60 @@ class LoginActivity : AppCompatActivity() {
         binding.tvRegistrasi.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
+        val forgotPasswordText = findViewById<TextView>(R.id.forgotPasswordTextView)
+        forgotPasswordText.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
 
         auth = FirebaseAuth.getInstance()
         binding.btnMasuk.setOnClickListener {
             val email = binding.emailTextField.text.toString()
             val password = binding.sandiTextField.text.toString()
 
-            // Validasi Email
             if (email.isEmpty()) {
                 binding.emailTextField.error = "Email Harus Diisi"
                 binding.emailTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            // Validasi kesesuaian Email
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding.emailTextField.error = "Email Tidak Valid"
                 binding.emailTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            // Validasi Password
             if (password.isEmpty()) {
                 binding.sandiTextField.error = "Password Harus Diisi"
                 binding.sandiTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            // Validasi jumlah karakter dari password
             if (password.length < 8) {
                 binding.sandiTextField.error = "Password Minimal 8 Karakter"
                 binding.sandiTextField.requestFocus()
                 return@setOnClickListener
             }
 
-            // buatkan validasi email jika tidak terdapat dalam database
             val db = Firebase.firestore
             db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener { result ->
                 if (result.isEmpty) {
                     binding.emailTextField.error = "Email Tidak Terdaftar"
                     binding.emailTextField.requestFocus()
-                    return@addOnSuccessListener
                 } else {
                     LoginFirebase(email, password)
                 }
             }.addOnFailureListener {
-                Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Terjadi kesalahan: ${it.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun LoginFirebase(email: String, password: String) {
-        // Tampilkan ProgressBar
         binding.loadingProgressBar.visibility = View.VISIBLE
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) {
-                // Sembunyikan ProgressBar
                 binding.loadingProgressBar.visibility = View.GONE
 
                 if (it.isSuccessful) {
@@ -110,10 +109,10 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this, "Pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener {
-                        Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Terjadi kesalahan: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Kata sandi salah", Toast.LENGTH_SHORT).show()
                 }
             }
     }

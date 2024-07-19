@@ -133,6 +133,7 @@
     <string name="pengajuan">Pengajuan</string>
     <string name="masukan_catatan">Masukan catatan</string>
     <string name="x25bc">▼</string>
+    <string name="forgot_password">Lupa kata sandi?</string>
 
 
     <string-array name="jenis_barang">

@@ -110,6 +110,19 @@
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/forgotPasswordTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/forgot_password"
+                android:textSize="15sp"
+                android:gravity="right"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/nunito_bold"
+
+                android:layout_marginTop="5dp"
+                android:textColor="@color/gray"
+                tools:ignore="RtlHardcoded" />
 
             <Button
                 android:id="@+id/btnMasuk"

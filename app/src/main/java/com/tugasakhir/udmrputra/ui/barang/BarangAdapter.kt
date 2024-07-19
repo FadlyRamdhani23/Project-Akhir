@@ -40,7 +40,8 @@ class BarangAdapter(private val context: Context, private val barangList: List<B
             .into(holder.gambar)
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, StockBarangActivity::class.java)
+            val intent = Intent(context, DetailStockListActivity::class.java)
+            intent.putExtra("barangId", currentItem.id)
             context.startActivity(intent)
         }
 

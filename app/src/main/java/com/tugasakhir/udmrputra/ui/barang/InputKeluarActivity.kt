@@ -18,11 +18,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tugasakhir.udmrputra.R
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangKeluarBinding
 import java.text.NumberFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class InputKeluarActivity : AppCompatActivity() {
@@ -156,6 +158,7 @@ class InputKeluarActivity : AppCompatActivity() {
         val tanggal = binding.buttonDatePicker.text?.toString()
         val hargaJual = binding.inputHargaJual.text.toString().replace("[Rp,.]".toRegex(), "").toLongOrNull()
 
+
         val barangId = categoryMap.entries.find { it.value == barangName }?.key
         val jumlah = if (!jumlahString.isNullOrEmpty()) {
             jumlahString.toInt()
@@ -186,7 +189,8 @@ class InputKeluarActivity : AppCompatActivity() {
             "jumlah" to jumlah,
             "catatan" to catatan,
             "tanggal" to tanggal,
-            "hargaJual" to hargaJual
+            "hargaJual" to hargaJual,
+            "created_at" to Timestamp(Date())
         )
 
         if (barangId != null) {

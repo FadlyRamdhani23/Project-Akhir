@@ -27,7 +27,6 @@
         android:id="@+id/list_gambar"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/tomato"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

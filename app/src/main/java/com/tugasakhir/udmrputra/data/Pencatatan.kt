@@ -13,7 +13,8 @@ data class Pencatatan(
     val gambar: String? = "",
     val catatan: String? = "",
     val tanggal: String? = "",
-    val hargaBeli: String? = ""
+    val hargaBeli: String? = "",
+    val tanggalInput : String? = ""
 ) : Parcelable {
     constructor() : this("", "", "", "", "", "", "", "", "","")
 
@@ -27,7 +28,8 @@ data class Pencatatan(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString(),
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -41,6 +43,7 @@ data class Pencatatan(
         parcel.writeString(catatan)
         parcel.writeString(tanggal)
         parcel.writeString(hargaBeli)
+        parcel.writeString(tanggalInput)
     }
 
     override fun describeContents(): Int {

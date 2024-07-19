@@ -5,4 +5,9 @@
         <item>Titip Supir</item>
         <item>Transfer</item>
     </string-array>
+    <string-array name="filter_jenis_array">
+        <item>Semua</item>
+        <item>Sayur</item>
+        <item>Buah</item>
+    </string-array>
 </resources>

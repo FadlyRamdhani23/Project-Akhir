@@ -166,6 +166,14 @@ class PlaceholderFragment : Fragment() {
                                     val catatan = masukDocument.getString("catatan") ?: ""
                                     val tanggal = masukDocument.getString("tanggal") ?: ""
                                     val hargaBeli = masukDocument.getLong("hargaBeli")?.toString() ?: ""
+                                    val created_at = masukDocument.get("created_at") // Read without casting
+                                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                                    val tanggalInput = if (created_at is com.google.firebase.Timestamp) {
+                                        dateFormat.format(created_at.toDate())
+                                    } else {
+                                        // Handle the case where tanggalPengajuan is not a Timestamp
+                                        ""
+                                    }
 
                                     val pencatatan = Pencatatan(
                                         id = id,
@@ -177,7 +185,8 @@ class PlaceholderFragment : Fragment() {
                                         gambar = gambar,
                                         catatan = catatan,
                                         tanggal = tanggal,
-                                        hargaBeli = hargaBeli
+                                        hargaBeli = hargaBeli,
+                                        tanggalInput = tanggalInput
                                     )
 
                                     if (shouldIncludeInFilter(pencatatan.tanggal.toString(), filter, jenis, catId)) {
@@ -192,6 +201,11 @@ class PlaceholderFragment : Fragment() {
                         if (tasks.all { it.isComplete } && isAdded) {
                             activity?.runOnUiThread {
                                 if (isAdded) {
+                                    // Sort the dataList by tanggalInput in descending order
+                                    dataList.sortByDescending { pencatatan ->
+                                        SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(pencatatan.tanggalInput)
+                                    }
+
                                     p_adapter = PencatatanMasukAdapter(requireContext(), pencatatanList = dataList)
                                     recyclerView.adapter = p_adapter
                                     progressBar.visibility = View.GONE
@@ -202,6 +216,7 @@ class PlaceholderFragment : Fragment() {
                 }
             }
     }
+
 
     private fun fetchDataFromFirestore2(filter: String = "Semua", jenis: String = "Semua") {
         progressBar.visibility = View.VISIBLE
@@ -231,17 +246,26 @@ class PlaceholderFragment : Fragment() {
                                     val catatan = masukDocument.getString("catatan") ?: ""
                                     val tanggal = masukDocument.getString("tanggal") ?: ""
                                     val hargaJual = masukDocument.getLong("hargaJual")?.toString() ?: ""
+                                    val created_at = masukDocument.get("created_at") // Read without casting
+                                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                                    val tanggalInput = if (created_at is com.google.firebase.Timestamp) {
+                                        dateFormat.format(created_at.toDate())
+                                    } else {
+                                        // Handle the case where tanggalPengajuan is not a Timestamp
+                                        ""
+                                    }
 
                                     val pencatatanKeluar = PencatatanKeluar(
                                         id = id,
                                         catId = catId,
-                                        barId =bard,
+                                        barId = bard,
                                         barangId = barangName,
                                         namaPetani = namaPetani,
                                         jumlah = jumlah,
                                         catatan = catatan,
                                         tanggal = tanggal,
-                                        hargaJual = hargaJual
+                                        hargaJual = hargaJual,
+                                        tanggalInput = tanggalInput
                                     )
 
                                     if (shouldIncludeInFilter(pencatatanKeluar.tanggal.toString(), filter, jenis, catId)) {
@@ -256,6 +280,11 @@ class PlaceholderFragment : Fragment() {
                         if (tasks.all { it.isComplete }) {
                             activity?.runOnUiThread {
                                 if (isAdded) {
+                                    // Sort the dataList by tanggalInput in descending order
+                                    dataList.sortByDescending { pencatatanKeluar ->
+                                        SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(pencatatanKeluar.tanggalInput)
+                                    }
+
                                     p_adapter2 = PencatatanKeluarAdapter(requireContext(), pencatatanList = dataList)
                                     recyclerView.adapter = p_adapter2
                                     progressBar.visibility = View.GONE
@@ -266,6 +295,7 @@ class PlaceholderFragment : Fragment() {
                 }
             }
     }
+
 
     private fun shouldIncludeInFilter(dateString: String, filter: String, jenis: String, catId: String): Boolean {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -36,6 +37,7 @@ import com.tugasakhir.udmrputra.adapter.ImageAdapter
 import com.tugasakhir.udmrputra.databinding.ActivityInputBarangMasukBinding
 import java.text.NumberFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
@@ -239,7 +241,8 @@ class InputMasukActivity : AppCompatActivity() {
                             "gambar" to imageUrls,
                             "catatan" to catatan,
                             "tanggal" to tanggal,
-                            "hargaBeli" to hargaBeli
+                            "hargaBeli" to hargaBeli,
+                            "created_at" to Timestamp(Date())
                         )
 
                         // Menambahkan data barang masuk ke subkoleksi "masuk"

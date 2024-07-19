@@ -105,6 +105,7 @@ class NotificationsFragment : Fragment() {
                         db.collection("pengajuan").document(pengajuanId).collection("barang")
                             .get()
                             .addOnSuccessListener { barangResult ->
+
                                 val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
                                 val tanggalPengajuan = if (tanggalPengajuanTimestamp is com.google.firebase.Timestamp) {
                                     dateFormat.format(tanggalPengajuanTimestamp.toDate())

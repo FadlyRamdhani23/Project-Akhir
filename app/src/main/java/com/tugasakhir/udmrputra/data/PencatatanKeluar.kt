@@ -10,5 +10,6 @@ data class PencatatanKeluar(
     val gambar: String? = "",
     val catatan: String? = "",
     val tanggal: String? = "",
-    val hargaJual: String
+    val hargaJual: String? = "",
+    val tanggalInput : String? = "",
 )
