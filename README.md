@@ -6,10 +6,6 @@ Tampilan Admin                              | Tampilan Tracking                 
 --------------------------------------------|--------------------------------------------|--------------------------------------------
 <img src="screenshots/admin.png" width="200">|<img src="screenshots/tranking.png" width="200">|<img src="screenshots/pembayaran.png" width="200">
 
-### Link Berkas PA
-
-(diisi link Google Drive kelompok PA yang telah disiapkan oleh Tim PA)
-
 ### Susunan Tim
 
 Nama|Username Github|Posisi
